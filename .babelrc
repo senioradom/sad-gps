@@ -1,0 +1,17 @@
+{
+    "plugins": [
+        "@babel/plugin-syntax-class-properties"
+    ],
+    "presets": [
+        [
+            "env",
+            {
+                "targets": {
+                    "browsers": [
+                        "last 2 Chrome versions"
+                    ]
+                }
+            }
+        ]
+    ]
+}
