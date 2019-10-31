@@ -111,6 +111,14 @@ class LeafletDrawService {
         this.featureGroup.clearLayers();
     }
 
+    labelArea(id) {
+        const label = document.getElementById(`label-${id}`).value;
+        this.featureGroup.getLayer(id).feature.properties.label = label;
+        this.featureGroup.getLayer(id).setPopupContent(this._createPopUpContent(id, label));
+
+        this._emitEvent('mapEdited');
+    }
+
     // --------------------
     // Privates
     // --------------------
@@ -206,17 +214,9 @@ class LeafletDrawService {
     _createPopUpContent(id, label) {
         // <i><small>Nom de la zone</small></i><br>
         return `
-            <input id="label-${id}" type="text" value="${label}" maxlength="10" onfocusout="leafletDrawServiceInstance.setLabel(${id})">
+            <input id="label-${id}" type="text" value="${label}" maxlength="10" onfocusout="leafletDrawServiceInstance.labelArea(${id})">
         `;
         // <input type="button" value="Save" onclick="leafletDrawServiceInstance.setLabel(${id})">
-    }
-
-    _setLabel(id) {
-        const label = document.getElementById(`label-${id}`).value;
-        this.featureGroup.getLayer(id).feature.properties.label = label;
-        this.featureGroup.getLayer(id).setPopupContent(this._createPopUpContent(id, label));
-
-        this._emitEvent('mapEdited');
     }
 
     // --
