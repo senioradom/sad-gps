@@ -3,6 +3,8 @@ import 'leaflet-draw';
 import * as drawLocales from 'leaflet-draw-locales';
 
 class LeafletDrawService {
+    _debug = false;
+
     _MAX_NUMBER_OF_CIRCLES = 10;
 
     _FRANCE_CENTERED = {
@@ -38,7 +40,10 @@ class LeafletDrawService {
         this.controlDraw = new L.Control.Draw({
             draw: {
                 circle: {
-                    feet: false
+                    feet: false,
+                    shapeOptions: {
+                        color: '#7a7a7a'
+                    }
                 },
                 marker: false,
                 circlemarker: false,
@@ -47,7 +52,13 @@ class LeafletDrawService {
                 rectangle: false
             },
             edit: {
-                featureGroup: this.featureGroup
+                featureGroup: this.featureGroup,
+                edit: {
+                    selectedPathOptions: {
+                        color: '#00acf0',
+                        fillColor: '#00acf0'
+                    }
+                }
             }
         }).addTo(this.map);
 
@@ -113,12 +124,16 @@ class LeafletDrawService {
         this.featureGroup.clearLayers();
     }
 
-    labelArea(id) {
+    labelArea(id, distance, save) {
         const label = document.getElementById(`label-${id}`).value;
-        this.featureGroup.getLayer(id).feature.properties.label = label;
-        this.featureGroup.getLayer(id).setPopupContent(this._createPopUpContent(id, label));
+        const layer = this.featureGroup.getLayer(id);
 
-        this._emitEvent('mapEdited');
+        layer.feature.properties.label = label;
+        layer.setPopupContent(this._createPopUpContent(id, label, distance));
+
+        if (save) {
+            this._emitEvent('mapEdited');
+        }
     }
 
     // --------------------
@@ -215,12 +230,42 @@ class LeafletDrawService {
         }
     }
 
-    _createPopUpContent(id, label) {
-        // <i><small>Nom de la zone</small></i><br>
+    _regenerateTooltips() {
+        this.map.eachLayer((layer) => {
+            if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
+                if (layer.feature.properties.drawtype === 'circle') {
+                    this.labelArea(this.featureGroup.getLayerId(layer), false, false);
+                }
+            }
+        });
+    }
+
+    _createPopUpContent(id, label, distance) {
+        let radiusInKm;
+        if (distance) {
+            radiusInKm = distance / 1000;
+        } else {
+            radiusInKm = (this.featureGroup.getLayer(id).feature.properties.radius / 1000);
+        }
+
+        if (radiusInKm < 1) {
+            radiusInKm *= 1000;
+            radiusInKm = `${radiusInKm.toFixed(0)} m`
+        } else {
+            radiusInKm = `${radiusInKm.toFixed(2)} km`
+        }
+
         return `
-            <input id="label-${id}" type="text" value="${label}" maxlength="10" onfocusout="leafletDrawServiceInstance.labelArea(${id})">
+            <input 
+                id="label-${id}" 
+                type="text" 
+                value="${label}" 
+                maxlength="10"
+                onkeyup="if(event.keyCode == 13){if (document && document.activeElement) document.activeElement.blur()}"
+                onfocusout="leafletDrawServiceInstance.labelArea(${id}, ${distance}, true)"
+            >
+            <div id="distance-${id}">${radiusInKm}</div>
         `;
-        // <input type="button" value="Save" onclick="leafletDrawServiceInstance.setLabel(${id})">
     }
 
     // --
@@ -238,20 +283,24 @@ class LeafletDrawService {
 
         this.map.on(L.Draw.Event.DELETED, this._drawDeletedEvent.bind(this));
 
+        this.map.on(L.Draw.Event.EDITRESIZE, this._drawEditedResizeEvent.bind(this));
+
+        this.map.on(L.Draw.Event.EDITSTOP, this._drawEditStopEvent.bind(this));
+
         // Events debugging
-        this.map.on(L.Draw.Event.DRAWSTART, this._debugEvent.bind(this));
-        this.map.on(L.Draw.Event.DRAWSTOP, this._debugEvent.bind(this));
-        this.map.on(L.Draw.Event.DRAWVERTEX, this._debugEvent.bind(this));
-        this.map.on(L.Draw.Event.EDITSTART, this._debugEvent.bind(this));
-        this.map.on(L.Draw.Event.EDITMOVE, this._debugEvent.bind(this));
-        this.map.on(L.Draw.Event.EDITRESIZE, this._debugEvent.bind(this));
-        this.map.on(L.Draw.Event.EDITVERTEX, this._debugEvent.bind(this));
-        this.map.on(L.Draw.Event.EDITSTOP, this._debugEvent.bind(this));
-        this.map.on(L.Draw.Event.DELETESTART, this._debugEvent.bind(this));
-        this.map.on(L.Draw.Event.DELETESTOP, this._debugEvent.bind(this));
-        this.map.on(L.Draw.Event.TOOLBAROPENED, this._debugEvent.bind(this));
-        this.map.on(L.Draw.Event.TOOLBARCLOSED, this._debugEvent.bind(this));
-        this.map.on(L.Draw.Event.MARKERCONTEXT, this._debugEvent.bind(this));
+        if (this._debug) {
+            this.map.on(L.Draw.Event.DRAWSTART, this._debugEvent.bind(this));
+            this.map.on(L.Draw.Event.DRAWSTOP, this._debugEvent.bind(this));
+            this.map.on(L.Draw.Event.DRAWVERTEX, this._debugEvent.bind(this));
+            this.map.on(L.Draw.Event.EDITSTART, this._debugEvent.bind(this));
+            this.map.on(L.Draw.Event.EDITMOVE, this._debugEvent.bind(this));
+            this.map.on(L.Draw.Event.EDITVERTEX, this._debugEvent.bind(this));
+            this.map.on(L.Draw.Event.DELETESTART, this._debugEvent.bind(this));
+            this.map.on(L.Draw.Event.DELETESTOP, this._debugEvent.bind(this));
+            this.map.on(L.Draw.Event.TOOLBAROPENED, this._debugEvent.bind(this));
+            this.map.on(L.Draw.Event.TOOLBARCLOSED, this._debugEvent.bind(this));
+            this.map.on(L.Draw.Event.MARKERCONTEXT, this._debugEvent.bind(this));
+        }
     }
 
     _drawCreatedEvent(e) {
@@ -274,6 +323,10 @@ class LeafletDrawService {
         }
     }
 
+    _drawEditedResizeEvent(e) {
+        this.labelArea(e.layer._leaflet_id, e.layer._mRadius, false);
+    }
+
     _drawEditedEvent(e) {
         e.layers.eachLayer((layer) => {
             this._setFeatureProperties.bind(this, layer);
@@ -294,8 +347,18 @@ class LeafletDrawService {
         this._emitEvent('mapEdited');
     }
 
+    _drawEditStopEvent(e) {
+        this._regenerateTooltips();
+    }
+
     _debugEvent(e) {
         console.log(`[debug] : Event : ${e.type}`);
+
+        switch (e.type) {
+            case 'draw:editstop':
+                //
+                break;
+        }
     }
 }
 
