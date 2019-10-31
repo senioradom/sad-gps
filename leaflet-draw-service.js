@@ -11,6 +11,8 @@ class LeafletDrawService {
         zoom: 6
     };
 
+    _initialShapes = 0;
+
     constructor() {
         window.leafletDrawServiceInstance = this;
     }
@@ -142,11 +144,13 @@ class LeafletDrawService {
 
                         let handler;
                         if (feature.properties.drawtype === L.Draw.Circle.TYPE) {
+                            this._initialShapes++;
                             handler = this.controlDraw._toolbars.draw._modes.circle.handler;
                             this.circle = new L.Circle(latLng, feature.properties.radius, handler.options.shapeOptions);
                             this.circle.feature = feature;
                             L.Draw.SimpleShape.prototype._fireCreatedEvent.call(handler, this.circle);
                         } else {
+                            this._initialShapes++;
                             handler = this.controlDraw._toolbars.draw._modes.marker.handler;
                             const layer = new L.Marker(latLng, handler.options);
                             layer.feature = feature;
@@ -263,7 +267,11 @@ class LeafletDrawService {
 
         this._initPopup(this.featureGroup.getLayers()[this.featureGroup.getLayers().length - 1]);
 
-        this._emitEvent('mapEdited');
+        if (this._initialShapes > 0) {
+            this._initialShapes--;
+        } else {
+            this._emitEvent('mapEdited');
+        }
     }
 
     _drawEditedEvent(e) {
