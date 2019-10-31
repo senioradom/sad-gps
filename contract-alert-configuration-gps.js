@@ -62,8 +62,6 @@ class ContractAlertConfigurationGps {
     }
 
     save() {
-        console.log('this.leafletDrawService.exportGeoJSON()');
-
         this.configuration.preference.geoJson = this.leafletDrawService.exportGeoJSON();
 
         fetch(`https://gateway-pp.senioradom.com/api/3/contracts/${this.contractRef}/alert-configurations/${this.configuration.id}`, {
@@ -73,9 +71,9 @@ class ContractAlertConfigurationGps {
             },
             'body': JSON.stringify(this.configuration),
             'method': 'PUT'
-        })   .then(this.handleErrors)
-            .then(response => console.log('ok') )
-            .catch(error => console.log(error) );
+        }).then(this.handleErrors)
+            .then(response => console.log('ok'))
+            .catch(error => console.log(error));
     }
 }
 

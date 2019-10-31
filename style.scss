@@ -1,3 +1,83 @@
+// --------------------------------------------
+// Libraries override
+// --------------------------------------------
+// --------------------
+// Leaflet
+// --------------------
+/*
+.leaflet-control-layers-toggle {
+  background-image: url(https://raw.githubusercontent.com/Leaflet/Leaflet/master/dist/images/layers.png) !important;;
+}
+
+.leaflet-retina .leaflet-control-layers-toggle {
+  background-image: url(https://raw.githubusercontent.com/Leaflet/Leaflet/master/dist/images/layers-2x.png) !important;;
+}
+
+.leaflet-default-icon-path {
+  background-image: url(https://raw.githubusercontent.com/Leaflet/Leaflet/master/dist/images/marker-icon.png) !important;
+}
+*/
+
+.leaflet-popup-content-wrapper {
+    padding: 0!important;
+
+    border-radius: 0!important;
+}
+
+.leaflet-popup-content {
+    margin: auto!important;
+
+    line-height: 1!important;
+}
+
+.leaflet-popup-tip-container {
+    // display: none;
+}
+
+.leaflet-popup-tip-container {
+    bottom: 18px;
+
+    overflow: visible!important;
+
+    transform: rotate(180deg);
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+    background: transparent!important;
+    box-shadow: none!important;
+}
+
+.leaflet-popup-tip-container::after {
+    position: absolute;
+
+    width: 25px;
+    height: 41px;
+    margin-top: 0;
+    margin-left: -13px;
+
+    content: '';
+    transform: rotate(180deg);
+
+    background-image: url(https://raw.githubusercontent.com/Leaflet/Leaflet/master/dist/images/marker-icon.png) !important;
+}
+
+input[id^='label-'] {
+    position: relative;
+    z-index: 1;
+}
+
+.leaflet-popup {
+    bottom: -51px!important;
+}
+
+.leaflet-marker-icon.leaflet-div-icon.leaflet-editing-icon {
+    // @todo
+}
+
+// --------------------------------------------
+// Application
+// --------------------------------------------
 #map {
   height: 600px;
 
