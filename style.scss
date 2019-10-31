@@ -79,7 +79,51 @@ input[id^='label-'] {
 // Application
 // --------------------------------------------
 #map {
-  height: 600px;
+    position: relative;
+    //height: 600px;
+
+    height: 100vh;
+
+    border: 1px solid #ccc;
+}
+
+#notifications {
+    position: absolute;
+    z-index: 401;
+    right: 12px;
+    bottom: 20px;
+
+    display: none;
+
+    width: 120px;
+    height: 20px;
+
+    text-align: center;
+
+    background-color: white;
+
+    @at-root #{&}.saving {
+        display: block;
+
+        border: 1px solid black;
+        background-color: white;
+    }
+
+    @at-root #{&}.success {
+        display: block;
+
+        border: 1px solid green;
+        background-color: lime;
+    }
+
+    @at-root #{&}.failure {
+        display: block;
+
+        border: 1px solid darkred;
+        background-color: red;
+    }
+}
+
 
   border: 1px solid #ccc;
 }

@@ -62,6 +62,8 @@ class ContractAlertConfigurationGps {
     }
 
     save() {
+        this._notify('SAVING');
+
         this.configuration.preference.geoJson = this.leafletDrawService.exportGeoJSON();
 
         fetch(`https://gateway-pp.senioradom.com/api/3/contracts/${this.contractRef}/alert-configurations/${this.configuration.id}`, {
@@ -72,8 +74,43 @@ class ContractAlertConfigurationGps {
             'body': JSON.stringify(this.configuration),
             'method': 'PUT'
         }).then(this.handleErrors)
-            .then(response => console.log('ok'))
-            .catch(error => console.log(error));
+            .then(response => {
+                this._notify('SUCCESS');
+            })
+            .catch(error => {
+                this._notify('FAILURE');
+            });
+    }
+
+    _notify(type) {
+        switch (type) {
+            case 'SAVING':
+                document.getElementById('notifications').classList.add('saving');
+                document.getElementById('notifications').innerHTML = 'Saving...';
+                break;
+
+            case 'SUCCESS':
+                document.getElementById('notifications').classList.remove('saving');
+
+                document.getElementById('notifications').innerHTML = 'OK';
+                document.getElementById('notifications').classList.add('success');
+                setTimeout(() => {
+                    document.getElementById('notifications').classList.remove('success');
+                    document.getElementById('notifications').innerHTML = ''
+                }, 2000);
+                break;
+
+            case 'FAILURE':
+                document.getElementById('notifications').classList.remove('saving');
+
+                document.getElementById('notifications').innerHTML = 'NOT';
+                document.getElementById('notifications').classList.add('failure');
+                setTimeout(() => {
+                    document.getElementById('notifications').classList.remove('failure');
+                    document.getElementById('notifications').innerHTML = ''
+                }, 2000);
+                break;
+        }
     }
 }
 
