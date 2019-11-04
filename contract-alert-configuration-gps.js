@@ -1,4 +1,6 @@
 import LeafletDrawService from './leaflet-draw-service';
+import NotificationService from './notification-service';
+
 
 class ContractAlertConfigurationGps {
 
@@ -7,6 +9,8 @@ class ContractAlertConfigurationGps {
         this.basicAuth = basicAuth;
 
         this.leafletDrawService = new LeafletDrawService();
+        this.notificationService = new NotificationService();
+
         this.htmlElement = document.getElementById('map');
 
         document.addEventListener('mapEdited', () => this.save());
@@ -62,7 +66,7 @@ class ContractAlertConfigurationGps {
     }
 
     save() {
-        this._notify('SAVING');
+        this.notificationService.notify('SAVING', 'Saving...');
 
         this.configuration.preference.geoJson = this.leafletDrawService.exportGeoJSON();
 
@@ -75,42 +79,11 @@ class ContractAlertConfigurationGps {
             'method': 'PUT'
         }).then(this.handleErrors)
             .then(response => {
-                this._notify('SUCCESS');
+                this.notificationService.notify('SUCCESS', 'OK');
             })
             .catch(error => {
-                this._notify('FAILURE');
+                this.notificationService.notify('FAILURE', 'NOT');
             });
-    }
-
-    _notify(type) {
-        switch (type) {
-            case 'SAVING':
-                document.getElementById('notifications').classList.add('saving');
-                document.getElementById('notifications').innerHTML = 'Saving...';
-                break;
-
-            case 'SUCCESS':
-                document.getElementById('notifications').classList.remove('saving');
-
-                document.getElementById('notifications').innerHTML = 'OK';
-                document.getElementById('notifications').classList.add('success');
-                setTimeout(() => {
-                    document.getElementById('notifications').classList.remove('success');
-                    document.getElementById('notifications').innerHTML = ''
-                }, 2000);
-                break;
-
-            case 'FAILURE':
-                document.getElementById('notifications').classList.remove('saving');
-
-                document.getElementById('notifications').innerHTML = 'NOT';
-                document.getElementById('notifications').classList.add('failure');
-                setTimeout(() => {
-                    document.getElementById('notifications').classList.remove('failure');
-                    document.getElementById('notifications').innerHTML = ''
-                }, 2000);
-                break;
-        }
     }
 }
 

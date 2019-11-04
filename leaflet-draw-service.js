@@ -1,6 +1,7 @@
 import L from 'leaflet';
 import 'leaflet-draw';
 import * as drawLocales from 'leaflet-draw-locales';
+import NotificationService from "./notification-service";
 
 class LeafletDrawService {
     _debug = false;
@@ -16,6 +17,8 @@ class LeafletDrawService {
     _initialShapes = 0;
 
     constructor() {
+        this.notificationService = new NotificationService();
+
         window.leafletDrawServiceInstance = this;
     }
 
