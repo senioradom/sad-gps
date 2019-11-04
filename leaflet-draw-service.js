@@ -263,6 +263,8 @@ class LeafletDrawService {
                 id="label-${id}" 
                 type="text" 
                 value="${label}" 
+                required
+                autocomplete="off"
                 maxlength="10"
                 onkeyup="if(event.keyCode == 13){if (document && document.activeElement) document.activeElement.blur()}"
                 onfocusout="leafletDrawServiceInstance.labelArea(${id}, ${distance}, true)"
@@ -271,11 +273,69 @@ class LeafletDrawService {
         `;
     }
 
+    _getDuplicatedLabels() {
+        const labelsArray = [];
+        document.querySelectorAll('[id^="label-"]').forEach(function (el) {
+            labelsArray.push(el.value);
+        });
+
+        const duplicatedLabelsArray = labelsArray.reduce((accumulator, currentValue, index, array) => {
+            if (array.indexOf(currentValue) !== index && !accumulator.includes(currentValue)) {
+                accumulator.push(currentValue)
+            }
+
+            return accumulator;
+        }, []);
+
+        return duplicatedLabelsArray;
+    }
+
+    _checkLabels() {
+        const condDuplicated = this._getDuplicatedLabels().length === 0;
+
+        let condNotEmpy = true;
+        document.querySelectorAll('[id^="label-"]').forEach((el) => {
+            if (el.value === '') {
+                condNotEmpy = false;
+            }
+        });
+
+        // @todo : Can do with extra check on 10 chars max length (currently checked via HTML input rule)
+
+        return condNotEmpy && condDuplicated;
+    }
+
+    _updateLabels(isValid) {
+        if (isValid) {
+            document.querySelectorAll('[id^="label-"].not-valid').forEach(function (el) {
+                el.classList.remove('not-valid');
+            });
+        } else {
+            const duplicatedLabelsArray = this._getDuplicatedLabels();
+
+            document.querySelectorAll('[id^="label-"]').forEach(function (el) {
+                if (duplicatedLabelsArray.includes(el.value) || el.value === '') {
+                    el.classList.add('not-valid');
+                } else {
+                    el.classList.remove('not-valid');
+                }
+            });
+        }
+    }
+
     // --
     // Events handler
     // --------------------
     _emitEvent(type) {
-        document.dispatchEvent(new Event(type));
+        if (this._checkLabels()) {
+            this._updateLabels(true);
+
+            document.dispatchEvent(new Event(type));
+        } else {
+            this._updateLabels(false);
+
+            this.notificationService.notify('FAILURE', 'Labels validation failed...');
+        }
     }
 
     _initEventListeners() {

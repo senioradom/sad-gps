@@ -81,6 +81,10 @@ input[id^='label-'] {
     font-weight: bold;
 }
 
+input[id^='label-'].not-valid {
+    background-color: red;
+}
+
 div[id^='distance-'] {
     width: 120px;
     padding: 3px;
