@@ -4,7 +4,7 @@ import * as drawLocales from 'leaflet-draw-locales';
 import NotificationService from "./notification-service";
 
 class LeafletDrawService {
-    _debug = false;
+    _debug = true;
 
     _MAX_NUMBER_OF_CIRCLES = 10;
 
@@ -80,8 +80,15 @@ class LeafletDrawService {
         this._initEventListeners();
 
         if (geoJSON) {
+            this._initialGeoJsonState = geoJSON;
             this._importGeoJSON(geoJSON);
         }
+    }
+
+    resetMap() {
+        this._disableEditMode();
+        this._deleteAllLayers();
+        this._importGeoJSON(this._initialGeoJsonState);
     }
 
     addMarker(latitude, longitude) {
@@ -123,10 +130,6 @@ class LeafletDrawService {
         return JSON.stringify(geoJson);
     }
 
-    deleteAllLayers() {
-        this.featureGroup.clearLayers();
-    }
-
     labelArea(id, distance, save) {
         const label = document.getElementById(`label-${id}`).value;
         const layer = this.featureGroup.getLayer(id);
@@ -155,6 +158,8 @@ class LeafletDrawService {
                 return;
             }
 
+            this._enableEdit();
+
             features.forEach(feature => {
                 if (feature.type === 'Feature') {
                     if (feature.geometry.type === 'Point') {
@@ -179,6 +184,18 @@ class LeafletDrawService {
             });
 
             this._centerMap();
+        }
+    }
+
+    _deleteAllLayers() {
+        this.featureGroup.clearLayers();
+    }
+
+    _disableEditMode() {
+        for (let key in this.controlDraw._toolbars) {
+            if (this.controlDraw._toolbars.hasOwnProperty(key) && this.controlDraw._toolbars[key] instanceof L.EditToolbar) {
+                this.controlDraw._toolbars[key].disable();
+            }
         }
     }
 
@@ -208,13 +225,25 @@ class LeafletDrawService {
 
     _disableEditIfMaxNumberOfCircleslReached() {
         if (this.featureGroup.getLayers().length >= this._MAX_NUMBER_OF_CIRCLES) {
-            this.controlDraw.setDrawingOptions({
-                circle: false
-            });
-
-            this.map.removeControl(this.controlDraw);
-            this.map.addControl(this.controlDraw);
+            this._disableEdit();
         }
+    }
+
+    _disableEdit() {
+        this._toggleEdit(false);
+    }
+
+    _enableEdit() {
+        this._toggleEdit(true);
+    }
+
+    _toggleEdit(bool) {
+        this.controlDraw.setDrawingOptions({
+            circle: bool
+        });
+
+        this.map.removeControl(this.controlDraw);
+        this.map.addControl(this.controlDraw);
     }
 
     _setFeatureProperties(layer) {
