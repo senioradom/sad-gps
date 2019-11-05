@@ -130,18 +130,6 @@ class LeafletDrawService {
         return JSON.stringify(geoJson);
     }
 
-    labelArea(id, distance, save) {
-        const label = document.getElementById(`label-${id}`).value;
-        const layer = this.featureGroup.getLayer(id);
-
-        layer.feature.properties.label = label;
-        layer.setPopupContent(this._createPopUpContent(id, label, distance));
-
-        if (save) {
-            this._emitEvent('mapEdited');
-        }
-    }
-
     // --------------------
     // Privates
     // --------------------
@@ -266,10 +254,23 @@ class LeafletDrawService {
         this.map.eachLayer((layer) => {
             if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
                 if (layer.feature.properties.drawtype === 'circle') {
-                    this.labelArea(this.featureGroup.getLayerId(layer), false, false);
+                    this._labelArea(this.featureGroup.getLayerId(layer), false, false);
                 }
             }
         });
+    }
+
+
+    _labelArea(id, distance, save) {
+        const label = document.getElementById(`label-${id}`).value;
+        const layer = this.featureGroup.getLayer(id);
+
+        layer.feature.properties.label = label;
+        layer.setPopupContent(this._createPopUpContent(id, label, distance));
+
+        if (save) {
+            this._emitEvent('mapEdited');
+        }
     }
 
     _createPopUpContent(id, label, distance) {
@@ -295,8 +296,8 @@ class LeafletDrawService {
                 required
                 autocomplete="off"
                 maxlength="10"
-                onkeyup="if(event.keyCode == 13){if (document && document.activeElement) document.activeElement.blur()}"
-                onfocusout="leafletDrawServiceInstance.labelArea(${id}, ${distance}, true)"
+                onkeyup="leafletDrawServiceInstance._onKeyUp(event);"
+                onfocusout="leafletDrawServiceInstance._labelArea(${id}, ${distance}, true);"
             >
             <div id="distance-${id}">${radiusInKm}</div>
         `;
@@ -395,6 +396,20 @@ class LeafletDrawService {
         }
     }
 
+    _onKeyUp(event) {
+        if (event.keyCode === 13) {
+            if (document && document.activeElement) {
+                document.activeElement.blur();
+            }
+        }
+
+        if (this._checkLabels()) {
+            this._updateLabels(true);
+        } else {
+            this._updateLabels(false);
+        }
+    }
+
     _drawCreatedEvent(e) {
         this.featureGroup.addLayer(e.layer);
 
@@ -416,7 +431,7 @@ class LeafletDrawService {
     }
 
     _drawEditedResizeEvent(e) {
-        this.labelArea(e.layer._leaflet_id, e.layer._mRadius, false);
+        this._labelArea(e.layer._leaflet_id, e.layer._mRadius, false);
     }
 
     _drawEditedEvent(e) {
