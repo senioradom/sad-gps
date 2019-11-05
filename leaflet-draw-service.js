@@ -297,8 +297,7 @@ class LeafletDrawService {
         if (distance) {
             radiusInKm = distance / 1000;
         } else {
-            // radiusInKm = (this.featureGroup.getLayer(id).feature.properties.radius / 1000);
-            radiusInKm = (this.featureGroup.getLayer(id)._mRadius / 1000);
+            radiusInKm = (this.featureGroup.getLayer(id).getRadius() / 1000);
         }
 
         if (radiusInKm < 1) {
