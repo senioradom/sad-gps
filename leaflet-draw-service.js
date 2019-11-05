@@ -85,6 +85,10 @@ class LeafletDrawService {
         }
     }
 
+    isMapDirty() {
+        return this._initialGeoJsonState !== this.exportGeoJSON();
+    }
+
     resetMap() {
         this._disableEditMode();
         this._deleteAllLayers();

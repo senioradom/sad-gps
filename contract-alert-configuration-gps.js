@@ -97,13 +97,27 @@ class ContractAlertConfigurationGps {
     // --
     // Events handler
     // --------------------
-    _initEvents() {
+    _promptUserLeavingThePageWhenUnsavedChanges() {
+        window.addEventListener('beforeunload', (e) => {
+            if (this.leafletDrawService.isMapDirty()) {
+                e.preventDefault();
+                e.returnValue = ''; // Required by Chrome
+            }
+        });
+    }
+
+    _initClickEvents() {
         this.saveButton.addEventListener('click', () => this._save());
 
         this.resetButton.addEventListener('click', () => {
             this.leafletDrawService.resetMap();
             this._save();
         });
+    }
+
+    _initEvents() {
+        this._initClickEvents();
+        this._promptUserLeavingThePageWhenUnsavedChanges();
 
         if (this.autosave) {
             document.addEventListener('mapEdited', () => this._save());
