@@ -127,7 +127,7 @@ class LeafletDrawService {
                 }
             }
             if (layerFound) {
-                feature.properties.radius = layerFound._mRadius;
+                feature.properties.radius = layerFound.getRadius();
             }
         }
 
@@ -456,7 +456,7 @@ class LeafletDrawService {
     }
 
     _drawEditedResizeEvent(e) {
-        this._labelArea(e.layer._leaflet_id, e.layer._mRadius, false);
+        this._labelArea(e.layer._leaflet_id, e.layer.getRadius(), false);
     }
 
     _drawEditedEvent(e) {
