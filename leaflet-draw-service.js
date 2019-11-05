@@ -260,6 +260,25 @@ class LeafletDrawService {
         });
     }
 
+    _recoverStateBeforeDeletion() {
+        this.map.eachLayer((layer) => {
+            if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
+                if (layer.feature.properties.drawtype === 'circle') {
+                    const id = this.featureGroup.getLayerId(layer);
+                    if (!document.getElementById(`label-${id}`)) {
+                        try {
+                            const originalLabel = layer._popup._content.split('\n').filter(v => v.indexOf('value="') > -1)[0].trim().replace('value="', '').replace(/"$/, '');
+                            layer.feature.properties.label = originalLabel;
+
+                            this._initPopup(layer);
+                        } catch (e) {
+                            layer.remove();
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     _labelArea(id, distance, save) {
         const label = document.getElementById(`label-${id}`).value;
@@ -278,7 +297,8 @@ class LeafletDrawService {
         if (distance) {
             radiusInKm = distance / 1000;
         } else {
-            radiusInKm = (this.featureGroup.getLayer(id).feature.properties.radius / 1000);
+            // radiusInKm = (this.featureGroup.getLayer(id).feature.properties.radius / 1000);
+            radiusInKm = (this.featureGroup.getLayer(id)._mRadius / 1000);
         }
 
         if (radiusInKm < 1) {
@@ -380,6 +400,8 @@ class LeafletDrawService {
 
         this.map.on(L.Draw.Event.EDITSTOP, this._drawEditStopEvent.bind(this));
 
+        this.map.on(L.Draw.Event.DELETESTOP, this._drawDeleteStopEvent.bind(this));
+
         // Events debugging
         if (this._debug) {
             this.map.on(L.Draw.Event.DRAWSTART, this._debugEvent.bind(this));
@@ -458,6 +480,9 @@ class LeafletDrawService {
         this._regenerateTooltips();
     }
 
+    _drawDeleteStopEvent(e) {
+        this._recoverStateBeforeDeletion();
+    }
     _debugEvent(e) {
         console.log(`[debug] : Event : ${e.type}`);
 
