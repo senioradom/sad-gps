@@ -326,12 +326,12 @@ class LeafletDrawService {
     _getDuplicatedLabels() {
         const labelsArray = [];
         document.querySelectorAll('[id^="label-"]').forEach(function (el) {
-            labelsArray.push(el.value);
+            labelsArray.push(el.value.toLowerCase());
         });
 
         const duplicatedLabelsArray = labelsArray.reduce((accumulator, currentValue, index, array) => {
-            if (array.indexOf(currentValue) !== index && !accumulator.includes(currentValue)) {
-                accumulator.push(currentValue)
+            if (array.indexOf(currentValue) !== index && !accumulator.includes(currentValue.toLowerCase())) {
+                accumulator.push(currentValue.toLowerCase())
             }
 
             return accumulator;
@@ -364,7 +364,7 @@ class LeafletDrawService {
             const duplicatedLabelsArray = this._getDuplicatedLabels();
 
             document.querySelectorAll('[id^="label-"]').forEach(function (el) {
-                if (duplicatedLabelsArray.includes(el.value) || el.value === '') {
+                if (duplicatedLabelsArray.includes(el.value.toLowerCase()) || el.value === '') {
                     el.classList.add('not-valid');
                 } else {
                     el.classList.remove('not-valid');
