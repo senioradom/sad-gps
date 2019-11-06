@@ -7,13 +7,17 @@
     <link rel="stylesheet" href="./style.scss">
 </head>
 <body>
-<div id="map">
-    <div id="notifications"></div>
+
+<div class="map map--loading" id="map">
+    <div class="map__loading-overlay"></div>
+    <div class="map__notifications" id="notifications"></div>
 </div>
 
 <button id="reset">Reset</button>
 <button id="save">Save</button>
 
+<button onclick="console.log(window.leafletDrawServiceInstance.isMapDirty())">isDirty()</button>
+<button onclick="window.location.reload()">Reload</button>
 <button onclick="console.log(JSON.parse(window.leafletDrawServiceInstance.exportGeoJSON()))">Debug</button>
 
 <script src="./index.js"></script>

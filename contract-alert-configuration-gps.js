@@ -25,6 +25,8 @@ class ContractAlertConfigurationGps {
     // Public
     // --------------------
     async init() {
+        this._toggleLoadingIndicator(true);
+
         const response = await fetch(`https://gateway-pp.senioradom.com/api/3/contracts/${this.contractRef}/alert-configurations`, {
             'headers': {
                 'authorization': `Basic ${this.basicAuth}`,
@@ -44,6 +46,7 @@ class ContractAlertConfigurationGps {
         }
 
         this.leafletDrawService.generateMap(this.map, this.configuration.preference.geoJson);
+        this._toggleLoadingIndicator(false);
     }
 
     // --------------------
@@ -74,6 +77,7 @@ class ContractAlertConfigurationGps {
     }
 
     _save() {
+        this._toggleLoadingIndicator(true);
         this.notificationService.notify('SAVING', 'Saving...');
 
         this.configuration.preference.geoJson = this.leafletDrawService.exportGeoJSON();
@@ -87,9 +91,11 @@ class ContractAlertConfigurationGps {
             'method': 'PUT'
         }).then(this._handleErrors)
             .then(response => {
+                this._toggleLoadingIndicator(false);
                 this.notificationService.notify('SUCCESS', 'OK');
             })
             .catch(error => {
+                this._toggleLoadingIndicator(false);
                 this.notificationService.notify('FAILURE', 'NOT');
             });
     }
@@ -97,6 +103,14 @@ class ContractAlertConfigurationGps {
     // --
     // Events handler
     // --------------------
+    _toggleLoadingIndicator(isLoading) {
+        if (isLoading) {
+            this.map.classList.add('map--loading');
+        } else {
+            this.map.classList.remove('map--loading');
+        }
+    }
+
     _promptUserLeavingThePageWhenUnsavedChanges() {
         window.addEventListener('beforeunload', (e) => {
             if (this.leafletDrawService.isMapDirty()) {
@@ -107,7 +121,9 @@ class ContractAlertConfigurationGps {
     }
 
     _initClickEvents() {
-        this.saveButton.addEventListener('click', () => this._save());
+        this.saveButton.addEventListener('click', () => {
+            this._save();
+        });
 
         this.resetButton.addEventListener('click', () => {
             this.leafletDrawService.resetMap();
