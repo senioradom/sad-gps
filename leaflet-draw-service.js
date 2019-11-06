@@ -89,6 +89,10 @@ class LeafletDrawService {
         return this._initialGeoJsonState !== this.exportGeoJSON();
     }
 
+    updateInitialGeoJsonState() {
+        return this._initialGeoJsonState = this.exportGeoJSON();
+    }
+
     resetMap() {
         this._disableEditMode();
         this._deleteAllLayers();

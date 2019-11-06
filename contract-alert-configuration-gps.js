@@ -93,6 +93,7 @@ class ContractAlertConfigurationGps {
             .then(response => {
                 this._toggleLoadingIndicator(false);
                 this.notificationService.notify('SUCCESS', 'OK');
+                this.leafletDrawService.updateInitialGeoJsonState();
             })
             .catch(error => {
                 this._toggleLoadingIndicator(false);
