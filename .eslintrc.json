@@ -1,0 +1,23 @@
+{
+    "extends": [
+        "airbnb-base",
+        "plugin:prettier/recommended"
+    ],
+    "parser": "babel-eslint",
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "overrides": [
+        {
+            "files": [
+                "*.js"
+            ],
+            "rules": {
+                "no-underscore-dangle": "off",
+                "max-len": "off",
+                "no-console": "off"
+            }
+        }
+    ]
+}

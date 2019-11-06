@@ -1,9 +1,7 @@
 import LeafletDrawService from './leaflet-draw-service';
 import NotificationService from './notification-service';
 
-
 class ContractAlertConfigurationGps {
-
     constructor(contractRef, basicAuth) {
         this.autosave = false;
 
@@ -27,16 +25,23 @@ class ContractAlertConfigurationGps {
     async init() {
         this._toggleLoadingIndicator(true);
 
-        const response = await fetch(`https://gateway-pp.senioradom.com/api/3/contracts/${this.contractRef}/alert-configurations`, {
-            'headers': {
-                'authorization': `Basic ${this.basicAuth}`,
-            },
-            'method': 'GET',
-        });
+        const response = await fetch(
+            `https://gateway-pp.senioradom.com/api/3/contracts/${this.contractRef}/alert-configurations`,
+            {
+                headers: {
+                    authorization: `Basic ${this.basicAuth}`
+                },
+                method: 'GET'
+            }
+        );
 
         const configurations = await response.json();
 
-        this.configuration = configurations.filter(conf => conf.alertCode === 'out_of_perimeter')[0];
+        [this.configuration] = [
+            configurations.filter(
+                conf => conf.alertCode === 'out_of_perimeter'
+            )[0]
+        ];
 
         if (!this.configuration.preference.geoJson) {
             this.configuration.preference.geoJson = `{
@@ -45,7 +50,10 @@ class ContractAlertConfigurationGps {
         }`;
         }
 
-        this.leafletDrawService.generateMap(this.map, this.configuration.preference.geoJson);
+        this.leafletDrawService.generateMap(
+            this.map,
+            this.configuration.preference.geoJson
+        );
         this._toggleLoadingIndicator(false);
     }
 
@@ -55,6 +63,7 @@ class ContractAlertConfigurationGps {
     // --
     // Methods
     // --------------------
+    /*
     _zoomMapOnGPSLocation(lat, lng) {
         this.leafletDrawService.addMarker(lat, lng);
     }
@@ -67,10 +76,12 @@ class ContractAlertConfigurationGps {
         const address = event.option.value;
         this._zoomMapOnGPSLocation(address.lat, address.lng);
     }
+    */
 
+    // eslint-disable-next-line class-methods-use-this
     _handleErrors(response) {
         if (!response.ok) {
-            throw Error(response.status)
+            throw Error(response.status);
         }
 
         return response;
@@ -82,20 +93,24 @@ class ContractAlertConfigurationGps {
 
         this.configuration.preference.geoJson = this.leafletDrawService.exportGeoJSON();
 
-        fetch(`https://gateway-pp.senioradom.com/api/3/contracts/${this.contractRef}/alert-configurations/${this.configuration.id}`, {
-            'headers': {
-                'authorization': `Basic ${this.basicAuth}`,
-                'content-type': 'application/json',
-            },
-            'body': JSON.stringify(this.configuration),
-            'method': 'PUT'
-        }).then(this._handleErrors)
-            .then(response => {
+        fetch(
+            `https://gateway-pp.senioradom.com/api/3/contracts/${this.contractRef}/alert-configurations/${this.configuration.id}`,
+            {
+                headers: {
+                    authorization: `Basic ${this.basicAuth}`,
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(this.configuration),
+                method: 'PUT'
+            }
+        )
+            .then(this._handleErrors)
+            .then(() => {
                 this._toggleLoadingIndicator(false);
                 this.notificationService.notify('SUCCESS', 'OK');
                 this.leafletDrawService.updateInitialGeoJsonState();
             })
-            .catch(error => {
+            .catch(() => {
                 this._toggleLoadingIndicator(false);
                 this.notificationService.notify('FAILURE', 'NOT');
             });
@@ -113,7 +128,7 @@ class ContractAlertConfigurationGps {
     }
 
     _promptUserLeavingThePageWhenUnsavedChanges() {
-        window.addEventListener('beforeunload', (e) => {
+        window.addEventListener('beforeunload', e => {
             if (this.leafletDrawService.isMapDirty()) {
                 e.preventDefault();
                 e.returnValue = ''; // Required by Chrome

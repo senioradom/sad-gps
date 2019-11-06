@@ -27,13 +27,16 @@ class NotificationService {
                 this.element.innerHTML = message;
                 this._resetState();
                 break;
+
+            default:
+                break;
         }
     }
 
     _resetState() {
         setTimeout(() => {
             this.element.className = '';
-            this.element.innerHTML = ''
+            this.element.innerHTML = '';
         }, 2000);
     }
 }

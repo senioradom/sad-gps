@@ -1,0 +1,9 @@
+{
+	"map": {
+		"inline": true
+	},
+	"plugins": {
+		"autoprefixer": true,
+		"cssnano": true,
+	}
+}

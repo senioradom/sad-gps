@@ -1,7 +1,7 @@
 import L from 'leaflet';
 import 'leaflet-draw';
-import * as drawLocales from 'leaflet-draw-locales';
-import NotificationService from "./notification-service";
+// import * as drawLocales from 'leaflet-draw-locales';
+import NotificationService from './notification-service';
 
 class LeafletDrawService {
     _debug = true;
@@ -28,7 +28,10 @@ class LeafletDrawService {
     generateMap(el, geoJSON) {
         // drawLocales(this.localeService.getLocale() as drawLocales.Languages);
 
-        const config = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {});
+        const config = L.tileLayer(
+            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {}
+        );
 
         this.map = L.map(el, {
             center: [this._FRANCE_CENTERED.lat, this._FRANCE_CENTERED.lng],
@@ -65,17 +68,26 @@ class LeafletDrawService {
             }
         }).addTo(this.map);
 
-        L.control.layers({
-            // [this.translateService.instant('MAP.MAP')]: config.addTo(this.map),
-            // [this.translateService.instant('MAP.SATELLITE')]: L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
-            'Carte': config.addTo(this.map),
-            'Satellite': L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
-                attribution: 'google'
-            })
-        }, {}, {
-            position: 'topright',
-            collapsed: false
-        }).addTo(this.map);
+        L.control
+            .layers(
+                {
+                    // [this.translateService.instant('MAP.MAP')]: config.addTo(this.map),
+                    // [this.translateService.instant('MAP.SATELLITE')]: L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
+                    Carte: config.addTo(this.map),
+                    Satellite: L.tileLayer(
+                        'http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}',
+                        {
+                            attribution: 'google'
+                        }
+                    )
+                },
+                {},
+                {
+                    position: 'topright',
+                    collapsed: false
+                }
+            )
+            .addTo(this.map);
 
         this._initEventListeners();
 
@@ -90,7 +102,7 @@ class LeafletDrawService {
     }
 
     updateInitialGeoJsonState() {
-        return this._initialGeoJsonState = this.exportGeoJSON();
+        this._initialGeoJsonState = this.exportGeoJSON();
     }
 
     resetMap() {
@@ -106,7 +118,9 @@ class LeafletDrawService {
             }
 
             this.map.panTo(new L.LatLng(latitude, longitude));
-            this.marker = new L.Marker(new L.LatLng(latitude, longitude)).addTo(this.map);
+            this.marker = new L.Marker(new L.LatLng(latitude, longitude)).addTo(
+                this.map
+            );
         }
     }
 
@@ -114,26 +128,32 @@ class LeafletDrawService {
         const geoJson = this.featureGroup.toGeoJSON();
         const layers = this.featureGroup._layers;
 
-        let layerFound = null;
-        for (const feature of geoJson.features) {
+        let matchingLayer = null;
+
+        Object.values(geoJson.features).forEach(feature => {
             const lat = feature.geometry.coordinates[1];
             const lng = feature.geometry.coordinates[0];
 
-            for (const layerKey in layers) {
-                if (layers.hasOwnProperty(layerKey)) {
-                    const layer = layers[layerKey];
+            Object.keys(layers).some(key => {
+                if (Object.prototype.hasOwnProperty.call(layers, key)) {
+                    const layer = layers[key];
 
                     const coords = layer.toGeoJSON().geometry.coordinates;
                     if (coords[1] === lat && coords[0] === lng) {
-                        layerFound = layer;
-                        break;
+                        matchingLayer = layer;
+
+                        return true;
                     }
                 }
+
+                return false;
+            });
+
+            if (matchingLayer) {
+                // eslint-disable-next-line no-param-reassign
+                feature.properties.radius = matchingLayer.getRadius();
             }
-            if (layerFound) {
-                feature.properties.radius = layerFound.getRadius();
-            }
-        }
+        });
 
         return JSON.stringify(geoJson);
     }
@@ -159,21 +179,38 @@ class LeafletDrawService {
             features.forEach(feature => {
                 if (feature.type === 'Feature') {
                     if (feature.geometry.type === 'Point') {
-                        const latLng = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
+                        const latLng = L.latLng(
+                            feature.geometry.coordinates[1],
+                            feature.geometry.coordinates[0]
+                        );
 
                         let handler;
-                        if (feature.properties.drawtype === L.Draw.Circle.TYPE) {
-                            this._initialShapes++;
-                            handler = this.controlDraw._toolbars.draw._modes.circle.handler;
-                            this.circle = new L.Circle(latLng, feature.properties.radius, handler.options.shapeOptions);
+                        if (
+                            feature.properties.drawtype === L.Draw.Circle.TYPE
+                        ) {
+                            this._initialShapes += 1;
+                            handler = this.controlDraw._toolbars.draw._modes
+                                .circle.handler;
+                            this.circle = new L.Circle(
+                                latLng,
+                                feature.properties.radius,
+                                handler.options.shapeOptions
+                            );
                             this.circle.feature = feature;
-                            L.Draw.SimpleShape.prototype._fireCreatedEvent.call(handler, this.circle);
+                            L.Draw.SimpleShape.prototype._fireCreatedEvent.call(
+                                handler,
+                                this.circle
+                            );
                         } else {
-                            this._initialShapes++;
-                            handler = this.controlDraw._toolbars.draw._modes.marker.handler;
+                            this._initialShapes += 1;
+                            handler = this.controlDraw._toolbars.draw._modes
+                                .marker.handler;
                             const layer = new L.Marker(latLng, handler.options);
                             layer.feature = feature;
-                            L.Draw.Feature.prototype._fireCreatedEvent.call(handler, layer);
+                            L.Draw.Feature.prototype._fireCreatedEvent.call(
+                                handler,
+                                layer
+                            );
                         }
                     }
                 }
@@ -188,26 +225,33 @@ class LeafletDrawService {
     }
 
     _disableEditMode() {
-        for (let key in this.controlDraw._toolbars) {
-            if (this.controlDraw._toolbars.hasOwnProperty(key) && this.controlDraw._toolbars[key] instanceof L.EditToolbar) {
+        Object.keys(this.controlDraw._toolbars).forEach(key => {
+            if (
+                Object.prototype.hasOwnProperty.call(
+                    this.controlDraw._toolbars,
+                    key
+                ) &&
+                this.controlDraw._toolbars[key] instanceof L.EditToolbar
+            ) {
                 this.controlDraw._toolbars[key].disable();
             }
-        }
+        });
     }
 
     _initPopup(layer) {
         const id = this.featureGroup.getLayerId(layer);
-        let label = layer.feature.properties.label;
+        let { label } = layer.feature.properties;
         if (!label) {
             label = `zone ${this.featureGroup.getLayers().length}`;
         }
 
+        // eslint-disable-next-line new-cap
         const popup = new L.popup({
             autoPan: false,
             closeButton: false,
             autoClose: false,
             closeOnClick: false,
-            closeOnEscapeKey: false,
+            closeOnEscapeKey: false
         });
 
         popup.setContent(this._createPopUpContent(id, label));
@@ -220,7 +264,9 @@ class LeafletDrawService {
     }
 
     _disableEditIfMaxNumberOfCircleslReached() {
-        if (this.featureGroup.getLayers().length >= this._MAX_NUMBER_OF_CIRCLES) {
+        if (
+            this.featureGroup.getLayers().length >= this._MAX_NUMBER_OF_CIRCLES
+        ) {
             this._disableEdit();
         }
     }
@@ -242,6 +288,9 @@ class LeafletDrawService {
         this.map.addControl(this.controlDraw);
     }
 
+    /* eslint-disable no-param-reassign */
+
+    // eslint-disable-next-line class-methods-use-this
     _setFeatureProperties(layer) {
         if (layer instanceof L.Circle) {
             layer.feature.properties.radius = layer.getRadius();
@@ -252,31 +301,55 @@ class LeafletDrawService {
         }
     }
 
+    /* eslint-enable no-param-reassign */
+
     _centerMap() {
-        if (!(Object.keys(this.featureGroup.getBounds()).length === 0 && this.featureGroup.getBounds().constructor === Object)) {
+        if (
+            !(
+                Object.keys(this.featureGroup.getBounds()).length === 0 &&
+                this.featureGroup.getBounds().constructor === Object
+            )
+        ) {
             this.map.fitBounds(this.featureGroup.getBounds());
         }
     }
 
     _regenerateTooltips() {
-        this.map.eachLayer((layer) => {
-            if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
+        this.map.eachLayer(layer => {
+            if (
+                layer.feature &&
+                layer.feature.properties &&
+                layer.feature.properties.drawtype
+            ) {
                 if (layer.feature.properties.drawtype === 'circle') {
-                    this._labelArea(this.featureGroup.getLayerId(layer), false, false);
+                    this._labelArea(
+                        this.featureGroup.getLayerId(layer),
+                        false,
+                        false
+                    );
                 }
             }
         });
     }
 
     _recoverStateBeforeDeletion() {
-        this.map.eachLayer((layer) => {
-            if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
+        this.map.eachLayer(layer => {
+            if (
+                layer.feature &&
+                layer.feature.properties &&
+                layer.feature.properties.drawtype
+            ) {
                 if (layer.feature.properties.drawtype === 'circle') {
                     const id = this.featureGroup.getLayerId(layer);
                     if (!document.getElementById(`label-${id}`)) {
                         try {
-                            const originalLabel = layer._popup._content.split('\n').filter(v => v.indexOf('value="') > -1)[0].trim().replace('value="', '').replace(/"$/, '');
-                            layer.feature.properties.label = originalLabel;
+                            // eslint-disable-next-line no-param-reassign
+                            layer.feature.properties.label = layer._popup._content
+                                .split('\n')
+                                .filter(v => v.indexOf('value="') > -1)[0]
+                                .trim()
+                                .replace('value="', '')
+                                .replace(/"$/, '');
 
                             this._initPopup(layer);
                         } catch (e) {
@@ -305,14 +378,14 @@ class LeafletDrawService {
         if (distance) {
             radiusInKm = distance / 1000;
         } else {
-            radiusInKm = (this.featureGroup.getLayer(id).getRadius() / 1000);
+            radiusInKm = this.featureGroup.getLayer(id).getRadius() / 1000;
         }
 
         if (radiusInKm < 1) {
             radiusInKm *= 1000;
-            radiusInKm = `${radiusInKm.toFixed(0)} m`
+            radiusInKm = `${radiusInKm.toFixed(0)} m`;
         } else {
-            radiusInKm = `${radiusInKm.toFixed(2)} km`
+            radiusInKm = `${radiusInKm.toFixed(2)} km`;
         }
 
         return `
@@ -330,19 +403,26 @@ class LeafletDrawService {
         `;
     }
 
+    // eslint-disable-next-line class-methods-use-this
     _getDuplicatedLabels() {
         const labelsArray = [];
-        document.querySelectorAll('[id^="label-"]').forEach(function (el) {
+        document.querySelectorAll('[id^="label-"]').forEach(el => {
             labelsArray.push(el.value.toLowerCase());
         });
 
-        const duplicatedLabelsArray = labelsArray.reduce((accumulator, currentValue, index, array) => {
-            if (array.indexOf(currentValue) !== index && !accumulator.includes(currentValue.toLowerCase())) {
-                accumulator.push(currentValue.toLowerCase())
-            }
+        const duplicatedLabelsArray = labelsArray.reduce(
+            (accumulator, currentValue, index, array) => {
+                if (
+                    array.indexOf(currentValue) !== index &&
+                    !accumulator.includes(currentValue.toLowerCase())
+                ) {
+                    accumulator.push(currentValue.toLowerCase());
+                }
 
-            return accumulator;
-        }, []);
+                return accumulator;
+            },
+            []
+        );
 
         return duplicatedLabelsArray;
     }
@@ -351,7 +431,7 @@ class LeafletDrawService {
         const condDuplicated = this._getDuplicatedLabels().length === 0;
 
         let condNotEmpy = true;
-        document.querySelectorAll('[id^="label-"]').forEach((el) => {
+        document.querySelectorAll('[id^="label-"]').forEach(el => {
             if (el.value === '') {
                 condNotEmpy = false;
             }
@@ -364,14 +444,19 @@ class LeafletDrawService {
 
     _updateLabels(isValid) {
         if (isValid) {
-            document.querySelectorAll('[id^="label-"].not-valid').forEach(function (el) {
-                el.classList.remove('not-valid');
-            });
+            document
+                .querySelectorAll('[id^="label-"].not-valid')
+                .forEach(el => {
+                    el.classList.remove('not-valid');
+                });
         } else {
             const duplicatedLabelsArray = this._getDuplicatedLabels();
 
-            document.querySelectorAll('[id^="label-"]').forEach(function (el) {
-                if (duplicatedLabelsArray.includes(el.value.toLowerCase()) || el.value === '') {
+            document.querySelectorAll('[id^="label-"]').forEach(el => {
+                if (
+                    duplicatedLabelsArray.includes(el.value.toLowerCase()) ||
+                    el.value === ''
+                ) {
                     el.classList.add('not-valid');
                 } else {
                     el.classList.remove('not-valid');
@@ -391,7 +476,10 @@ class LeafletDrawService {
         } else {
             this._updateLabels(false);
 
-            this.notificationService.notify('FAILURE', 'Labels validation failed...');
+            this.notificationService.notify(
+                'FAILURE',
+                'Labels validation failed...'
+            );
         }
     }
 
@@ -403,11 +491,17 @@ class LeafletDrawService {
 
         this.map.on(L.Draw.Event.DELETED, this._drawDeletedEvent.bind(this));
 
-        this.map.on(L.Draw.Event.EDITRESIZE, this._drawEditedResizeEvent.bind(this));
+        this.map.on(
+            L.Draw.Event.EDITRESIZE,
+            this._drawEditedResizeEvent.bind(this)
+        );
 
         this.map.on(L.Draw.Event.EDITSTOP, this._drawEditStopEvent.bind(this));
 
-        this.map.on(L.Draw.Event.DELETESTOP, this._drawDeleteStopEvent.bind(this));
+        this.map.on(
+            L.Draw.Event.DELETESTOP,
+            this._drawDeleteStopEvent.bind(this)
+        );
 
         // Events debugging
         if (this._debug) {
@@ -419,9 +513,18 @@ class LeafletDrawService {
             this.map.on(L.Draw.Event.EDITVERTEX, this._debugEvent.bind(this));
             this.map.on(L.Draw.Event.DELETESTART, this._debugEvent.bind(this));
             this.map.on(L.Draw.Event.DELETESTOP, this._debugEvent.bind(this));
-            this.map.on(L.Draw.Event.TOOLBAROPENED, this._debugEvent.bind(this));
-            this.map.on(L.Draw.Event.TOOLBARCLOSED, this._debugEvent.bind(this));
-            this.map.on(L.Draw.Event.MARKERCONTEXT, this._debugEvent.bind(this));
+            this.map.on(
+                L.Draw.Event.TOOLBAROPENED,
+                this._debugEvent.bind(this)
+            );
+            this.map.on(
+                L.Draw.Event.TOOLBARCLOSED,
+                this._debugEvent.bind(this)
+            );
+            this.map.on(
+                L.Draw.Event.MARKERCONTEXT,
+                this._debugEvent.bind(this)
+            );
         }
     }
 
@@ -450,10 +553,14 @@ class LeafletDrawService {
 
         this._disableEditIfMaxNumberOfCircleslReached();
 
-        this._initPopup(this.featureGroup.getLayers()[this.featureGroup.getLayers().length - 1]);
+        this._initPopup(
+            this.featureGroup.getLayers()[
+                this.featureGroup.getLayers().length - 1
+            ]
+        );
 
         if (this._initialShapes > 0) {
-            this._initialShapes--;
+            this._initialShapes -= 1;
         } else {
             this._emitEvent('mapEdited');
         }
@@ -464,15 +571,18 @@ class LeafletDrawService {
     }
 
     _drawEditedEvent(e) {
-        e.layers.eachLayer((layer) => {
+        e.layers.eachLayer(layer => {
             this._setFeatureProperties.bind(this, layer);
         });
 
         this._emitEvent('mapEdited');
     }
 
-    _drawDeletedEvent(e) {
-        if (Object.keys(this.featureGroup._layers).length < this._MAX_NUMBER_OF_CIRCLES) {
+    _drawDeletedEvent() {
+        if (
+            Object.keys(this.featureGroup._layers).length <
+            this._MAX_NUMBER_OF_CIRCLES
+        ) {
             this.controlDraw.setDrawingOptions({
                 circle: true
             });
@@ -483,13 +593,15 @@ class LeafletDrawService {
         this._emitEvent('mapEdited');
     }
 
-    _drawEditStopEvent(e) {
+    _drawEditStopEvent() {
         this._regenerateTooltips();
     }
 
-    _drawDeleteStopEvent(e) {
+    _drawDeleteStopEvent() {
         this._recoverStateBeforeDeletion();
     }
+
+    // eslint-disable-next-line class-methods-use-this
     _debugEvent(e) {
         console.log(`[debug] : Event : ${e.type}`);
 
