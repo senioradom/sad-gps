@@ -14,6 +14,51 @@
   border: 1px solid #ccc;
 
   // --------------------
+  // Buttons
+  // --------------------
+  @at-root #{&}__buttons-container {
+    position: absolute;
+    z-index: 401;
+    right: 0;
+    bottom: 0;
+
+    padding: 10px;
+
+    background: transparent;
+  }
+
+  @at-root #{&}__button {
+    padding: 13px;
+
+    cursor: pointer;
+    user-select: none;
+
+    border-radius: 5px;
+    box-shadow: 0 0 2px 0 #000;
+
+    font-size: 13px;
+
+    @at-root #{&}--save {
+      color: white;
+      border: 1px solid $distributorColor;
+      background-color: $distributorColor;
+    }
+
+    @at-root #{&}--reset {
+      color: $distributorColor;
+      border: 1px solid #444;
+      background-color: #fff;
+    }
+
+    @at-root #{&}--disabled {
+      cursor: not-allowed;
+      pointer-events: none;
+
+      color: #c1c1c1;
+      border: 1px solid #c1c1c1;
+      background-color: #fff;
+    }
+  }
   // Notifications
   // --------------------
   @at-root #{&}__notifications {
