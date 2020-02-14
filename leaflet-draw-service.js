@@ -53,10 +53,7 @@ class LeafletDrawService {
         this.controlDraw = new L.Control.Draw({
             draw: {
                 circle: {
-                    feet: false,
-                    shapeOptions: {
-                        color: '#7a7a7a'
-                    }
+                    feet: false
                 },
                 marker: false,
                 circlemarker: false,
@@ -180,42 +177,40 @@ class LeafletDrawService {
             features.forEach(feature => {
                 if (feature.type === 'Feature') {
                     if (feature.geometry.type === 'Point') {
-                        const latLng = L.latLng(
-                            feature.geometry.coordinates[1],
-                            feature.geometry.coordinates[0]
-                        );
+                        const latLng = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
 
                         let handler;
-                        if (
-                            feature.properties.drawtype === L.Draw.Circle.TYPE
-                        ) {
+                        if (feature.properties.drawtype === L.Draw.Circle.TYPE) {
                             this._initialShapes += 1;
-                            handler = this.controlDraw._toolbars.draw._modes
+                            handler = this.controlDraw._toolbars.draw._modes.circle.handler;
 
                             this.circle = new L.Circle(latLng, feature.properties.radius, {
                                 color: this._colors.circle.view,
                                 weight: 1
                             });
-                            );
+
                             this.circle.feature = feature;
-                            L.Draw.SimpleShape.prototype._fireCreatedEvent.call(
-                                handler,
-                                this.circle
-                            );
+
+                            L.Draw.SimpleShape.prototype._fireCreatedEvent.call(handler, this.circle);
                         } else {
                             this._initialShapes += 1;
-                            handler = this.controlDraw._toolbars.draw._modes
-                                .marker.handler;
+
+                            handler = this.controlDraw._toolbars.draw._modes.marker.handler;
+
                             const layer = new L.Marker(latLng, handler.options);
+
                             layer.feature = feature;
-                            L.Draw.Feature.prototype._fireCreatedEvent.call(
-                                handler,
-                                layer
-                            );
+
+                            L.Draw.Feature.prototype._fireCreatedEvent.call(handler, layer);
                         }
                     }
                 }
             });
+
+            const labelsAreValid = this._checkLabelsAreValid();
+
+            this._toggleLabelsValidStyles(labelsAreValid);
+            this._toggleButtonsState(labelsAreValid);
 
             this._centerMap();
         }
@@ -413,7 +408,7 @@ class LeafletDrawService {
 
         // @todo : Can do with extra check on 10 chars max length (currently checked via HTML input rule)
 
-        return condNotEmpy && condDuplicated;
+        return condNotEmpty && condDuplicated;
     }
 
     _toggleLabelsValidStyles(isValid) {
@@ -434,6 +429,18 @@ class LeafletDrawService {
         }
     }
 
+    _toggleButtonsState(isValid) {
+        const buttons = document.querySelectorAll('.map__button');
+        if (isValid) {
+            buttons.forEach(button => {
+                button.classList.remove('map__button--disabled');
+            });
+        } else {
+            buttons.forEach(button => {
+                button.classList.add('map__button--disabled');
+            });
+        }
+    }
 
     _leafLetConfigOverrides() {
         L.Draw.Circle = L.Draw.Circle.extend({
@@ -445,21 +452,21 @@ class LeafletDrawService {
             }
         });
     }
+
     // --
     // Events handler
     // --------------------
     _emitEvent(type) {
-        if (this._checkLabels()) {
-            this._updateLabels(true);
+        if (this._checkLabelsAreValid()) {
+            this._toggleLabelsValidStyles(true);
+            this._toggleButtonsState(true);
 
             document.dispatchEvent(new Event(type));
         } else {
-            this._updateLabels(false);
+            this._toggleLabelsValidStyles(false);
+            this._toggleButtonsState(false);
 
-            this.notificationService.notify(
-                'FAILURE',
-                'Labels validation failed...'
-            );
+            this.notificationService.notify('FAILURE', 'Labels validation failed...');
         }
     }
 
@@ -500,14 +507,19 @@ class LeafletDrawService {
             }
         }
 
-        if (this._checkLabels()) {
-            this._updateLabels(true);
+        if (this._checkLabelsAreValid()) {
+            this._toggleLabelsValidStyles(true);
         } else {
-            this._updateLabels(false);
+            this._toggleLabelsValidStyles(false);
         }
     }
 
     _drawCreatedEvent(e) {
+        if (e.layerType === L.Draw.Circle.TYPE) {
+            // e.layer.options.color = '#ff0000';
+            console.log(e.layer.options.color);
+        }
+
         this.featureGroup.addLayer(e.layer);
 
         e.layer.feature = e.layer.feature || {};
@@ -540,12 +552,12 @@ class LeafletDrawService {
     }
 
     _drawDeletedEvent() {
-        if (
-            Object.keys(this.featureGroup._layers).length <
-            this._MAX_NUMBER_OF_CIRCLES
-        ) {
+        if (Object.keys(this.featureGroup._layers).length < this._MAX_NUMBER_OF_CIRCLES) {
             this.controlDraw.setDrawingOptions({
-                circle: true
+                circle: true,
+                shapeOptions: {
+                    color: this._colors.circle.view
+                }
             });
             this.map.removeControl(this.controlDraw);
             this.map.addControl(this.controlDraw);

@@ -104,7 +104,11 @@
   // Loading
   // --------------------
   &--loading {
-    pointer-events: none;
+    pointer-events: none !important;
+
+    & * {
+      pointer-events: none !important;
+    }
 
     #{ $self }__loading-overlay {
       display: block;
