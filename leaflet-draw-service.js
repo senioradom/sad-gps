@@ -43,7 +43,7 @@ class LeafletDrawService {
         this.map = L.map(el, {
             center: [this._FRANCE_CENTERED.lat, this._FRANCE_CENTERED.lng],
             zoom: this._FRANCE_CENTERED.zoom,
-            zoomControl: true,
+            zoomControl: false,
             layers: [config]
         });
 
@@ -71,6 +71,8 @@ class LeafletDrawService {
                 }
             }
         }).addTo(this.map);
+
+        this.map.addControl(L.control.zoom({ position: 'bottomleft' }));
 
         this._initEventListeners();
 
