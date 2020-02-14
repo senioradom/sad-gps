@@ -296,6 +296,36 @@ $distributorColor: #2c827d;
   bottom: -51px !important;
 }
 
+// --------------------
+// Tooltip
+// --------------------
+.leaflet-draw-actions a {
+  background-color: #464646!important;
+
+  @at-root #{&}:hover {
+    background-color: $distributorColor!important;
+  }
+}
+
+.leaflet-draw-tooltip-subtext {
+  color: white!important;
+
+  font-weight: bold;
+}
+
+.leaflet-draw-tooltip {
+  visibility: visible!important;
+
+  background: $distributorColor!important;
+
+  @at-root #{&}::before {
+    border-right-color: $distributorColor!important;
+  }
+}
+
+// --------------------
+// Icons while editing circles/shapes...
+// --------------------
 .leaflet-marker-icon.leaflet-div-icon.leaflet-editing-icon {
   // @todo
 }
