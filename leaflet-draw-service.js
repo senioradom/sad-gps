@@ -428,8 +428,8 @@ class LeafletDrawService {
         L.Draw.Circle = L.Draw.Circle.extend({
             options: {
                 shapeOptions: {
-                    weight: 1,
-                    color: this._colors.circle.view
+                    color: this._colors.circle.view,
+                    weight: 2
                 }
             }
         });
