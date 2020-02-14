@@ -1,6 +1,9 @@
 // --------------------------------------------
 // Application
 // --------------------------------------------
+
+$distributorColor: #2c827d;
+
 // --------------------
 // Map
 // --------------------
@@ -139,18 +142,18 @@
       overflow: hidden;
 
       box-sizing: border-box;
-      width: 40px;
-      height: 40px;
-      margin-top: -20px;
-      margin-left: -20px;
+      width: 56px;
+      height: 56px;
+      margin-top: -28px;
+      margin-left: -28px;
 
       content: '';
       animation: spinner .6s linear infinite;
       white-space: nowrap;
       text-indent: 100%;
 
-      border: 2px solid #ccc;
-      border-top-color: #333;
+      border: 3px solid #ccc;
+      border-top-color: $distributorColor;
       border-radius: 50%;
     }
 
@@ -249,6 +252,19 @@
   box-shadow: none !important;
 }
 
+.leaflet-popup-tip-container::before {
+  position: absolute;
+
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+
+  content: '';
+
+  border-radius: 50%;
+  background-color: $distributorColor;
+}
+
 .leaflet-popup-tip-container::after {
   position: absolute;
 
@@ -257,49 +273,20 @@
   margin-top: 0;
   margin-left: -13px;
 
-  content: '';
+  content: '\f3c5';
+  //content: '';
   transform: rotate(180deg);
   //background-image: url(https://raw.githubusercontent.com/Leaflet/Leaflet/master/dist/images/marker-icon.png) !important;
+  //background-image: url(images/marker.png) !important;
+  //background-repeat: no-repeat;
+  //background-size: contain;
 
-  background-image: url(images/marker.png) !important;
-  background-repeat: no-repeat;
-  background-size: contain;
-}
+  color: white;
+  text-shadow: 0 0 1px rgba(0,0,0,.81);
 
-input[id^='label-'] {
-  position: relative;
-  z-index: 1;
-
-  width: 120px;
-  padding: 3px;
-
-  text-align: center;
-
-  border: 1px solid #7a7a7a;
-  border-radius: 8px 8px 0 0;
-
-  font-size: 16px;
-  font-weight: bold;
-}
-
-input[id^='label-'].not-valid {
-  color: red;
-  border: 1px solid red;
-}
-
-div[id^='distance-'] {
-  width: 120px;
-  padding: 3px;
-
-  text-align: center;
-
-  color: #7a7a7a;
-  border: 1px solid #7a7a7a;
-  border-radius: 0 0 8px 8px;
-  background-color: white;
-
-  font-size: 16px;
-  font-style: italic;
+  font-family: 'Font Awesome 5 Free';
+  font-size: 34px;
+  font-weight: 900;
 }
 
 .leaflet-popup {
@@ -316,19 +303,39 @@ div[id^='distance-'] {
   width: 30px !important;
   height: 30px !important;
 
-  border: 2px solid #00acf0;
+  border: 1px solid $distributorColor;
   border-radius: 50%;
   background-color: white;
-  background-repeat: no-repeat;
-  background-position: center;
+  //background-repeat: no-repeat;
+  //background-position: center;
 }
 
 .leaflet-editing-icon.leaflet-edit-resize {
-  background-image: url(images/drag.png);
+  //background-image: url(images/drag.png);
+  background-image: none;
+
+  @at-root #{&}::after {
+    position: absolute;
+    top: 0;
+    left: 6px;
+
+    content: '\f31e';
+
+    color: $distributorColor;
+
+    font-family: 'Font Awesome 5 Free';
+    font-size: 21px;
+    font-weight: 900;
+  }
 }
 
 .leaflet-editing-icon.leaflet-edit-move {
-  margin-left: -16px !important;
+  border: none;
+  //margin-left: -16px !important;
+  //background-image: url(images/gps.png);
+  background: none!important;
+}
 
-  background-image: url(images/gps.png);
+.leaflet-control-attribution {
+  display: none;
 }
