@@ -16,7 +16,10 @@
             "rules": {
                 "no-underscore-dangle": "off",
                 "max-len": "off",
-                "no-console": "off"
+                "no-console": "off",
+                "class-methods-use-this": "off",
+                "no-param-reassign": "off",
+                "new-cap": "off"
             }
         }
     ]
