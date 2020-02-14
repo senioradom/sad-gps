@@ -72,24 +72,6 @@ class LeafletDrawService {
             }
         }).addTo(this.map);
 
-        L.control
-            .layers(
-                {
-                    // [this.translateService.instant('MAP.MAP')]: config.addTo(this.map),
-                    // [this.translateService.instant('MAP.SATELLITE')]: L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
-                    Carte: config.addTo(this.map),
-                    Satellite: L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
-                        attribution: 'google'
-                    })
-                },
-                {},
-                {
-                    position: 'topright',
-                    collapsed: false
-                }
-            )
-            .addTo(this.map);
-
         this._initEventListeners();
 
         if (geoJSON) {
