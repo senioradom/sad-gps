@@ -36,7 +36,8 @@ class LeafletDrawService {
         // drawLocales(this.localeService.getLocale() as drawLocales.Languages);
 
         const config = L.tileLayer(
-            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            // 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
             {}
         );
 
