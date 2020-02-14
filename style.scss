@@ -348,6 +348,54 @@ $distributorColor: #2c827d;
   background: none!important;
 }
 
+// --------------------
+// Leaflet Draw icons (edit bar)
+// --------------------
+.leaflet-touch .leaflet-draw-toolbar {
+  @at-root
+  #{&} .leaflet-draw-draw-circle,
+  #{&} .leaflet-draw-edit-edit,
+  #{&} .leaflet-draw-edit-remove {
+    position: relative;
+
+    background-image: none;
+  }
+
+  @at-root
+  #{&} .leaflet-draw-draw-circle::after,
+  #{&} .leaflet-draw-edit-edit::after,
+  #{&} .leaflet-draw-edit-remove::after {
+    position: absolute;
+    top: 0;
+    left: 9px;
+
+    color: #464646;
+
+    font-family: 'Font Awesome 5 Free';
+    font-size: 14px;
+    font-weight: 900;
+  }
+}
+
+.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-circle {
+  @at-root #{&}::after {
+    content: '\f111';
+
+    font-weight: 300;
+  }
+}
+
+.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-edit-edit {
+  @at-root #{&}::after {
+    content: '\f304';
+  }
+}
+
+.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-edit-remove {
+  @at-root #{&}::after {
+    content: '\f1f8';
+  }
+}
 .leaflet-control-attribution {
   display: none;
 }
