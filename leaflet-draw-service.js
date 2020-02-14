@@ -74,12 +74,9 @@ class LeafletDrawService {
                     // [this.translateService.instant('MAP.MAP')]: config.addTo(this.map),
                     // [this.translateService.instant('MAP.SATELLITE')]: L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
                     Carte: config.addTo(this.map),
-                    Satellite: L.tileLayer(
-                        'http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}',
-                        {
-                            attribution: 'google'
-                        }
-                    )
+                    Satellite: L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
+                        attribution: 'google'
+                    })
                 },
                 {},
                 {
@@ -118,9 +115,7 @@ class LeafletDrawService {
             }
 
             this.map.panTo(new L.LatLng(latitude, longitude));
-            this.marker = new L.Marker(new L.LatLng(latitude, longitude)).addTo(
-                this.map
-            );
+            this.marker = new L.Marker(new L.LatLng(latitude, longitude)).addTo(this.map);
         }
     }
 
@@ -150,7 +145,6 @@ class LeafletDrawService {
             });
 
             if (matchingLayer) {
-                // eslint-disable-next-line no-param-reassign
                 feature.properties.radius = matchingLayer.getRadius();
             }
         });
@@ -227,10 +221,7 @@ class LeafletDrawService {
     _disableEditMode() {
         Object.keys(this.controlDraw._toolbars).forEach(key => {
             if (
-                Object.prototype.hasOwnProperty.call(
-                    this.controlDraw._toolbars,
-                    key
-                ) &&
+                Object.prototype.hasOwnProperty.call(this.controlDraw._toolbars, key) &&
                 this.controlDraw._toolbars[key] instanceof L.EditToolbar
             ) {
                 this.controlDraw._toolbars[key].disable();
@@ -245,7 +236,6 @@ class LeafletDrawService {
             label = `zone ${this.featureGroup.getLayers().length}`;
         }
 
-        // eslint-disable-next-line new-cap
         const popup = new L.popup({
             autoPan: false,
             closeButton: false,
@@ -264,9 +254,7 @@ class LeafletDrawService {
     }
 
     _disableEditIfMaxNumberOfCircleslReached() {
-        if (
-            this.featureGroup.getLayers().length >= this._MAX_NUMBER_OF_CIRCLES
-        ) {
+        if (this.featureGroup.getLayers().length >= this._MAX_NUMBER_OF_CIRCLES) {
             this._disableEdit();
         }
     }
@@ -288,9 +276,6 @@ class LeafletDrawService {
         this.map.addControl(this.controlDraw);
     }
 
-    /* eslint-disable no-param-reassign */
-
-    // eslint-disable-next-line class-methods-use-this
     _setFeatureProperties(layer) {
         if (layer instanceof L.Circle) {
             layer.feature.properties.radius = layer.getRadius();
@@ -300,8 +285,6 @@ class LeafletDrawService {
             layer.feature.properties.drawtype = L.Draw.Marker.TYPE;
         }
     }
-
-    /* eslint-enable no-param-reassign */
 
     _centerMap() {
         if (
@@ -316,17 +299,9 @@ class LeafletDrawService {
 
     _regenerateTooltips() {
         this.map.eachLayer(layer => {
-            if (
-                layer.feature &&
-                layer.feature.properties &&
-                layer.feature.properties.drawtype
-            ) {
+            if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
                 if (layer.feature.properties.drawtype === 'circle') {
-                    this._labelArea(
-                        this.featureGroup.getLayerId(layer),
-                        false,
-                        false
-                    );
+                    this._labelArea(this.featureGroup.getLayerId(layer), false, false);
                 }
             }
         });
@@ -334,16 +309,11 @@ class LeafletDrawService {
 
     _recoverStateBeforeDeletion() {
         this.map.eachLayer(layer => {
-            if (
-                layer.feature &&
-                layer.feature.properties &&
-                layer.feature.properties.drawtype
-            ) {
+            if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
                 if (layer.feature.properties.drawtype === 'circle') {
                     const id = this.featureGroup.getLayerId(layer);
                     if (!document.getElementById(`label-${id}`)) {
                         try {
-                            // eslint-disable-next-line no-param-reassign
                             layer.feature.properties.label = layer._popup._content
                                 .split('\n')
                                 .filter(v => v.indexOf('value="') > -1)[0]
@@ -403,26 +373,19 @@ class LeafletDrawService {
         `;
     }
 
-    // eslint-disable-next-line class-methods-use-this
     _getDuplicatedLabels() {
         const labelsArray = [];
         document.querySelectorAll('[id^="label-"]').forEach(el => {
             labelsArray.push(el.value.toLowerCase());
         });
 
-        const duplicatedLabelsArray = labelsArray.reduce(
-            (accumulator, currentValue, index, array) => {
-                if (
-                    array.indexOf(currentValue) !== index &&
-                    !accumulator.includes(currentValue.toLowerCase())
-                ) {
-                    accumulator.push(currentValue.toLowerCase());
-                }
+        const duplicatedLabelsArray = labelsArray.reduce((accumulator, currentValue, index, array) => {
+            if (array.indexOf(currentValue) !== index && !accumulator.includes(currentValue.toLowerCase())) {
+                accumulator.push(currentValue.toLowerCase());
+            }
 
-                return accumulator;
-            },
-            []
-        );
+            return accumulator;
+        }, []);
 
         return duplicatedLabelsArray;
     }
@@ -491,17 +454,11 @@ class LeafletDrawService {
 
         this.map.on(L.Draw.Event.DELETED, this._drawDeletedEvent.bind(this));
 
-        this.map.on(
-            L.Draw.Event.EDITRESIZE,
-            this._drawEditedResizeEvent.bind(this)
-        );
+        this.map.on(L.Draw.Event.EDITRESIZE, this._drawEditedResizeEvent.bind(this));
 
         this.map.on(L.Draw.Event.EDITSTOP, this._drawEditStopEvent.bind(this));
 
-        this.map.on(
-            L.Draw.Event.DELETESTOP,
-            this._drawDeleteStopEvent.bind(this)
-        );
+        this.map.on(L.Draw.Event.DELETESTOP, this._drawDeleteStopEvent.bind(this));
 
         // Events debugging
         if (this._debug) {
@@ -513,18 +470,9 @@ class LeafletDrawService {
             this.map.on(L.Draw.Event.EDITVERTEX, this._debugEvent.bind(this));
             this.map.on(L.Draw.Event.DELETESTART, this._debugEvent.bind(this));
             this.map.on(L.Draw.Event.DELETESTOP, this._debugEvent.bind(this));
-            this.map.on(
-                L.Draw.Event.TOOLBAROPENED,
-                this._debugEvent.bind(this)
-            );
-            this.map.on(
-                L.Draw.Event.TOOLBARCLOSED,
-                this._debugEvent.bind(this)
-            );
-            this.map.on(
-                L.Draw.Event.MARKERCONTEXT,
-                this._debugEvent.bind(this)
-            );
+            this.map.on(L.Draw.Event.TOOLBAROPENED, this._debugEvent.bind(this));
+            this.map.on(L.Draw.Event.TOOLBARCLOSED, this._debugEvent.bind(this));
+            this.map.on(L.Draw.Event.MARKERCONTEXT, this._debugEvent.bind(this));
         }
     }
 
@@ -553,11 +501,7 @@ class LeafletDrawService {
 
         this._disableEditIfMaxNumberOfCircleslReached();
 
-        this._initPopup(
-            this.featureGroup.getLayers()[
-                this.featureGroup.getLayers().length - 1
-            ]
-        );
+        this._initPopup(this.featureGroup.getLayers()[this.featureGroup.getLayers().length - 1]);
 
         if (this._initialShapes > 0) {
             this._initialShapes -= 1;

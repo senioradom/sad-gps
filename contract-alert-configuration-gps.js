@@ -37,11 +37,7 @@ class ContractAlertConfigurationGps {
 
         const configurations = await response.json();
 
-        [this.configuration] = [
-            configurations.filter(
-                conf => conf.alertCode === 'out_of_perimeter'
-            )[0]
-        ];
+        [this.configuration] = [configurations.filter(conf => conf.alertCode === 'out_of_perimeter')[0]];
 
         if (!this.configuration.preference.geoJson) {
             this.configuration.preference.geoJson = `{
@@ -50,10 +46,7 @@ class ContractAlertConfigurationGps {
         }`;
         }
 
-        this.leafletDrawService.generateMap(
-            this.map,
-            this.configuration.preference.geoJson
-        );
+        this.leafletDrawService.generateMap(this.map, this.configuration.preference.geoJson);
         this._toggleLoadingIndicator(false);
     }
 
