@@ -154,6 +154,46 @@
       visibility: hidden;
     }
   }
+
+  // --------------------
+  // Custom zones
+  // --------------------
+  @at-root #{&}__custom-zone-label {
+    position: relative;
+    z-index: 1;
+
+    width: 120px;
+    padding: 3px;
+
+    text-align: center;
+
+    border: 1px solid #c0c0c0;
+    border-radius: 8px 8px 0 0;
+
+    font-size: 16px;
+
+    //font-weight: bold;
+
+    @at-root #{&}--not-valid {
+      color: #dc3545;
+      border: 1px solid #dc3545;
+    }
+  }
+
+  @at-root #{&}__custom-zone-distance {
+    width: 120px;
+    padding: 3px;
+
+    text-align: center;
+
+    color: #696969;
+    border: 1px solid #c0c0c0;
+    border-radius: 0 0 8px 8px;
+    background-color: white;
+
+    font-size: 12px;
+    font-style: italic;
+  }
 }
 
 // --------------------------------------------

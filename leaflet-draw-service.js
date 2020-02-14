@@ -322,7 +322,7 @@ class LeafletDrawService {
             if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
                 if (layer.feature.properties.drawtype === 'circle') {
                     const id = this.featureGroup.getLayerId(layer);
-                    if (!document.getElementById(`label-${id}`)) {
+                    if (!document.getElementById(`custom-zone-label-${id}`)) {
                         try {
                             layer.feature.properties.label = layer._popup._content
                                 .split('\n')
@@ -342,7 +342,7 @@ class LeafletDrawService {
     }
 
     _labelArea(id, distance, save) {
-        const label = document.getElementById(`label-${id}`).value;
+        const label = document.getElementById(`custom-zone-label-${id}`).value;
         const layer = this.featureGroup.getLayer(id);
 
         layer.feature.properties.label = label;
@@ -369,23 +369,24 @@ class LeafletDrawService {
         }
 
         return `
-            <input 
-                id="label-${id}" 
-                type="text" 
-                value="${label}" 
+            <input
+                id="custom-zone-label-${id}"
+                class="map__custom-zone-label"
+                type="text"
+                value="${label}"
                 required
                 autocomplete="off"
                 maxlength="10"
                 onkeyup="leafletDrawServiceInstance._onKeyUp(event);"
                 onfocusout="leafletDrawServiceInstance._labelArea(${id}, ${distance}, true);"
             >
-            <div id="distance-${id}">${radiusInKm}</div>
+            <div id="custom-zone-distance-${id}" class="map__custom-zone-distance">${radiusInKm}</div>
         `;
     }
 
     _getDuplicatedLabels() {
         const labelsArray = [];
-        document.querySelectorAll('[id^="label-"]').forEach(el => {
+        document.querySelectorAll('[id^="custom-zone-label-"]').forEach(el => {
             labelsArray.push(el.value.toLowerCase());
         });
 
@@ -400,13 +401,13 @@ class LeafletDrawService {
         return duplicatedLabelsArray;
     }
 
-    _checkLabels() {
+    _checkLabelsAreValid() {
         const condDuplicated = this._getDuplicatedLabels().length === 0;
 
-        let condNotEmpy = true;
-        document.querySelectorAll('[id^="label-"]').forEach(el => {
+        let condNotEmpty = true;
+        document.querySelectorAll('[id^="custom-zone-label-"]').forEach(el => {
             if (el.value === '') {
-                condNotEmpy = false;
+                condNotEmpty = false;
             }
         });
 
@@ -415,24 +416,19 @@ class LeafletDrawService {
         return condNotEmpy && condDuplicated;
     }
 
-    _updateLabels(isValid) {
+    _toggleLabelsValidStyles(isValid) {
         if (isValid) {
-            document
-                .querySelectorAll('[id^="label-"].not-valid')
-                .forEach(el => {
-                    el.classList.remove('not-valid');
-                });
+            document.querySelectorAll('[id^="custom-zone-label-"].map__custom-zone-label--not-valid').forEach(el => {
+                el.classList.remove('map__custom-zone-label--not-valid');
+            });
         } else {
             const duplicatedLabelsArray = this._getDuplicatedLabels();
 
-            document.querySelectorAll('[id^="label-"]').forEach(el => {
-                if (
-                    duplicatedLabelsArray.includes(el.value.toLowerCase()) ||
-                    el.value === ''
-                ) {
-                    el.classList.add('not-valid');
+            document.querySelectorAll('[id^="custom-zone-label-"]').forEach(el => {
+                if (duplicatedLabelsArray.includes(el.value.toLowerCase()) || el.value === '') {
+                    el.classList.add('map__custom-zone-label--not-valid');
                 } else {
-                    el.classList.remove('not-valid');
+                    el.classList.remove('map__custom-zone-label--not-valid');
                 }
             });
         }
