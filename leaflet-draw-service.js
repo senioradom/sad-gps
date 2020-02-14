@@ -16,7 +16,14 @@ class LeafletDrawService {
 
     _initialShapes = 0;
 
+    _colors = {
+        circle: {
+            view: '#2c827d'
+        }
+    };
+
     constructor() {
+        this._leafLetConfigOverrides();
         this.notificationService = new NotificationService();
 
         window.leafletDrawServiceInstance = this;
@@ -61,8 +68,8 @@ class LeafletDrawService {
                 featureGroup: this.featureGroup,
                 edit: {
                     selectedPathOptions: {
-                        color: '#00acf0',
-                        fillColor: '#00acf0'
+                        color: this._colors.circle.view,
+                        fillColor: this._colors.circle.view
                     }
                 }
             }
@@ -184,11 +191,11 @@ class LeafletDrawService {
                         ) {
                             this._initialShapes += 1;
                             handler = this.controlDraw._toolbars.draw._modes
-                                .circle.handler;
-                            this.circle = new L.Circle(
-                                latLng,
-                                feature.properties.radius,
-                                handler.options.shapeOptions
+
+                            this.circle = new L.Circle(latLng, feature.properties.radius, {
+                                color: this._colors.circle.view,
+                                weight: 1
+                            });
                             );
                             this.circle.feature = feature;
                             L.Draw.SimpleShape.prototype._fireCreatedEvent.call(
@@ -269,7 +276,10 @@ class LeafletDrawService {
 
     _toggleEdit(bool) {
         this.controlDraw.setDrawingOptions({
-            circle: bool
+            circle: bool,
+            shapeOptions: {
+                color: this._colors.circle.view
+            }
         });
 
         this.map.removeControl(this.controlDraw);
@@ -428,6 +438,17 @@ class LeafletDrawService {
         }
     }
 
+
+    _leafLetConfigOverrides() {
+        L.Draw.Circle = L.Draw.Circle.extend({
+            options: {
+                shapeOptions: {
+                    weight: 1,
+                    color: this._colors.circle.view
+                }
+            }
+        });
+    }
     // --
     // Events handler
     // --------------------
