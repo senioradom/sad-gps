@@ -171,7 +171,7 @@ class LeafletDrawService {
 
                             this.circle = new L.Circle(latLng, feature.properties.radius, {
                                 color: this._colors.circle.view,
-                                weight: 1
+                                weight: 2
                             });
 
                             this.circle.feature = feature;
@@ -559,13 +559,23 @@ class LeafletDrawService {
         this._recoverStateBeforeDeletion();
     }
 
-    // eslint-disable-next-line class-methods-use-this
+    // _drawToolbarClosedEvent(e) {
+    //     this._regenerateTooltips();
+    // }
+
     _debugEvent(e) {
         console.log(`[debug] : Event : ${e.type}`);
 
         switch (e.type) {
-            case 'draw:editstop':
-                //
+            // case 'draw:editstop':
+            // case 'draw:deletestop':
+            case 'draw:toolbarclosed':
+                // setTimeout(() => {
+                //     this._regenerateTooltips();
+                //     console.log('foo');
+                // }, 1000)
+                break;
+            default:
                 break;
         }
     }
