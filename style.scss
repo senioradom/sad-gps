@@ -396,6 +396,50 @@ $distributorColor: #2c827d;
     content: '\f1f8';
   }
 }
+
+// --------------------
+// Zoom
+// --------------------
+.leaflet-control-zoom {
+  @at-root
+  #{&}-in,
+  #{&}-out {
+    position: relative;
+
+    user-select: none;
+
+    color: transparent!important;
+    background-image: none;
+  }
+
+  @at-root
+  #{&}-in::after,
+  #{&}-out::after {
+    position: absolute;
+    top: 0;
+    left: 9px;
+
+    color: #464646;
+
+    font-family: 'Font Awesome 5 Free';
+    font-size: 14px;
+    font-weight: 900;
+  }
+}
+
+.leaflet-control-zoom-in::after {
+  content: '\f067';
+  //content: '\f00e';
+}
+
+.leaflet-control-zoom-out::after {
+  content: '\f068';
+  //content: '\f010';
+}
+
+// --------------------
+// Attribution
+// --------------------
 .leaflet-control-attribution {
   display: none;
 }
