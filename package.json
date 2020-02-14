@@ -9,6 +9,7 @@
   "dependencies": {
     "@babel/runtime": "^7.6.3",
     "@babel/runtime-corejs2": "^7.6.3",
+    "@fortawesome/fontawesome-free": "^5.12.1",
     "leaflet": "^1.5.1",
     "leaflet-draw": "^1.0.4",
     "leaflet-draw-locales": "^1.1.1"
