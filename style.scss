@@ -59,6 +59,8 @@
       background-color: #fff;
     }
   }
+
+  // --------------------
   // Notifications
   // --------------------
   @at-root #{&}__notifications {
@@ -79,22 +81,22 @@
     @at-root #{&}.saving {
       display: block;
 
-      border: 1px solid black;
+      border: 1px solid #6c757d;
       background-color: white;
     }
 
     @at-root #{&}.success {
       display: block;
 
-      border: 1px solid green;
-      background-color: lime;
+      border: 1px solid #28a745;
+      background-color: #28a745;
     }
 
     @at-root #{&}.failure {
       display: block;
 
-      border: 1px solid darkred;
-      background-color: red;
+      border: 1px solid #dc3545;
+      background-color: #dc3545;
     }
   }
 
