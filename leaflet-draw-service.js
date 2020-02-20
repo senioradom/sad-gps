@@ -35,21 +35,31 @@ class LeafletDrawService {
     generateMap(el, geoJSON) {
         // drawLocales(this.localeService.getLocale() as drawLocales.Languages);
 
-        const config = L.tileLayer(
-            // 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
-            {}
-        );
+        const mapAsImage = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+            noWrap: true
+        });
 
         this.map = L.map(el, {
             center: [this._FRANCE_CENTERED.lat, this._FRANCE_CENTERED.lng],
             zoom: this._FRANCE_CENTERED.zoom,
             zoomControl: false,
-            layers: [config]
+            layers: [mapAsImage]
         });
 
-        this.featureGroup = new L.FeatureGroup();
-        this.featureGroup.addTo(this.map);
+        this.alertsGPSConfigurationShapesGroup = new L.FeatureGroup();
+        this.alertsGPSConfigurationShapesGroup.addTo(this.map);
+
+        this.alertsGPSConfigurationLabelsGroup = new L.FeatureGroup();
+        this.alertsGPSConfigurationLabelsGroup.addTo(this.map);
+
+        this.userPositionsHistoryGroup = new L.FeatureGroup();
+        this.userPositionsHistoryGroup.addTo(this.map);
+
+        this.timelineControl = L.timelineSliderControl({
+            formatOutput(date) {
+                return moment(date).format('YYYY-MM-DD HH:mm:ss');
+            }
+        });
 
         this.controlDraw = new L.Control.Draw({
             draw: {
@@ -63,7 +73,7 @@ class LeafletDrawService {
                 rectangle: false
             },
             edit: {
-                featureGroup: this.featureGroup,
+                featureGroup: this.alertsGPSConfigurationShapesGroup,
                 edit: {
                     selectedPathOptions: {
                         color: this._colors.circle.view,
@@ -71,7 +81,8 @@ class LeafletDrawService {
                     }
                 }
             }
-        }).addTo(this.map);
+        });
+        this.controlDraw.addTo(this.map);
 
         this.map.addControl(L.control.zoom({ position: 'bottomleft' }));
 
@@ -99,18 +110,19 @@ class LeafletDrawService {
 
     addMarker(latitude, longitude) {
         if (latitude && longitude) {
-            if (this.marker) {
-                this.map.removeLayer(this.marker);
+            if (this.lastUserPositionMarker) {
+                this.userPositionsHistoryGroup.clearLayers();
             }
 
             this.map.panTo(new L.LatLng(latitude, longitude));
-            this.marker = new L.Marker(new L.LatLng(latitude, longitude)).addTo(this.map);
+            this.lastUserPositionMarker = new L.Marker(new L.LatLng(latitude, longitude));
+            this.lastUserPositionMarker.addTo(this.userPositionsHistoryGroup);
         }
     }
 
     exportGeoJSON() {
-        const geoJson = this.featureGroup.toGeoJSON();
-        const layers = this.featureGroup._layers;
+        const geoJson = this.alertsGPSConfigurationShapesGroup.toGeoJSON();
+        const layers = this.alertsGPSConfigurationShapesGroup._layers;
 
         let matchingLayer = null;
 
@@ -202,7 +214,8 @@ class LeafletDrawService {
     }
 
     _deleteAllLayers() {
-        this.featureGroup.clearLayers();
+        this.alertsGPSConfigurationShapesGroup.clearLayers();
+        this.alertsGPSConfigurationLabelsGroup.clearLayers();
     }
 
     _disableEditMode() {
@@ -239,7 +252,7 @@ class LeafletDrawService {
     }
 
     _initPopup(layer) {
-        const id = this.featureGroup.getLayerId(layer);
+        const id = this.alertsGPSConfigurationShapesGroup.getLayerId(layer);
         let { label } = layer.feature.properties;
         if (!label) {
             label = `zone ${this._guessZoneIndex()}`;
@@ -259,11 +272,11 @@ class LeafletDrawService {
         layer.bindPopup(popup);
         layer.off('click', this.openPopup);
 
-        popup.addTo(this.map);
+        popup.addTo(this.alertsGPSConfigurationLabelsGroup);
     }
 
     _disableEditIfMaxNumberOfCircleslReached() {
-        if (this.featureGroup.getLayers().length >= this._MAX_NUMBER_OF_CIRCLES) {
+        if (this.alertsGPSConfigurationShapesGroup.getLayers().length >= this._MAX_NUMBER_OF_CIRCLES) {
             this._disableEdit();
         }
     }
@@ -301,11 +314,11 @@ class LeafletDrawService {
     _centerMap() {
         if (
             !(
-                Object.keys(this.featureGroup.getBounds()).length === 0 &&
-                this.featureGroup.getBounds().constructor === Object
+                Object.keys(this.alertsGPSConfigurationShapesGroup.getBounds()).length === 0 &&
+                this.alertsGPSConfigurationShapesGroup.getBounds().constructor === Object
             )
         ) {
-            this.map.fitBounds(this.featureGroup.getBounds());
+            this.map.fitBounds(this.alertsGPSConfigurationShapesGroup.getBounds());
         }
     }
 
@@ -313,7 +326,7 @@ class LeafletDrawService {
         this.map.eachLayer(layer => {
             if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
                 if (layer.feature.properties.drawtype === 'circle') {
-                    this._labelArea(this.featureGroup.getLayerId(layer), false, false);
+                    this._labelArea(this.alertsGPSConfigurationShapesGroup.getLayerId(layer), false, false);
                 }
             }
         });
@@ -323,7 +336,7 @@ class LeafletDrawService {
         this.map.eachLayer(layer => {
             if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
                 if (layer.feature.properties.drawtype === 'circle') {
-                    const id = this.featureGroup.getLayerId(layer);
+                    const id = this.alertsGPSConfigurationShapesGroup.getLayerId(layer);
                     if (!document.getElementById(`custom-zone-label-${id}`)) {
                         try {
                             layer.feature.properties.label = layer._popup._content
@@ -345,7 +358,7 @@ class LeafletDrawService {
 
     _labelArea(id, distance, save) {
         const label = document.getElementById(`custom-zone-label-${id}`).value;
-        const layer = this.featureGroup.getLayer(id);
+        const layer = this.alertsGPSConfigurationShapesGroup.getLayer(id);
 
         layer.feature.properties.label = label;
         layer.setPopupContent(this._createPopUpContent(id, label, distance));
@@ -360,7 +373,7 @@ class LeafletDrawService {
         if (distance) {
             radiusInKm = distance / 1000;
         } else {
-            radiusInKm = this.featureGroup.getLayer(id).getRadius() / 1000;
+            radiusInKm = this.alertsGPSConfigurationShapesGroup.getLayer(id).getRadius() / 1000;
         }
 
         if (radiusInKm < 1) {
@@ -527,7 +540,7 @@ class LeafletDrawService {
             console.log(e.layer.options.color);
         }
 
-        this.featureGroup.addLayer(e.layer);
+        this.alertsGPSConfigurationShapesGroup.addLayer(e.layer);
 
         e.layer.feature = e.layer.feature || {};
         e.layer.feature.properties = e.layer.feature.properties || {};
@@ -537,7 +550,11 @@ class LeafletDrawService {
 
         this._disableEditIfMaxNumberOfCircleslReached();
 
-        this._initPopup(this.featureGroup.getLayers()[this.featureGroup.getLayers().length - 1]);
+        this._initPopup(
+            this.alertsGPSConfigurationShapesGroup.getLayers()[
+                this.alertsGPSConfigurationShapesGroup.getLayers().length - 1
+            ]
+        );
 
         if (this._initialShapes > 0) {
             this._initialShapes -= 1;
@@ -559,7 +576,7 @@ class LeafletDrawService {
     }
 
     _drawDeletedEvent() {
-        if (Object.keys(this.featureGroup._layers).length < this._MAX_NUMBER_OF_CIRCLES) {
+        if (Object.keys(this.alertsGPSConfigurationShapesGroup._layers).length < this._MAX_NUMBER_OF_CIRCLES) {
             this.controlDraw.setDrawingOptions({
                 circle: true,
                 shapeOptions: {
