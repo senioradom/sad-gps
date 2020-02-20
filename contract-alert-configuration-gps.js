@@ -1,5 +1,6 @@
 import LeafletDrawService from './leaflet-draw-service';
 import NotificationService from './notification-service';
+import GPSService from './gps-service';
 
 class ContractAlertConfigurationGps {
     constructor(contractRef, basicAuth) {
@@ -10,6 +11,7 @@ class ContractAlertConfigurationGps {
 
         this.leafletDrawService = new LeafletDrawService();
         this.notificationService = new NotificationService();
+        this.gpsService = new GPSService(this.contractRef, this.basicAuth);
 
         this.map = document.getElementById('map');
 
@@ -70,6 +72,18 @@ class ContractAlertConfigurationGps {
         this._zoomMapOnGPSLocation(address.lat, address.lng);
     }
     */
+
+    _getLastPosition() {
+        return this.gpsService.getLastPosition();
+    }
+
+    _getPositions() {
+        return this.gpsService.getPositions();
+    }
+
+    _getAddress() {
+        return this.gpsService.getAddress();
+    }
 
     // eslint-disable-next-line class-methods-use-this
     _handleErrors(response) {
