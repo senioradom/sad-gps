@@ -105,6 +105,11 @@ class LeafletDrawService {
     resetMap() {
         this._disableEditMode();
         this._deleteAllLayers();
+
+        Array.from(document.querySelectorAll('[id^="custom-zone-label-"]')).forEach(element => {
+            element.remove();
+        });
+
         this._importGeoJSON(this._initialGeoJsonState);
     }
 
