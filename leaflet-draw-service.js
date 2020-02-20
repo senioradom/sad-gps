@@ -1,10 +1,16 @@
 import L from 'leaflet';
 import 'leaflet-draw';
+import 'leaflet.timeline';
 // import * as drawLocales from 'leaflet-draw-locales';
+import moment from 'moment';
+import 'moment-timezone';
+
 import NotificationService from './notification-service';
 
 class LeafletDrawService {
     _debug = true;
+
+    _mode = 'GPS-ALERTS-CONFIGURATION-MODE';
 
     _MAX_NUMBER_OF_CIRCLES = 10;
 
@@ -158,6 +164,44 @@ class LeafletDrawService {
         return JSON.stringify(geoJson);
     }
 
+    switchAlertsConfigurationToHistoryMode() {
+        this._mode =
+            this._mode === 'GPS-ALERTS-CONFIGURATION-MODE'
+                ? 'GPS-HISTORY-PLAYBACK-MODE'
+                : 'GPS-ALERTS-CONFIGURATION-MODE';
+
+        const isHistoryPlaybackMode = this._mode === 'GPS-HISTORY-PLAYBACK-MODE';
+
+        if (isHistoryPlaybackMode) {
+            this.timelineControl.addTo(this.map);
+        }
+
+        // eslint-disable-next-line no-unused-vars
+        Object.entries(this.alertsGPSConfigurationShapesGroup._layers).forEach(([key, layer]) => {
+            layer.getElement().style.display = isHistoryPlaybackMode ? 'none' : 'block';
+        });
+
+        // eslint-disable-next-line no-unused-vars
+        Object.entries(this.alertsGPSConfigurationLabelsGroup._layers).forEach(([key, layer]) => {
+            layer.getElement().style.display = isHistoryPlaybackMode ? 'none' : 'block';
+        });
+
+        document.querySelector('.leaflet-control.leaflet-timeline-control').style.display = isHistoryPlaybackMode
+            ? 'block'
+            : 'none';
+
+        document.querySelector('.leaflet-draw.leaflet-control').style.display = isHistoryPlaybackMode
+            ? 'none'
+            : 'block';
+
+        document.querySelector('.map__buttons-container').style.display = isHistoryPlaybackMode ? 'none' : 'block';
+
+        if (isHistoryPlaybackMode) {
+            this._playGPSPositionsHistory(window.playBackGeoJson);
+        } else {
+            this.userPositionsHistoryGroup.clearLayers();
+        }
+    }
 
     validateDrawings() {
         if (this.controlDraw._toolbars.draw._modes.circle) {
@@ -485,6 +529,29 @@ class LeafletDrawService {
                 }
             }
         });
+    }
+
+    _playGPSPositionsHistory(positionsHistoryData) {
+        this.timeline = L.timeline(positionsHistoryData, {
+            pointToLayer(data, latlng) {
+                const divIcon = L.divIcon({
+                    className: 'custom-div-icon',
+                    html: `
+<div style='background-color:#4838cc;font-size: 50px' class='marker-pin bouboub'>
+    <i class='fa fa-camera awesome'></i>
+</div>`,
+                    iconSize: [30, 42],
+                    iconAnchor: [15, 42]
+                });
+
+                return L.marker(latlng, {
+                    icon: divIcon
+                });
+            }
+        });
+
+        this.timelineControl.addTimelines(this.timeline);
+        this.timeline.addTo(this.userPositionsHistoryGroup);
     }
 
     // --
