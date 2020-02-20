@@ -216,11 +216,33 @@ class LeafletDrawService {
         });
     }
 
+    _guessZoneIndex() {
+        const labelsArray = [];
+
+        document.querySelectorAll('[id^="custom-zone-label-"]').forEach(el => {
+            const zoneNumber = el.value.toLowerCase().match(/\d+/);
+            if (zoneNumber) {
+                labelsArray.push(parseInt(zoneNumber[0], 10));
+            }
+        });
+
+        const [zoneMin, zoneMax] = [Math.min(...labelsArray), Math.max(...labelsArray)];
+        const missingZonesIndexes = Array.from(Array(zoneMax - zoneMin), (value, index) => index + zoneMin).filter(
+            index => !labelsArray.includes(index)
+        );
+
+        if (missingZonesIndexes[0]) {
+            return missingZonesIndexes[0];
+        }
+
+        return this.alertsGPSConfigurationShapesGroup.getLayers().length;
+    }
+
     _initPopup(layer) {
         const id = this.featureGroup.getLayerId(layer);
         let { label } = layer.feature.properties;
         if (!label) {
-            label = `zone ${this.featureGroup.getLayers().length}`;
+            label = `zone ${this._guessZoneIndex()}`;
         }
 
         const popup = new L.popup({
