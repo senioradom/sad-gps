@@ -158,6 +158,15 @@ class LeafletDrawService {
         return JSON.stringify(geoJson);
     }
 
+
+    validateDrawings() {
+        if (this.controlDraw._toolbars.draw._modes.circle) {
+            this.controlDraw._toolbars.draw._modes.circle.handler.disable();
+        }
+
+        this.controlDraw._toolbars.edit._modes.edit.handler.disable();
+        this.controlDraw._toolbars.edit._modes.remove.handler.disable();
+    }
     // --------------------
     // Privates
     // --------------------

@@ -98,6 +98,7 @@ class ContractAlertConfigurationGps {
         this._toggleLoadingIndicator(true);
         this.notificationService.notify('SAVING', 'Saving...');
 
+        this.leafletDrawService.validateDrawings();
         this.configuration.preference.geoJson = this.leafletDrawService.exportGeoJSON();
 
         fetch(
