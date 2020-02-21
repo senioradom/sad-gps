@@ -41,7 +41,7 @@ class LeafletDrawService {
     generateMap(el, geoJSON) {
         // drawLocales(this.localeService.getLocale() as drawLocales.Languages);
 
-        const mapAsImage = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+        const mapAsImage = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             noWrap: true
         });
 
