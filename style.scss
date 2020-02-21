@@ -515,6 +515,22 @@ $distributorColor: #2c827d;
   text-align: center!important;
 }
 
+.leaflet-control.leaflet-timeline-control .button-container button {
+  cursor: pointer;
+
+  border: 1px solid #ccc!important;
+
+  @at-root #{&}:focus {
+    outline: none;
+  }
+}
+
+.leaflet-control.leaflet-timeline-control .button-container button.play,
+.leaflet-control.leaflet-timeline-control .button-container button.pause {
+  margin-right: 3px;
+  margin-left: 3px;
+}
+
 /*
 .leaflet-control.leaflet-timeline-control {
   box-sizing: border-box;
