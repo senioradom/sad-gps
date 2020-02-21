@@ -172,8 +172,12 @@ class LeafletDrawService {
 
         const isHistoryPlaybackMode = this._mode === 'GPS-HISTORY-PLAYBACK-MODE';
 
+        const map = document.getElementById('map');
+        map.dataset.mapMode = this._mode;
+
         if (isHistoryPlaybackMode) {
             this.timelineControl.addTo(this.map);
+            map.dataset.historyLoaded = false;
         }
 
         // eslint-disable-next-line no-unused-vars
@@ -196,9 +200,7 @@ class LeafletDrawService {
 
         document.querySelector('.map__buttons-container').style.display = isHistoryPlaybackMode ? 'none' : 'block';
 
-        if (isHistoryPlaybackMode) {
-            this._playGPSPositionsHistory(window.playBackGeoJson);
-        } else {
+        if (!isHistoryPlaybackMode) {
             this.userPositionsHistoryGroup.clearLayers();
         }
     }
@@ -555,8 +557,13 @@ class LeafletDrawService {
 
         // eslint-disable-next-line no-unused-vars
         this.timeline.on('change', e => {
-            this.map.fitBounds(this.userPositionsHistoryGroup.getBounds());
+            try {
+                this.map.fitBounds(this.userPositionsHistoryGroup.getBounds());
+                // eslint-disable-next-line no-empty
+            } catch (exception) {}
         });
+
+        document.getElementById('map').dataset.historyLoaded = true;
     }
 
     // --

@@ -531,6 +531,10 @@ $distributorColor: #2c827d;
   margin-left: 3px;
 }
 
+#map[data-history-loaded='false'] .leaflet-control-layers.leaflet-control-layers-expanded.leaflet-timeline-control.leaflet-control {
+  visibility: hidden;
+}
+
 /*
 .leaflet-control.leaflet-timeline-control {
   box-sizing: border-box;
