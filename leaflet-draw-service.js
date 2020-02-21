@@ -63,7 +63,7 @@ class LeafletDrawService {
 
         this.timelineControl = L.timelineSliderControl({
             formatOutput(date) {
-                return moment(date).format('YYYY-MM-DD HH:mm:ss');
+                return moment(date).format('DD/MM/YYYY - HH:mm');
             }
         });
 
@@ -535,11 +535,11 @@ class LeafletDrawService {
         this.timeline = L.timeline(positionsHistoryData, {
             pointToLayer(data, latlng) {
                 const divIcon = L.divIcon({
-                    className: 'custom-div-icon',
+                    className: 'user',
                     html: `
-<div style='background-color:#4838cc;font-size: 50px' class='marker-pin bouboub'>
-    <i class='fa fa-camera awesome'></i>
-</div>`,
+<i class="user__icon fas fa-portrait"></i>
+<div class="user__label">${moment(data.properties.start).format('DD/MM/YYYY - HH:mm')}</div>
+`,
                     iconSize: [30, 42],
                     iconAnchor: [15, 42]
                 });

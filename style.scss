@@ -205,6 +205,57 @@ $distributorColor: #2c827d;
   }
 }
 
+.user {
+  @at-root #{&}__icon {
+    position: relative;
+    right: 16px;
+    bottom: 55px;
+
+    color: $distributorColor;
+    text-shadow: 1px 1px 1px #000;
+
+    font-size: 55px;
+  }
+
+  // Bug fix : Sometimes the library overlays 2 icons which causes styling issues
+  // eg : Darker box shadows due to overlaying them
+  @at-root #{&}:nth-of-type(2) {
+    visibility: hidden;
+  }
+
+  @at-root #{&}__label {
+    position: absolute;
+    top: 7px;
+    left: -60px;
+
+    width: 120px;
+    padding: 5px;
+
+    text-align: center;
+
+    color: black;
+    border-radius: 5px;
+    background: white;
+    box-shadow: 3px 3px 21px 0 rgba(0,0,0,.61);
+
+    font-size: 14px;
+
+    @at-root #{&}::after {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+
+      margin-left: -5px;
+
+      content: ' ';
+
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent transparent white transparent;
+    }
+  }
+}
+
 // --------------------------------------------
 // Libraries override
 // --------------------------------------------
