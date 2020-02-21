@@ -9,9 +9,9 @@ class ContractAlertConfigurationGps {
         this.contractRef = contractRef;
         this.basicAuth = basicAuth;
 
-        this.leafletDrawService = new LeafletDrawService();
         this.notificationService = new NotificationService();
         this.gpsService = new GPSService(this.contractRef, this.basicAuth);
+        this.leafletDrawService = new LeafletDrawService(this.gpsService);
 
         this.map = document.getElementById('map');
 

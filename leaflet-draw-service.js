@@ -28,9 +28,10 @@ class LeafletDrawService {
         }
     };
 
-    constructor() {
+    constructor(gpsService) {
         this._leafLetConfigOverrides();
         this.notificationService = new NotificationService();
+        this.gpsService = gpsService;
 
         window.leafletDrawServiceInstance = this;
     }
@@ -62,6 +63,8 @@ class LeafletDrawService {
         this.userPositionsHistoryGroup.addTo(this.map);
 
         this.timelineControl = L.timelineSliderControl({
+            steps: 1000 * 24,
+            duration: 10000 * 24,
             formatOutput(date) {
                 return moment(date).format('DD/MM/YYYY - HH:mm');
             }
@@ -205,6 +208,47 @@ class LeafletDrawService {
         }
     }
 
+    timelineData(dates) {
+        const data = {
+            type: 'FeatureCollection',
+            features: []
+        };
+
+        let lastPositionDateTime;
+
+        this.gpsService.getPositions().then(result => {
+            result.forEach((position, index) => {
+                if (index === 0) {
+                    lastPositionDateTime = moment(position.createdAt);
+                } else {
+                    if (moment(position.createdAt) < moment(lastPositionDateTime).add(5, 'minutes')) {
+                        return;
+                    }
+
+                    data.features[data.features.length - 1].properties.end = position.createdAt;
+                }
+
+                lastPositionDateTime = moment(position.createdAt);
+
+                data.features.push({
+                    type: 'Feature',
+                    properties: {
+                        start: position.createdAt
+                        // end: Added programmatically
+                    },
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [position.longitude, position.latitude]
+                    }
+                });
+            });
+
+            data.features[data.features.length - 1].properties.end =
+                data.features[data.features.length - 1].properties.start;
+
+            this._playGPSPositionsHistory(data);
+        });
+    }
     validateDrawings() {
         if (this.controlDraw._toolbars.draw._modes.circle) {
             this.controlDraw._toolbars.draw._modes.circle.handler.disable();
