@@ -552,6 +552,11 @@ class LeafletDrawService {
 
         this.timelineControl.addTimelines(this.timeline);
         this.timeline.addTo(this.userPositionsHistoryGroup);
+
+        // eslint-disable-next-line no-unused-vars
+        this.timeline.on('change', e => {
+            this.map.fitBounds(this.userPositionsHistoryGroup.getBounds());
+        });
     }
 
     // --
