@@ -215,6 +215,7 @@ class LeafletDrawService {
 
         if (!isHistoryPlaybackMode) {
             this.userPositionsHistoryGroup.clearLayers();
+            this._centerMap('alertsGPSConfigurationShapesGroup');
         }
     }
 
@@ -351,7 +352,7 @@ class LeafletDrawService {
             this._toggleLabelsValidStyles(labelsAreValid);
             this._toggleButtonsState(labelsAreValid);
 
-            this._centerMap();
+            this._centerMap('alertsGPSConfigurationShapesGroup');
         }
     }
 
@@ -453,14 +454,9 @@ class LeafletDrawService {
         }
     }
 
-    _centerMap() {
-        if (
-            !(
-                Object.keys(this.alertsGPSConfigurationShapesGroup.getBounds()).length === 0 &&
-                this.alertsGPSConfigurationShapesGroup.getBounds().constructor === Object
-            )
-        ) {
-            this.map.fitBounds(this.alertsGPSConfigurationShapesGroup.getBounds());
+    _centerMap(layer) {
+        if (!(Object.keys(this[layer].getBounds()).length === 0 && this[layer].getBounds().constructor === Object)) {
+            this.map.fitBounds(this[layer].getBounds());
         }
     }
 
@@ -640,8 +636,7 @@ class LeafletDrawService {
         // eslint-disable-next-line no-unused-vars
         this.timeline.on('change', e => {
             try {
-                this.map.fitBounds(this.userPositionsHistoryGroup.getBounds());
-                // eslint-disable-next-line no-empty
+                this._centerMap('userPositionsHistoryGroup');
             } catch (exception) {}
         });
 
