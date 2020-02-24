@@ -59,6 +59,9 @@ class LeafletDrawService {
         this.alertsGPSConfigurationLabelsGroup = new L.FeatureGroup();
         this.alertsGPSConfigurationLabelsGroup.addTo(this.map);
 
+        this.lastUserPositionGroup = new L.FeatureGroup();
+        this.lastUserPositionGroup.addTo(this.map);
+
         this.userPositionsHistoryGroup = new L.FeatureGroup();
         this.userPositionsHistoryGroup.addTo(this.map);
 
@@ -122,16 +125,29 @@ class LeafletDrawService {
         this._importGeoJSON(this._initialGeoJsonState);
     }
 
-    addMarker(latitude, longitude) {
-        if (latitude && longitude) {
-            if (this.lastUserPositionMarker) {
-                this.userPositionsHistoryGroup.clearLayers();
+    addPositionMarker() {
+        this.gpsService.getLastPosition().then(result => {
+            if (!(result.latitude && result.longitude && result.createdAt)) {
+                return;
             }
 
-            this.map.panTo(new L.LatLng(latitude, longitude));
-            this.lastUserPositionMarker = new L.Marker(new L.LatLng(latitude, longitude));
-            this.lastUserPositionMarker.addTo(this.userPositionsHistoryGroup);
-        }
+            this.map.panTo(new L.LatLng(result.latitude, result.longitude));
+
+            this.lastUserPositionMarker = new L.marker([result.latitude, result.longitude], {
+                icon: L.divIcon({
+                    className: 'user',
+                    html: `
+<i class="user__icon fas fa-portrait"></i>
+<div class="user__label">${moment(result.createdAt).format('DD/MM/YYYY - HH:mm')}</div>
+`,
+                    iconSize: [30, 42],
+                    iconAnchor: [15, 42]
+                })
+            });
+
+            this.lastUserPositionMarker.addTo(this.lastUserPositionGroup);
+            this._centerMap('lastUserPositionGroup');
+        });
     }
 
     exportGeoJSON() {
@@ -179,8 +195,8 @@ class LeafletDrawService {
         map.dataset.mapMode = this._mode;
 
         if (isHistoryPlaybackMode) {
-            this.timelineControl.addTo(this.map);
             map.dataset.historyLoaded = false;
+            this.addPositionMarker();
         }
 
         // eslint-disable-next-line no-unused-vars
