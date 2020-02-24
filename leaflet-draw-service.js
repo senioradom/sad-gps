@@ -65,14 +65,6 @@ class LeafletDrawService {
         this.userPositionsHistoryGroup = new L.FeatureGroup();
         this.userPositionsHistoryGroup.addTo(this.map);
 
-        this.timelineControl = L.timelineSliderControl({
-            steps: 1000 * 24,
-            duration: 10000 * 24,
-            formatOutput(date) {
-                return moment(date).format('DD/MM/YYYY - HH:mm');
-            }
-        });
-
         this.controlDraw = new L.Control.Draw({
             draw: {
                 circle: {
@@ -232,7 +224,15 @@ class LeafletDrawService {
 
         let lastPositionDateTime;
 
+        let minimumDate;
+        let maximumDate;
+
         this.gpsService.getPositions().then(result => {
+            const moments = result.map(position => moment(position.createdAt));
+
+            minimumDate = moment.min(moments);
+            maximumDate = moment.max(moments);
+
             result.forEach((position, index) => {
                 if (index === 0) {
                     lastPositionDateTime = moment(position.createdAt);
@@ -262,9 +262,29 @@ class LeafletDrawService {
             data.features[data.features.length - 1].properties.end =
                 data.features[data.features.length - 1].properties.start;
 
+            Array.from(document.querySelectorAll('.leaflet-timeline-control')).forEach(element => {
+                element.remove();
+            });
+
+            this.lastUserPositionGroup.clearLayers();
+            this.userPositionsHistoryGroup.clearLayers();
+
+            const duration = moment.duration(maximumDate.diff(minimumDate));
+            const hours = parseInt(duration.asHours(), 10);
+
+            this.timelineControl = L.timelineSliderControl({
+                steps: hours,
+                duration: hours * 1000,
+                formatOutput(date) {
+                    return moment(date).format('DD/MM/YYYY - HH:mm');
+                }
+            });
+            this.timelineControl.addTo(this.map);
+
             this._playGPSPositionsHistory(data);
         });
     }
+
     validateDrawings() {
         if (this.controlDraw._toolbars.draw._modes.circle) {
             this.controlDraw._toolbars.draw._modes.circle.handler.disable();
