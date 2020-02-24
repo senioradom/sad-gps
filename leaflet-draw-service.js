@@ -201,9 +201,11 @@ class LeafletDrawService {
             layer.getElement().style.display = isHistoryPlaybackMode ? 'none' : 'block';
         });
 
-        document.querySelector('.leaflet-control.leaflet-timeline-control').style.display = isHistoryPlaybackMode
-            ? 'block'
-            : 'none';
+        if (document.querySelector('.leaflet-control.leaflet-timeline-control')) {
+            document.querySelector('.leaflet-control.leaflet-timeline-control').style.display = isHistoryPlaybackMode
+                ? 'block'
+                : 'none';
+        }
 
         document.querySelector('.leaflet-draw.leaflet-control').style.display = isHistoryPlaybackMode
             ? 'none'
