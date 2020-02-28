@@ -1,6 +1,6 @@
 import LeafletDrawService from './services/leaflet-draw-service';
 import NotificationService from './services/notification-service';
-import GPSService from './services/gps-service';
+import ApiService from './services/api-service';
 import DateTimesSelectorWidget from './widgets/DateTimesSelectorWidget';
 import '@fortawesome/fontawesome-free/js/all.min';
 
@@ -12,7 +12,7 @@ class App {
         this.basicAuth = basicAuth;
 
         this.notificationService = new NotificationService();
-        this.gpsService = new GPSService(this.contractRef, this.basicAuth);
+        this.gpsService = new ApiService(this.contractRef, this.basicAuth);
         this.leafletDrawService = new LeafletDrawService(this.gpsService);
 
         this.app = document.getElementById('app');

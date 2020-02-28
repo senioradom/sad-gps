@@ -1,4 +1,4 @@
-class GPSService {
+class ApiService {
     // • GPS Tracking
     // Last position
     // https://gateway-pp.senioradom.com/api/4/contracts/CLICK3RE/actimetry/gps-positions/last
@@ -64,4 +64,4 @@ class GPSService {
     }
 }
 
-export default GPSService;
+export default ApiService;
