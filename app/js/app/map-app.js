@@ -1,7 +1,7 @@
-import MapService from './services/map-service';
-import NotificationService from './services/notification-service';
-import ApiService from './services/api-service';
-import WidgetDates from './widgets/widget-dates';
+import MapService from '../services/map-service';
+import NotificationService from '../services/notification-service';
+import ApiService from '../services/api-service';
+import WidgetDates from '../widgets/widget-dates';
 import '@fortawesome/fontawesome-free/js/all.min';
 
 class MapApp {
