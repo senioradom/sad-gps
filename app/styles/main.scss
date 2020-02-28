@@ -27,11 +27,14 @@ $nodeModuleRoot: '../../node_modules/';
 
 @import 'partials/map';
 
-@import 'partials/widget-dates';
-
 @import 'partials/shared';
 
 @import 'partials/user';
+
+// --------------------
+// Widgets
+// --------------------
+@import 'partials/widgets/widget-dates';
 
 // --------------------
 // Libraries overrides
