@@ -4,15 +4,15 @@ import ApiService from '../services/api-service';
 import WidgetDates from '../widgets/widget-dates';
 import '@fortawesome/fontawesome-free/js/all.min';
 
-class MapApp {
+class AppMap {
     _autoSave = false;
 
     _elements = {
-        app: document.getElementById('js-map-app'),
+        app: document.getElementById('js-app-map'),
         map: document.getElementById('js-map'),
         buttons: {
-            reset: document.getElementById('js-map-app__button-reset'),
-            save: document.getElementById('js-map-app__button-save')
+            reset: document.getElementById('js-app-map__button-reset'),
+            save: document.getElementById('js-app-map__button-save')
         }
     };
 
@@ -71,10 +71,10 @@ class MapApp {
     // --------------------
     _toggleLoadingIndicator(isLoading) {
         if (isLoading) {
-            this._elements.app.classList.add('map-app--loading');
+            this._elements.app.classList.add('app-map--loading');
             this._elements.map.classList.add('map--loading');
         } else {
-            this._elements.app.classList.remove('map-app--loading');
+            this._elements.app.classList.remove('app-map--loading');
             this._elements.map.classList.remove('map--loading');
         }
     }
@@ -116,4 +116,4 @@ class MapApp {
     }
 }
 
-export default MapApp;
+export default AppMap;

@@ -1,3 +1,3 @@
-import MapApp from './app/map-app';
+import AppMap from './app/app-map';
 
-(() => new MapApp('apiURL', 'contractRef', 'basicAuth'))();
+(() => new AppMap('apiURL', 'contractRef', 'basicAuth'))();

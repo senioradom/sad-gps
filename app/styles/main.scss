@@ -21,24 +21,27 @@ $nodeModuleRoot: '../../node_modules/';
 // --------------------
 // App
 // --------------------
-@import 'partials/map-app';
+@import 'elements/app-map';
 
-@import 'partials/notifications';
+@import 'elements/map';
 
-@import 'partials/map';
+@import 'elements/user';
 
-@import 'partials/shared';
+@import 'elements/notifications';
 
-@import 'partials/user';
+// --------------------
+// Common
+// --------------------
+@import 'common/shared';
 
 // --------------------
 // Widgets
 // --------------------
-@import 'partials/widgets/widget-dates';
+@import 'widgets/widget-dates';
 
 // --------------------
 // Libraries overrides
 // --------------------
-@import './fonts/font-awesome-v5';
+@import 'libraries-overrides/fonts/font-awesome-v5';
 
-@import 'partials/libraries-overrides';
+@import 'libraries-overrides/libraries-overrides';
