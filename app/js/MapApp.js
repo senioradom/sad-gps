@@ -13,11 +13,11 @@ class MapApp {
         this.leafletDrawService = new LeafletDrawService(this.apiService);
 
         this._elements = {
-            app: document.getElementById('js-app'),
-            map: document.getElementById('map'),
+            app: document.getElementById('js-map-app'),
+            map: document.getElementById('js-map'),
             buttons: {
-                reset: document.getElementById('reset'),
-                save: document.getElementById('save')
+                reset: document.getElementById('js-map-app__button-reset'),
+                save: document.getElementById('js-map-app__button-save')
             }
         };
 
@@ -80,11 +80,11 @@ class MapApp {
     // --------------------
     _toggleLoadingIndicator(isLoading) {
         if (isLoading) {
+            this._elements.app.classList.add('map-app--loading');
             this._elements.map.classList.add('map--loading');
-            this._elements.app.classList.add('app--loading');
         } else {
+            this._elements.app.classList.remove('map-app--loading');
             this._elements.map.classList.remove('map--loading');
-            this._elements.app.classList.remove('app--loading');
         }
     }
 

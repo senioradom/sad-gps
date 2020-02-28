@@ -11,7 +11,7 @@
 <!-- ------------------
  Application
 ------------------- -->
-<div class="app app--loading" id="js-app">
+<div class="map-app map-app--loading" id="js-map-app">
 
     <!-- ------------------
      Widget : DateTime picker
@@ -36,19 +36,24 @@
         </div>
     </div>
 
-
     <!-- ------------------
-
+    Map
     ------------------- -->
-    <div class="map map--loading" id="map" data-map-mode="GPS-ALERTS-CONFIGURATION-MODE" data-history-loaded="false">
+    <div class="map map--loading" id="js-map" data-map-mode="GPS-ALERTS-CONFIGURATION-MODE" data-history-loaded="false">
         <div class="map__loading-overlay"></div>
     </div>
 
-    <div class="app__buttons-container">
-        <button class="app__button app__button--reset" id="reset">Annuler</button>
-        <button class="app__button app__button--save" id="save">Sauvegarder</button>
+    <!-- ------------------
+    Buttons
+    ------------------- -->
+    <div class="map-app__buttons-container">
+        <button class="map-app__button map-app__button--reset" id="js-map-app__button-reset">Annuler</button>
+        <button class="map-app__button map-app__button--save" id="js-map-app__button-save">Sauvegarder</button>
     </div>
 
+    <!-- ------------------
+     Notifications
+    ------------------- -->
     <div class="notifications" id="js-notifications"></div>
 </div>
 
