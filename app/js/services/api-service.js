@@ -1,30 +1,42 @@
 class ApiService {
-    // • GPS Tracking
-    // Last position
-    // https://gateway-pp.senioradom.com/api/4/contracts/CLICK3RE/actimetry/gps-positions/last
-    // https://gateway-pp.senioradom.com/api/4/contracts/CLICK3RE/actimetry/gps-positions?start=2020-01-31T23:00:00.000Z&end=2020-02-06T23:00:00.000Z
-
-    //  • Security perimeter
-    //  https://gateway-pp.senioradom.com/api/3/contracts/CLICK3RE/alert-configurations
-
-    // • Address
-    // https://gateway-pp.senioradom.com/api/3/address?query=5%20avenue%20garenniere
-
-    constructor(contractRef, basicAuth) {
+    constructor(api, contractRef, basicAuth) {
+        this.api = api;
         this.contractRef = contractRef;
         this.basicAuth = basicAuth;
     }
 
+    getAlertConfigurations() {
+        return fetch(`${this.api}/api/3/contracts/${this.contractRef}/alert-configurations`, {
+            headers: {
+                authorization: `Basic ${this.basicAuth}`
+            },
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then(responseData => {
+                return responseData;
+            })
+            .catch(error => console.warn(error));
+    }
+
+    saveAlertConfiguration(configuration) {
+        return fetch(`${this.api}/api/3/contracts/${this.contractRef}/alert-configurations/${configuration.id}`, {
+            headers: {
+                authorization: `Basic ${this.basicAuth}`,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(configuration),
+            method: 'PUT'
+        }).then(this._handleErrors);
+    }
+
     getLastPosition() {
-        return fetch(
-            `https://gateway-pp.senioradom.com/api/4/contracts/${this.contractRef}/actimetry/gps-positions/last`,
-            {
-                headers: {
-                    authorization: `Basic ${this.basicAuth}`
-                },
-                method: 'GET'
-            }
-        )
+        return fetch(`${this.api}/api/4/contracts/${this.contractRef}/actimetry/gps-positions/last`, {
+            headers: {
+                authorization: `Basic ${this.basicAuth}`
+            },
+            method: 'GET'
+        })
             .then(response => response.json())
             .then(responseData => {
                 return responseData;
@@ -34,7 +46,7 @@ class ApiService {
 
     getPositions() {
         return fetch(
-            `https://gateway-pp.senioradom.com/api/4/contracts/${this.contractRef}/actimetry/gps-positions?start=2020-01-24T23:00:00.000Z&end=2020-01-30T23:00:00.000Z`,
+            `${this.api}/api/4/contracts/${this.contractRef}/actimetry/gps-positions?start=2020-01-24T23:00:00.000Z&end=2020-01-30T23:00:00.000Z`,
             {
                 headers: {
                     authorization: `Basic ${this.basicAuth}`
@@ -50,7 +62,7 @@ class ApiService {
     }
 
     getAddress() {
-        return fetch('https://gateway-pp.senioradom.com/api/3/address?query=5%20avenue%20garenniere', {
+        return fetch(`${this.api}/api/3/address?query=5%20avenue%20garenniere`, {
             headers: {
                 authorization: `Basic ${this.basicAuth}`
             },
@@ -61,6 +73,14 @@ class ApiService {
                 return responseData;
             })
             .catch(error => console.warn(error));
+    }
+
+    _handleErrors(response) {
+        if (!response.ok) {
+            throw Error(response.status);
+        }
+
+        return response;
     }
 }
 
