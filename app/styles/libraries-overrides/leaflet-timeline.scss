@@ -1,0 +1,39 @@
+// --------------------
+// Leaflet Timeline
+// --------------------
+.leaflet-bottom.leaflet-left {
+  width: 100%;
+}
+
+.leaflet-control.leaflet-timeline-control {
+  position: absolute!important;
+  bottom: 0!important;
+  left: 3%!important;
+
+  box-sizing: border-box!important;
+  width: 96%!important;
+  margin-bottom: 10px!important;
+  margin-left: 0!important;
+
+  text-align: center!important;
+}
+
+.leaflet-control.leaflet-timeline-control .button-container button {
+  cursor: pointer;
+
+  border: 1px solid #ccc!important;
+
+  @at-root #{&}:focus {
+    outline: none;
+  }
+}
+
+.leaflet-control.leaflet-timeline-control .button-container button.play,
+.leaflet-control.leaflet-timeline-control .button-container button.pause {
+  margin-right: 3px;
+  margin-left: 3px;
+}
+
+#map[data-history-loaded='false'] .leaflet-control-layers.leaflet-control-layers-expanded.leaflet-timeline-control.leaflet-control {
+  visibility: hidden;
+}

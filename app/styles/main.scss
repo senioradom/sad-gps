@@ -42,6 +42,10 @@ $nodeModuleRoot: '../../node_modules/';
 // --------------------
 // Libraries overrides
 // --------------------
-@import 'libraries-overrides/fonts/font-awesome-v5';
+@import 'libraries-overrides/font-awesome-v5';
 
-@import 'libraries-overrides/libraries-overrides';
+@import 'libraries-overrides/rome';
+
+@import 'libraries-overrides/leaflet';
+
+@import 'libraries-overrides/leaflet-timeline';
