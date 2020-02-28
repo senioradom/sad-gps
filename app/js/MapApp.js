@@ -1,7 +1,7 @@
 import LeafletDrawService from './services/leaflet-draw-service';
 import NotificationService from './services/notification-service';
 import ApiService from './services/api-service';
-import DatesSelectorWidget from './widgets/DatesSelectorWidget';
+import DatetimesSelectorWidget from './widgets/DatetimesSelectorWidget';
 import '@fortawesome/fontawesome-free/js/all.min';
 
 class MapApp {
@@ -12,12 +12,20 @@ class MapApp {
         this.apiService = new ApiService(api, contractRef, basicAuth);
         this.leafletDrawService = new LeafletDrawService(this.apiService);
 
-        this.app = document.getElementById('app');
-        this.map = document.getElementById('map');
-
-        this.resetButton = document.getElementById('reset');
-        this.saveButton = document.getElementById('save');
-        this.showDateWigetButton = document.getElementById('show-widget-history');
+        this.elements = {
+            app: document.getElementById('app'),
+            map: document.getElementById('map'),
+            buttons: {
+                reset: document.getElementById('reset'),
+                save: document.getElementById('save')
+            },
+            widgets: {
+                datetime: {
+                    form: document.querySelector('.widget-history__form'),
+                    button: document.getElementById('show-widget-history')
+                }
+            }
+        };
 
         this._initWidgets();
         this._initEvents();
@@ -39,7 +47,7 @@ class MapApp {
         }`;
             }
 
-            this.leafletDrawService.generateMap(this.map, this.configuration.preference.geoJson);
+            this.leafletDrawService.generateMap(this.elements.map, this.configuration.preference.geoJson);
             this._toggleLoadingIndicator(false);
         });
     }
@@ -76,11 +84,11 @@ class MapApp {
     // --------------------
     _toggleLoadingIndicator(isLoading) {
         if (isLoading) {
-            this.map.classList.add('map--loading');
-            this.app.classList.add('app--loading');
+            this.elements.map.classList.add('map--loading');
+            this.elements.app.classList.add('app--loading');
         } else {
-            this.map.classList.remove('map--loading');
-            this.app.classList.remove('app--loading');
+            this.elements.map.classList.remove('map--loading');
+            this.elements.app.classList.remove('app--loading');
         }
     }
 
@@ -99,9 +107,9 @@ class MapApp {
     }
 
     _initDateTimesWidget() {
-        this.dateTimesSelectorWidget = new DatesSelectorWidget();
-        this.showDateWigetButton.addEventListener('click', e => {
-            document.querySelector('.widget-history__form').classList.toggle('widget-history__form--visible');
+        this.dateTimesSelectorWidget = new DatetimesSelectorWidget();
+        this.elements.widgets.datetime.button.addEventListener('click', e => {
+            this.elements.widgets.datetime.form.classList.toggle('widget-history__form--visible');
         });
 
         setTimeout(() => {
@@ -111,11 +119,11 @@ class MapApp {
     }
 
     _initClickEvents() {
-        this.saveButton.addEventListener('click', () => {
+        this.elements.buttons.save.addEventListener('click', () => {
             this._save();
         });
 
-        this.resetButton.addEventListener('click', () => {
+        this.elements.buttons.reset.addEventListener('click', () => {
             this.leafletDrawService.resetMap();
             this._save();
         });

@@ -1,7 +1,7 @@
 import rome from '@bevacqua/rome';
 import moment from 'moment';
 
-class DatesSelectorWidget {
+class DatetimesSelectorWidget {
     constructor() {
         this._startElement = document.getElementById('history-playback-start');
         this._endElement = document.getElementById('history-playback-end');
@@ -36,4 +36,4 @@ class DatesSelectorWidget {
     }
 }
 
-export default DatesSelectorWidget;
+export default DatetimesSelectorWidget;
