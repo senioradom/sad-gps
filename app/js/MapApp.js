@@ -1,7 +1,7 @@
 import LeafletDrawService from './services/leaflet-draw-service';
 import NotificationService from './services/notification-service';
 import ApiService from './services/api-service';
-import DatetimesSelectorWidget from './widgets/DatetimesSelectorWidget';
+import WidgetDates from './widgets/WidgetDates';
 import '@fortawesome/fontawesome-free/js/all.min';
 
 class MapApp {
@@ -12,29 +12,32 @@ class MapApp {
         this.apiService = new ApiService(api, contractRef, basicAuth);
         this.leafletDrawService = new LeafletDrawService(this.apiService);
 
-        this.elements = {
-            app: document.getElementById('app'),
+        this._elements = {
+            app: document.getElementById('js-app'),
             map: document.getElementById('map'),
             buttons: {
                 reset: document.getElementById('reset'),
                 save: document.getElementById('save')
-            },
-            widgets: {
-                datetime: {
-                    form: document.querySelector('.widget-history__form'),
-                    button: document.getElementById('show-widget-history')
-                }
             }
         };
 
         this._initWidgets();
         this._initEvents();
+
+        this._init();
     }
 
     // --------------------
     // Public
     // --------------------
-    async init() {
+
+    // --------------------
+    // Privates
+    // --------------------
+    // --
+    // Methods
+    // --------------------
+    async _init() {
         this._toggleLoadingIndicator(true);
 
         this.apiService.getAlertConfigurations().then(configurations => {
@@ -47,17 +50,10 @@ class MapApp {
         }`;
             }
 
-            this.leafletDrawService.generateMap(this.elements.map, this.configuration.preference.geoJson);
+            this.leafletDrawService.generateMap(this._elements.map, this.configuration.preference.geoJson);
             this._toggleLoadingIndicator(false);
         });
     }
-
-    // --------------------
-    // Privates
-    // --------------------
-    // --
-    // Methods
-    // --------------------
 
     _save() {
         this._toggleLoadingIndicator(true);
@@ -84,11 +80,11 @@ class MapApp {
     // --------------------
     _toggleLoadingIndicator(isLoading) {
         if (isLoading) {
-            this.elements.map.classList.add('map--loading');
-            this.elements.app.classList.add('app--loading');
+            this._elements.map.classList.add('map--loading');
+            this._elements.app.classList.add('app--loading');
         } else {
-            this.elements.map.classList.remove('map--loading');
-            this.elements.app.classList.remove('app--loading');
+            this._elements.map.classList.remove('map--loading');
+            this._elements.app.classList.remove('app--loading');
         }
     }
 
@@ -103,27 +99,15 @@ class MapApp {
     }
 
     _initWidgets() {
-        this._initDateTimesWidget();
-    }
-
-    _initDateTimesWidget() {
-        this.dateTimesSelectorWidget = new DatetimesSelectorWidget();
-        this.elements.widgets.datetime.button.addEventListener('click', e => {
-            this.elements.widgets.datetime.form.classList.toggle('widget-history__form--visible');
-        });
-
-        setTimeout(() => {
-            console.log(this.dateTimesSelectorWidget.getStart());
-            console.log(this.dateTimesSelectorWidget.getEnd());
-        }, 1000);
+        (() => new WidgetDates())();
     }
 
     _initClickEvents() {
-        this.elements.buttons.save.addEventListener('click', () => {
+        this._elements.buttons.save.addEventListener('click', () => {
             this._save();
         });
 
-        this.elements.buttons.reset.addEventListener('click', () => {
+        this._elements.buttons.reset.addEventListener('click', () => {
             this.leafletDrawService.resetMap();
             this._save();
         });

@@ -1,4 +1,4 @@
-.widget-history {
+.widget-dates {
   position: absolute;
   z-index: 401;
   top: 10px;
@@ -52,7 +52,7 @@
     }
   }
 
-  @at-root #{&}__input-wrap {
+  @at-root #{&}__input-container {
     position: relative;
 
     padding-left: 13px;

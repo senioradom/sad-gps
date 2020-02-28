@@ -1,4 +1,3 @@
 import MapApp from './MapApp';
 
-const mappApp = new MapApp('apiURL', 'contractRef', 'basicAuth');
-mappApp.init();
+(() => new MapApp('apiURL', 'contractRef', 'basicAuth'))();
