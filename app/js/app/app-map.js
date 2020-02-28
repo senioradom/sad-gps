@@ -19,8 +19,9 @@ class AppMap {
     constructor(api, contractRef, basicAuth, locale) {
         this._apiService = new ApiService(api, contractRef, basicAuth);
         this._notificationService = new NotificationService();
+        this._locale = locale;
 
-        this._mapService = new MapService(this._apiService, this._notificationService, locale);
+        this._mapService = new MapService(this._apiService, this._notificationService, this._locale);
 
         this._init();
     }
@@ -90,7 +91,7 @@ class AppMap {
     }
 
     _initWidgets() {
-        (() => new WidgetDates())();
+        (() => new WidgetDates(this._locale))();
     }
 
     _initClickEvents() {

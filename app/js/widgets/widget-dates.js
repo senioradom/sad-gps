@@ -1,5 +1,6 @@
 import rome from '@bevacqua/rome';
 import moment from 'moment';
+import 'moment/locale/fr';
 
 class WidgetDates {
     _elements = {
@@ -14,7 +15,12 @@ class WidgetDates {
         }
     };
 
-    constructor() {
+    constructor(locale) {
+        if (['en', 'fr', 'es', 'sk', 'cs', 'zh'].includes(locale)) {
+            moment.locale(locale);
+        }
+
+        rome.use(moment);
         this._init();
     }
 

@@ -15,8 +15,8 @@
     "leaflet-draw": "^1.0.4",
     "leaflet-draw-locales": "^1.1.4",
     "leaflet.timeline": "^1.2.1",
-    "moment": "~2.18.1",
-    "moment-timezone": "~0.5.13"
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.28"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-0",
