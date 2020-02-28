@@ -5,8 +5,6 @@ import 'leaflet.timeline';
 import moment from 'moment';
 import 'moment-timezone';
 
-import NotificationService from './notification-service';
-
 class LeafletDrawService {
     _debug = true;
 
@@ -28,10 +26,10 @@ class LeafletDrawService {
         }
     };
 
-    constructor(gpsService) {
+    constructor(gpsService, notificationService) {
         this._leafLetConfigOverrides();
-        this.notificationService = new NotificationService();
         this.gpsService = gpsService;
+        this.notificationService = notificationService;
 
         window.leafletDrawServiceInstance = this;
     }

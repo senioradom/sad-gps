@@ -8,9 +8,10 @@ class MapApp {
     constructor(api, contractRef, basicAuth) {
         this.autosave = false;
 
-        this.notificationService = new NotificationService();
         this.apiService = new ApiService(api, contractRef, basicAuth);
-        this.leafletDrawService = new LeafletDrawService(this.apiService);
+        this.notificationService = new NotificationService();
+
+        this.leafletDrawService = new LeafletDrawService(this.apiService, this.notificationService);
 
         this._elements = {
             app: document.getElementById('js-map-app'),
@@ -45,9 +46,9 @@ class MapApp {
 
             if (!this.configuration.preference.geoJson) {
                 this.configuration.preference.geoJson = `{
-            'type': 'FeatureCollection',
-            'features': []
-        }`;
+                    'type': 'FeatureCollection',
+                    'features': []
+                }`;
             }
 
             this.leafletDrawService.generateMap(this._elements.map, this.configuration.preference.geoJson);
