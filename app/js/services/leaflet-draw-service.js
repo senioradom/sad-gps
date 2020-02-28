@@ -193,12 +193,10 @@ class LeafletDrawService {
             this.addPositionMarker();
         }
 
-        // eslint-disable-next-line no-unused-vars
         Object.entries(this.alertsGPSConfigurationShapesGroup._layers).forEach(([key, layer]) => {
             layer.getElement().style.display = isHistoryPlaybackMode ? 'none' : 'block';
         });
 
-        // eslint-disable-next-line no-unused-vars
         Object.entries(this.alertsGPSConfigurationLabelsGroup._layers).forEach(([key, layer]) => {
             layer.getElement().style.display = isHistoryPlaybackMode ? 'none' : 'block';
         });
@@ -648,7 +646,6 @@ class LeafletDrawService {
         this.timelineControl.addTimelines(this.timeline);
         this.timeline.addTo(this.userPositionsHistoryGroup);
 
-        // eslint-disable-next-line no-unused-vars
         this.timeline.on('change', e => {
             try {
                 this._centerMap('userPositionsHistoryGroup');
