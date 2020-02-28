@@ -5,7 +5,7 @@ import 'leaflet.timeline';
 import moment from 'moment';
 import 'moment-timezone';
 
-class LeafletDrawService {
+class MapService {
     _debug = true;
 
     _mode = 'GPS-ALERTS-CONFIGURATION-MODE';
@@ -795,4 +795,4 @@ class LeafletDrawService {
     }
 }
 
-export default LeafletDrawService;
+export default MapService;

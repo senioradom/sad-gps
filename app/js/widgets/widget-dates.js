@@ -2,24 +2,25 @@ import rome from '@bevacqua/rome';
 import moment from 'moment';
 
 class WidgetDates {
-    constructor() {
-        this._elements = {
-            buttons: {
-                toggle: document.getElementById('js-widget-dates__toggle'),
-                submit: document.getElementById('js-widget-dates__submit')
-            },
-            form: {
-                form: document.getElementById('js-widget-dates__form'),
-                start: document.getElementById('js-widget-dates__date-start'),
-                end: document.getElementById('js-widget-dates__date-end')
-            }
-        };
+    _elements = {
+        buttons: {
+            toggle: document.getElementById('js-widget-dates__toggle'),
+            submit: document.getElementById('js-widget-dates__submit')
+        },
+        form: {
+            form: document.getElementById('js-widget-dates__form'),
+            start: document.getElementById('js-widget-dates__date-start'),
+            end: document.getElementById('js-widget-dates__date-end')
+        }
+    };
 
+    constructor() {
         this._init();
-        this._initEvents();
     }
 
     _init() {
+        this._initEvents();
+
         this._dates = {
             start: rome(this._elements.form.start, {
                 weekStart: 1,

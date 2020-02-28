@@ -1,29 +1,26 @@
-import LeafletDrawService from './services/leaflet-draw-service';
+import MapService from './services/map-service';
 import NotificationService from './services/notification-service';
 import ApiService from './services/api-service';
-import WidgetDates from './widgets/WidgetDates';
+import WidgetDates from './widgets/widget-dates';
 import '@fortawesome/fontawesome-free/js/all.min';
 
 class MapApp {
-    constructor(api, contractRef, basicAuth) {
-        this.autosave = false;
+    _autoSave = false;
 
+    _elements = {
+        app: document.getElementById('js-map-app'),
+        map: document.getElementById('js-map'),
+        buttons: {
+            reset: document.getElementById('js-map-app__button-reset'),
+            save: document.getElementById('js-map-app__button-save')
+        }
+    };
+
+    constructor(api, contractRef, basicAuth) {
         this.apiService = new ApiService(api, contractRef, basicAuth);
         this.notificationService = new NotificationService();
 
-        this.leafletDrawService = new LeafletDrawService(this.apiService, this.notificationService);
-
-        this._elements = {
-            app: document.getElementById('js-map-app'),
-            map: document.getElementById('js-map'),
-            buttons: {
-                reset: document.getElementById('js-map-app__button-reset'),
-                save: document.getElementById('js-map-app__button-save')
-            }
-        };
-
-        this._initWidgets();
-        this._initEvents();
+        this.mapService = new MapService(this.apiService, this.notificationService);
 
         this._init();
     }
@@ -39,6 +36,9 @@ class MapApp {
     // Methods
     // --------------------
     async _init() {
+        this._initWidgets();
+        this._initEvents();
+
         this._toggleLoadingIndicator(true);
 
         this.apiService.getAlertConfigurations().then(configurations => {
@@ -51,7 +51,7 @@ class MapApp {
                 }`;
             }
 
-            this.leafletDrawService.generateMap(this._elements.map, this.configuration.preference.geoJson);
+            this.mapService.generateMap(this._elements.map, this.configuration.preference.geoJson);
             this._toggleLoadingIndicator(false);
         });
     }
@@ -60,15 +60,15 @@ class MapApp {
         this._toggleLoadingIndicator(true);
         this.notificationService.notify('SAVING', 'Saving...');
 
-        this.leafletDrawService.validateDrawings();
-        this.configuration.preference.geoJson = this.leafletDrawService.exportGeoJSON();
+        this.mapService.validateDrawings();
+        this.configuration.preference.geoJson = this.mapService.exportGeoJSON();
 
         this.apiService
             .saveAlertConfiguration(this.configuration)
             .then(() => {
                 this._toggleLoadingIndicator(false);
                 this.notificationService.notify('SUCCESS', 'OK');
-                this.leafletDrawService.updateInitialGeoJsonState();
+                this.mapService.updateInitialGeoJsonState();
             })
             .catch(() => {
                 this._toggleLoadingIndicator(false);
@@ -92,7 +92,7 @@ class MapApp {
     _promptUserLeavingThePageWhenUnsavedChanges() {
         return;
         window.addEventListener('beforeunload', e => {
-            if (this.leafletDrawService.isMapDirty()) {
+            if (this.mapService.isMapDirty()) {
                 e.preventDefault();
                 e.returnValue = ''; // Required by Chrome
             }
@@ -109,7 +109,7 @@ class MapApp {
         });
 
         this._elements.buttons.reset.addEventListener('click', () => {
-            this.leafletDrawService.resetMap();
+            this.mapService.resetMap();
             this._save();
         });
     }
@@ -118,7 +118,7 @@ class MapApp {
         this._initClickEvents();
         this._promptUserLeavingThePageWhenUnsavedChanges();
 
-        if (this.autosave) {
+        if (this._autoSave) {
             document.addEventListener('mapEdited', () => this._save());
         } else {
             console.log('[info]: Autosave disabled...');
