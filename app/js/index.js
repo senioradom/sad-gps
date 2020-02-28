@@ -1,3 +1,3 @@
 import AppMap from './app/app-map';
 
-(() => new AppMap('apiURL', 'contractRef', 'basicAuth'))();
+(() => new AppMap('apiURL', 'contractRef', 'basicAuth', 'fr'))();

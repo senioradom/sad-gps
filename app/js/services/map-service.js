@@ -1,7 +1,7 @@
 import L from 'leaflet';
 import 'leaflet-draw';
 import 'leaflet.timeline';
-// import * as drawLocales from 'leaflet-draw-locales';
+import drawLocales from 'leaflet-draw-locales';
 import moment from 'moment';
 import 'moment-timezone';
 
@@ -26,7 +26,9 @@ class MapService {
         }
     };
 
-    constructor(gpsService, notificationService) {
+    constructor(gpsService, notificationService, locale) {
+        drawLocales(locale);
+
         this._leafLetConfigOverrides();
         this._gpsService = gpsService;
         this._notificationService = notificationService;
@@ -38,8 +40,6 @@ class MapService {
     // Public
     // --------------------
     generateMap(el, geoJSON) {
-        // drawLocales(this.localeService.getLocale() as drawLocales.Languages);
-
         const mapAsImage = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             noWrap: true
         });

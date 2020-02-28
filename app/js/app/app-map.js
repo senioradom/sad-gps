@@ -16,11 +16,11 @@ class AppMap {
         }
     };
 
-    constructor(api, contractRef, basicAuth) {
+    constructor(api, contractRef, basicAuth, locale) {
         this._apiService = new ApiService(api, contractRef, basicAuth);
         this._notificationService = new NotificationService();
 
-        this._mapService = new MapService(this._apiService, this._notificationService);
+        this._mapService = new MapService(this._apiService, this._notificationService, locale);
 
         this._init();
     }
