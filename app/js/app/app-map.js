@@ -91,7 +91,7 @@ class AppMap {
     }
 
     _initWidgets() {
-        (() => new WidgetDates(this._locale))();
+        (() => new WidgetDates(this._mapService, this._locale))();
     }
 
     _initClickEvents() {

@@ -44,9 +44,9 @@ class ApiService {
             .catch(error => console.warn(error));
     }
 
-    getPositions() {
+    getPositions(start, end) {
         return fetch(
-            `${this.api}/api/4/contracts/${this.contractRef}/actimetry/gps-positions?start=2020-01-24T23:00:00.000Z&end=2020-01-30T23:00:00.000Z`,
+            `${this.api}/api/4/contracts/${this.contractRef}/actimetry/gps-positions?start=${start}&end=${end}`,
             {
                 headers: {
                     authorization: `Basic ${this.basicAuth}`

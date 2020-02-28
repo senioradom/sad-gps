@@ -15,7 +15,9 @@ class WidgetDates {
         }
     };
 
-    constructor(locale) {
+    constructor(mapService, locale) {
+        this._mapService = mapService;
+
         if (['en', 'fr', 'es', 'sk', 'cs', 'zh'].includes(locale)) {
             moment.locale(locale);
         }
@@ -31,7 +33,9 @@ class WidgetDates {
             start: rome(this._elements.form.start, {
                 weekStart: 1,
                 dateValidator: rome.val.beforeEq(this._elements.form.end),
-                initialValue: moment().subtract(1, 'months'),
+                initialValue: moment()
+                    .subtract(3, 'days')
+                    .startOf('day'),
                 min: moment().subtract(6, 'months'),
                 max: moment()
             }),
@@ -51,17 +55,18 @@ class WidgetDates {
         });
 
         this._elements.buttons.submit.addEventListener('click', e => {
-            console.log(this.getStart());
-            console.log(this.getEnd());
+            this._mapService.switchAlertsConfigurationToHistoryMode('GPS-HISTORY-PLAYBACK-MODE', () => {
+                this._mapService.initTimeLine(this._getStart().toISOString(), this._getEnd().toISOString());
+            });
         });
     }
 
-    getStart() {
-        return this._dates.start.getDate();
+    _getStart() {
+        return this._dates.start.getMoment();
     }
 
-    getEnd() {
-        return this._dates.end.getDate();
+    _getEnd() {
+        return this._dates.end.getMoment();
     }
 }
 

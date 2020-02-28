@@ -14,7 +14,7 @@
     "leaflet": "^1.5.1",
     "leaflet-draw": "^1.0.4",
     "leaflet-draw-locales": "^1.1.4",
-    "leaflet.timeline": "^1.2.1",
+    "leaflet.timeline": "^1.3.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.28"
   },

@@ -6,6 +6,13 @@ import moment from 'moment';
 import 'moment-timezone';
 
 class MapService {
+    _elements = {
+        map: document.getElementById('js-map'),
+        buttons: {
+            container: document.getElementById('js-app-map__buttons-container')
+        }
+    };
+
     _debug = true;
 
     _mode = 'GPS-ALERTS-CONFIGURATION-MODE';
@@ -117,7 +124,7 @@ class MapService {
         this._importGeoJSON(this._initialGeoJsonState);
     }
 
-    addPositionMarker() {
+    addCurrentPositionMarker(callback) {
         this._gpsService.getLastPosition().then(result => {
             if (!(result.latitude && result.longitude && result.createdAt)) {
                 return;
@@ -139,6 +146,8 @@ class MapService {
 
             this.lastUserPositionMarker.addTo(this.lastUserPositionGroup);
             this._centerMap('lastUserPositionGroup');
+
+            callback();
         });
     }
 
@@ -175,20 +184,16 @@ class MapService {
         return JSON.stringify(geoJson);
     }
 
-    switchAlertsConfigurationToHistoryMode() {
-        this._mode =
-            this._mode === 'GPS-ALERTS-CONFIGURATION-MODE'
-                ? 'GPS-HISTORY-PLAYBACK-MODE'
-                : 'GPS-ALERTS-CONFIGURATION-MODE';
+    switchAlertsConfigurationToHistoryMode(mode, callback) {
+        this._mode = mode;
 
         const isHistoryPlaybackMode = this._mode === 'GPS-HISTORY-PLAYBACK-MODE';
 
-        const map = document.getElementById('map');
-        map.dataset.mapMode = this._mode;
+        this._elements.map.dataset.mapMode = this._mode;
 
         if (isHistoryPlaybackMode) {
-            map.dataset.historyLoaded = false;
-            this.addPositionMarker();
+            this._elements.map.dataset.historyLoaded = false;
+            this.addCurrentPositionMarker(callback);
         }
 
         Object.entries(this.alertsGPSConfigurationShapesGroup._layers).forEach(([key, layer]) => {
@@ -209,7 +214,7 @@ class MapService {
             ? 'none'
             : 'block';
 
-        document.querySelector('.app__buttons-container').style.display = isHistoryPlaybackMode ? 'none' : 'block';
+        this._elements.buttons.container.style.display = isHistoryPlaybackMode ? 'none' : 'block';
 
         if (!isHistoryPlaybackMode) {
             this.userPositionsHistoryGroup.clearLayers();
@@ -217,7 +222,7 @@ class MapService {
         }
     }
 
-    timelineData(dates) {
+    initTimeLine(start, end) {
         const data = {
             type: 'FeatureCollection',
             features: []
@@ -228,7 +233,7 @@ class MapService {
         let minimumDate;
         let maximumDate;
 
-        this._gpsService.getPositions().then(result => {
+        this._gpsService.getPositions(start, end).then(result => {
             const moments = result.map(position => moment(position.createdAt));
 
             minimumDate = moment.min(moments);
@@ -646,13 +651,15 @@ class MapService {
         this.timelineControl.addTimelines(this.timeline);
         this.timeline.addTo(this.userPositionsHistoryGroup);
 
+        document.querySelector('.leaflet-timeline-control .play').click();
+
         this.timeline.on('change', e => {
             try {
                 this._centerMap('userPositionsHistoryGroup');
             } catch (exception) {}
         });
 
-        document.getElementById('map').dataset.historyLoaded = true;
+        this._elements.map.dataset.historyLoaded = true;
     }
 
     // --

@@ -46,7 +46,7 @@
     <!-- ------------------
     Buttons
     ------------------- -->
-    <div class="app-map__buttons-container">
+    <div class="app-map__buttons-container" id="js-app-map__buttons-container">
         <button class="app-map__button app-map__button--reset" id="js-app-map__button-reset">Annuler</button>
         <button class="app-map__button app-map__button--save" id="js-app-map__button-save">Sauvegarder</button>
     </div>
@@ -61,10 +61,8 @@
 <button onclick="window.location.reload()">Reload</button>
 <button onclick="console.log(JSON.parse(window.mapServiceInstance.exportGeoJSON()))">Debug</button>
 <button onclick="window.mapServiceInstance.switchAlertsConfigurationToHistoryMode()">Toggle edit/history</button>
-<button onclick="window.mapServiceInstance.timelineData(window.playBackGeoJson)">Timeline data</button>
-<button onclick="window.mapServiceInstance.foo()">Foo</button>
+<button onclick="window.mapServiceInstance.initTimeLine(window.playBackGeoJson)">Timeline data</button>
 
-<script src="../out/data.js"></script>
 <script src="./js/index.js"></script>
 </body>
 </html>
