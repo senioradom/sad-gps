@@ -17,31 +17,21 @@ class MapApp {
     };
 
     constructor(api, contractRef, basicAuth) {
-        this.apiService = new ApiService(api, contractRef, basicAuth);
-        this.notificationService = new NotificationService();
+        this._apiService = new ApiService(api, contractRef, basicAuth);
+        this._notificationService = new NotificationService();
 
-        this.mapService = new MapService(this.apiService, this.notificationService);
+        this._mapService = new MapService(this._apiService, this._notificationService);
 
         this._init();
     }
 
-    // --------------------
-    // Public
-    // --------------------
-
-    // --------------------
-    // Privates
-    // --------------------
-    // --
-    // Methods
-    // --------------------
     async _init() {
         this._initWidgets();
         this._initEvents();
 
         this._toggleLoadingIndicator(true);
 
-        this.apiService.getAlertConfigurations().then(configurations => {
+        this._apiService.getAlertConfigurations().then(configurations => {
             [this.configuration] = [configurations.filter(conf => conf.alertCode === 'out_of_perimeter')[0]];
 
             if (!this.configuration.preference.geoJson) {
@@ -51,28 +41,28 @@ class MapApp {
                 }`;
             }
 
-            this.mapService.generateMap(this._elements.map, this.configuration.preference.geoJson);
+            this._mapService.generateMap(this._elements.map, this.configuration.preference.geoJson);
             this._toggleLoadingIndicator(false);
         });
     }
 
     _save() {
         this._toggleLoadingIndicator(true);
-        this.notificationService.notify('SAVING', 'Saving...');
+        this._notificationService.notify('SAVING', 'Saving...');
 
-        this.mapService.validateDrawings();
-        this.configuration.preference.geoJson = this.mapService.exportGeoJSON();
+        this._mapService.validateDrawings();
+        this.configuration.preference.geoJson = this._mapService.exportGeoJSON();
 
-        this.apiService
+        this._apiService
             .saveAlertConfiguration(this.configuration)
             .then(() => {
                 this._toggleLoadingIndicator(false);
-                this.notificationService.notify('SUCCESS', 'OK');
-                this.mapService.updateInitialGeoJsonState();
+                this._notificationService.notify('SUCCESS', 'OK');
+                this._mapService.updateInitialGeoJsonState();
             })
             .catch(() => {
                 this._toggleLoadingIndicator(false);
-                this.notificationService.notify('FAILURE', 'NOT');
+                this._notificationService.notify('FAILURE', 'NOT');
             });
     }
 
@@ -92,7 +82,7 @@ class MapApp {
     _promptUserLeavingThePageWhenUnsavedChanges() {
         return;
         window.addEventListener('beforeunload', e => {
-            if (this.mapService.isMapDirty()) {
+            if (this._mapService.isMapDirty()) {
                 e.preventDefault();
                 e.returnValue = ''; // Required by Chrome
             }
@@ -109,7 +99,7 @@ class MapApp {
         });
 
         this._elements.buttons.reset.addEventListener('click', () => {
-            this.mapService.resetMap();
+            this._mapService.resetMap();
             this._save();
         });
     }

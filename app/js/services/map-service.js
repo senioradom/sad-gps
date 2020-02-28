@@ -28,10 +28,10 @@ class MapService {
 
     constructor(gpsService, notificationService) {
         this._leafLetConfigOverrides();
-        this.gpsService = gpsService;
-        this.notificationService = notificationService;
+        this._gpsService = gpsService;
+        this._notificationService = notificationService;
 
-        window.leafletDrawServiceInstance = this;
+        window.mapServiceInstance = this;
     }
 
     // --------------------
@@ -118,7 +118,7 @@ class MapService {
     }
 
     addPositionMarker() {
-        this.gpsService.getLastPosition().then(result => {
+        this._gpsService.getLastPosition().then(result => {
             if (!(result.latitude && result.longitude && result.createdAt)) {
                 return;
             }
@@ -228,7 +228,7 @@ class MapService {
         let minimumDate;
         let maximumDate;
 
-        this.gpsService.getPositions().then(result => {
+        this._gpsService.getPositions().then(result => {
             const moments = result.map(position => moment(position.createdAt));
 
             minimumDate = moment.min(moments);
@@ -541,8 +541,8 @@ class MapService {
                 required
                 autocomplete="off"
                 maxlength="10"
-                onkeyup="leafletDrawServiceInstance._onKeyUp(event);"
-                onfocusout="leafletDrawServiceInstance._labelArea(${id}, ${distance}, true);"
+                onkeyup="mapServiceInstance._onKeyUp(event);"
+                onfocusout="mapServiceInstance._labelArea(${id}, ${distance}, true);"
             >
             <div id="js-map__custom-zone-distance-${id}" class="map__custom-zone-distance">${radiusInKm}</div>
         `;
@@ -668,7 +668,7 @@ class MapService {
             this._toggleLabelsValidStyles(false);
             this._toggleButtonsState(false);
 
-            this.notificationService.notify('FAILURE', 'Labels validation failed...');
+            this._notificationService.notify('FAILURE', 'Labels validation failed...');
         }
     }
 
