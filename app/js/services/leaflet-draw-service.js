@@ -49,6 +49,7 @@ class LeafletDrawService {
         this.map = L.map(el, {
             center: [this._FRANCE_CENTERED.lat, this._FRANCE_CENTERED.lng],
             zoom: this._FRANCE_CENTERED.zoom,
+            // doubleClickZoom: false,
             zoomControl: false,
             layers: [mapAsImage]
         });
@@ -66,6 +67,7 @@ class LeafletDrawService {
         this.userPositionsHistoryGroup.addTo(this.map);
 
         this.controlDraw = new L.Control.Draw({
+            position: 'topright',
             draw: {
                 circle: {
                     feet: false
@@ -211,7 +213,7 @@ class LeafletDrawService {
             ? 'none'
             : 'block';
 
-        document.querySelector('.map__buttons-container').style.display = isHistoryPlaybackMode ? 'none' : 'block';
+        document.querySelector('.app__buttons-container').style.display = isHistoryPlaybackMode ? 'none' : 'block';
 
         if (!isHistoryPlaybackMode) {
             this.userPositionsHistoryGroup.clearLayers();
@@ -296,6 +298,19 @@ class LeafletDrawService {
         this.controlDraw._toolbars.edit._modes.edit.handler.disable();
         this.controlDraw._toolbars.edit._modes.remove.handler.disable();
     }
+
+    /**
+     * @todo : Debug to remove
+     */
+    debugLayers() {
+        console.log('map', this.map._layers);
+        console.log('alertsGPSConfigurationShapesGroup', this.alertsGPSConfigurationShapesGroup._layers);
+        console.log('alertsGPSConfigurationLabelsGroup', this.alertsGPSConfigurationLabelsGroup._layers);
+        console.log('lastUserPositionGroup', this.lastUserPositionGroup._layers);
+        console.log('userPositionsHistoryGroup', this.userPositionsHistoryGroup._layers);
+        console.log('controlDraw', this.controlDraw._layers);
+    }
+
     // --------------------
     // Privates
     // --------------------
@@ -588,14 +603,14 @@ class LeafletDrawService {
     }
 
     _toggleButtonsState(isValid) {
-        const buttons = document.querySelectorAll('.map__button');
+        const buttons = document.querySelectorAll('.app__button');
         if (isValid) {
             buttons.forEach(button => {
-                button.classList.remove('map__button--disabled');
+                button.classList.remove('app__button--disabled');
             });
         } else {
             buttons.forEach(button => {
-                button.classList.add('map__button--disabled');
+                button.classList.add('app__button--disabled');
             });
         }
     }
@@ -705,11 +720,6 @@ class LeafletDrawService {
     }
 
     _drawCreatedEvent(e) {
-        if (e.layerType === L.Draw.Circle.TYPE) {
-            // e.layer.options.color = '#ff0000';
-            console.log(e.layer.options.color);
-        }
-
         this.alertsGPSConfigurationShapesGroup.addLayer(e.layer);
 
         e.layer.feature = e.layer.feature || {};

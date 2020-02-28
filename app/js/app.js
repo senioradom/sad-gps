@@ -1,8 +1,10 @@
-import LeafletDrawService from './leaflet-draw-service';
-import NotificationService from './notification-service';
-import GPSService from './gps-service';
+import LeafletDrawService from './services/leaflet-draw-service';
+import NotificationService from './services/notification-service';
+import GPSService from './services/gps-service';
+import DateTimesSelectorWidget from './widgets/DateTimesSelectorWidget';
+import '@fortawesome/fontawesome-free/js/all.min';
 
-class ContractAlertConfigurationGps {
+class App {
     constructor(contractRef, basicAuth) {
         this.autosave = false;
 
@@ -13,11 +15,14 @@ class ContractAlertConfigurationGps {
         this.gpsService = new GPSService(this.contractRef, this.basicAuth);
         this.leafletDrawService = new LeafletDrawService(this.gpsService);
 
+        this.app = document.getElementById('app');
         this.map = document.getElementById('map');
 
         this.resetButton = document.getElementById('reset');
         this.saveButton = document.getElementById('save');
+        this.showDateWigetButton = document.getElementById('show-widget-history');
 
+        this._initWidgets();
         this._initEvents();
     }
 
@@ -50,6 +55,9 @@ class ContractAlertConfigurationGps {
 
         this.leafletDrawService.generateMap(this.map, this.configuration.preference.geoJson);
         this._toggleLoadingIndicator(false);
+        // this._getAddress().then(r1 => console.log(r1));
+        // this._getLastPosition().then(r2 => console.log(r2));
+        // this._getPositions().then(r3 => console.log(r3));
     }
 
     // --------------------
@@ -73,17 +81,17 @@ class ContractAlertConfigurationGps {
     }
     */
 
-    _getLastPosition() {
-        return this.gpsService.getLastPosition();
-    }
-
-    _getPositions() {
-        return this.gpsService.getPositions();
-    }
-
-    _getAddress() {
-        return this.gpsService.getAddress();
-    }
+    // _getLastPosition() {
+    //     return this.gpsService.getLastPosition();
+    // }
+    //
+    // _getPositions() {
+    //     return this.gpsService.getPositions();
+    // }
+    //
+    // _getAddress() {
+    //     return this.gpsService.getAddress();
+    // }
 
     // eslint-disable-next-line class-methods-use-this
     _handleErrors(response) {
@@ -130,18 +138,37 @@ class ContractAlertConfigurationGps {
     _toggleLoadingIndicator(isLoading) {
         if (isLoading) {
             this.map.classList.add('map--loading');
+            this.app.classList.add('app--loading');
         } else {
             this.map.classList.remove('map--loading');
+            this.app.classList.remove('app--loading');
         }
     }
 
     _promptUserLeavingThePageWhenUnsavedChanges() {
+        return;
         window.addEventListener('beforeunload', e => {
             if (this.leafletDrawService.isMapDirty()) {
                 e.preventDefault();
                 e.returnValue = ''; // Required by Chrome
             }
         });
+    }
+
+    _initWidgets() {
+        this._initDateTimesWidget();
+    }
+
+    _initDateTimesWidget() {
+        this.dateTimesSelectorWidget = new DateTimesSelectorWidget();
+        this.showDateWigetButton.addEventListener('click', e => {
+            document.querySelector('.widget-history__form').classList.toggle('widget-history__form--visible');
+        });
+
+        setTimeout(() => {
+            console.log(this.dateTimesSelectorWidget.getStart());
+            console.log(this.dateTimesSelectorWidget.getEnd());
+        }, 1000);
     }
 
     _initClickEvents() {
@@ -167,4 +194,4 @@ class ContractAlertConfigurationGps {
     }
 }
 
-export default ContractAlertConfigurationGps;
+export default App;

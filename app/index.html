@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/main.scss">
+</head>
+<body>
+
+<div class="app app-loading" id="app">
+    <div class="widget-history">
+        <button class="widget-history__button" id="show-widget-history">
+            <i class="fas fa-map-marked-alt"></i>
+        </button>
+
+        <div class="widget-history__form widget-history__form--visible"><!-- widget-history__form--visible -->
+            <div class="widget-history__input-wrap">
+                <input id="history-playback-start" class="widget-history__input-date form-element">
+            </div>
+
+            <div class="widget-history__input-wrap">
+                <input id="history-playback-end" class="widget-history__input-date form-element">
+            </div>
+
+            <button class="widget-history__button widget-history__button--play" id="show-widget-historysdafsdfsf">
+                <i class="fas fa-play"></i>
+            </button>
+        </div>
+
+
+        <!--
+        <i class="fas fa-sync-alt"></i>
+        -->
+    </div>
+
+    <div class="map map--loading" id="map" data-map-mode="GPS-ALERTS-CONFIGURATION-MODE" data-history-loaded="false">
+        <div class="map__loading-overlay"></div>
+    </div>
+
+    <div class="app__buttons-container">
+        <button class="app__button app__button--reset" id="reset">Annuler</button>
+        <button class="app__button app__button--save" id="save">Sauvegarder</button>
+    </div>
+
+    <div class="app__notifications" id="notifications"></div>
+</div>
+
+<button onclick="console.log(window.leafletDrawServiceInstance.isMapDirty())">isDirty()</button>
+<button onclick="window.location.reload()">Reload</button>
+<button onclick="console.log(JSON.parse(window.leafletDrawServiceInstance.exportGeoJSON()))">Debug</button>
+<button onclick="window.leafletDrawServiceInstance.switchAlertsConfigurationToHistoryMode()">Toggle edit/history</button>
+<button onclick="window.leafletDrawServiceInstance.timelineData(window.playBackGeoJson)">Timeline data</button>
+<button onclick="window.leafletDrawServiceInstance.foo()">Foo</button>
+
+<script src="../out/data.js"></script>
+<script src="./js/index.js"></script>
+</body>
+</html>

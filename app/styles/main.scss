@@ -1,0 +1,39 @@
+// --------------------------------------------
+// Application
+// --------------------------------------------
+// --------------------
+// Configuration
+// --------------------
+$distributorColor: #2c827d;
+$nodeModuleRoot: '../../node_modules/';
+
+// --------------------
+// Libraries
+// --------------------
+@import url('#{$nodeModuleRoot}@fortawesome/fontawesome-free/css/all.min.css');
+
+@import url('#{$nodeModuleRoot}leaflet/dist/leaflet.css');
+
+@import url('#{$nodeModuleRoot}leaflet-draw/dist/leaflet.draw.css');
+
+@import url('#{$nodeModuleRoot}rome/dist/rome.min.css');
+
+// --------------------
+// App
+// --------------------
+@import 'partials/app';
+
+@import 'partials/map';
+
+@import 'partials/widget-history';
+
+@import 'partials/shared';
+
+@import 'partials/user';
+
+// --------------------
+// Libraries overrides
+// --------------------
+@import './fonts/font-awesome-v5';
+
+@import 'partials/libraries-overrides';

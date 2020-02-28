@@ -1,0 +1,101 @@
+// --------------------
+// App
+// --------------------
+.app {
+  position: relative;
+
+  height: 720px;
+
+  border: 1px solid #ccc;
+
+  @at-root #{&}--loading, #{&}--loading * {
+    pointer-events: none;
+  }
+
+  // --------------------
+  // Buttons
+  // --------------------
+  @at-root #{&}__buttons-container {
+    position: absolute;
+    z-index: 401;
+    right: 10px;
+    bottom: 10px;
+
+    padding: 10px;
+
+    background: transparent;
+  }
+
+  @at-root #{&}__button {
+    padding: 13px;
+
+    cursor: pointer;
+    user-select: none;
+
+    border-radius: 5px;
+    box-shadow: 0 0 2px 0 #000;
+
+    font-size: 13px;
+
+    @at-root #{&}--save {
+      color: white;
+      border: 1px solid $distributorColor;
+      background-color: $distributorColor;
+    }
+
+    @at-root #{&}--reset {
+      color: $distributorColor;
+      border: 1px solid #444;
+      background-color: #fff;
+    }
+
+    @at-root #{&}--disabled {
+      cursor: not-allowed;
+      pointer-events: none;
+
+      color: #c1c1c1;
+      border: 1px solid #c1c1c1;
+      background-color: #fff;
+    }
+  }
+
+  // --------------------
+  // Notifications
+  // --------------------
+  @at-root #{&}__notifications {
+    position: absolute;
+    z-index: 401;
+    right: 12px;
+    bottom: 20px;
+
+    display: none;
+
+    width: 120px;
+    height: 20px;
+
+    text-align: center;
+
+    background-color: white;
+
+    @at-root #{&}.saving {
+      display: block;
+
+      border: 1px solid #6c757d;
+      background-color: white;
+    }
+
+    @at-root #{&}.success {
+      display: block;
+
+      border: 1px solid #28a745;
+      background-color: #28a745;
+    }
+
+    @at-root #{&}.failure {
+      display: block;
+
+      border: 1px solid #dc3545;
+      background-color: #dc3545;
+    }
+  }
+}

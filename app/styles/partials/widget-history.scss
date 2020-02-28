@@ -1,0 +1,76 @@
+.widget-history {
+  position: absolute;
+  z-index: 401;
+  top: 10px;
+  left: 10px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 8px;
+
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 0 2px 0 #000;
+
+  @at-root #{&}__button {
+    margin-right: 3px;
+
+    cursor: pointer;
+    user-select: none;
+
+    border: none;
+
+    font-size: 26px;
+
+    @at-root #{&}:focus {
+      outline: none;
+    }
+
+    @at-root #{&}--play {
+      display: block;
+
+      width: 34px;
+      height: 34px;
+      margin-left: 8px;
+
+      text-align: center;
+
+      color: black;
+      border: 1px solid black;
+      border-radius: 50%;
+
+      font-size: 13px;
+    }
+  }
+
+  @at-root #{&}__form {
+    display: none;
+
+    @at-root #{&}--visible {
+      display: flex;
+    }
+  }
+
+  @at-root #{&}__input-wrap {
+    position: relative;
+
+    padding-left: 13px;
+
+    @at-root #{&}:before {
+      position: absolute;
+      left: 6px;
+
+      width: 1px;
+      height: 30px;
+
+      content: '';
+
+      background-color: #ccc;
+    }
+  }
+
+  @at-root #{&}__input-date {
+    background-color: blue;
+  }
+}

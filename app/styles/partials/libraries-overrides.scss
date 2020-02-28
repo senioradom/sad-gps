@@ -1,0 +1,285 @@
+// --------------------------------------------
+// Libraries override
+// --------------------------------------------
+// --------------------
+// Rome (DatePicker)
+// --------------------
+.rd-container {
+  z-index: 401;
+}
+
+// --------------------
+// Leaflet
+// --------------------
+// --------------------
+// Popup
+// --------------------
+.leaflet-popup-content-wrapper {
+  padding: 0 !important;
+
+  border-radius: 0 !important;
+}
+
+.leaflet-popup-content {
+  margin: auto !important;
+
+  line-height: 1 !important;
+}
+
+.leaflet-popup-tip-container {
+  // display: none;
+}
+
+.leaflet-popup-tip-container {
+  bottom: 18px;
+
+  overflow: visible !important;
+
+  transform: rotate(180deg);
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.leaflet-popup-tip-container::before {
+  position: absolute;
+
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+
+  content: '';
+
+  border-radius: 50%;
+  background-color: $distributorColor;
+}
+
+.leaflet-popup-tip-container::after {
+  position: absolute;
+
+  width: 25px;
+  height: 41px;
+  margin-top: 0;
+  margin-left: -13px;
+
+  content: '\f3c5';
+  transform: rotate(180deg);
+
+  color: white;
+  text-shadow: 0 0 1px rgba(0,0,0,.81);
+
+  font-family: 'Font Awesome 5 Free';
+  font-size: 34px;
+  font-weight: 900;
+}
+
+.leaflet-popup {
+  top: 10px;
+  bottom: -51px !important;
+}
+
+// --------------------
+// Tooltip
+// --------------------
+.leaflet-draw-actions a {
+  background-color: #464646!important;
+
+  @at-root #{&}:hover {
+    background-color: $distributorColor!important;
+  }
+}
+
+.leaflet-draw-tooltip-subtext {
+  color: white!important;
+
+  font-weight: bold;
+}
+
+.leaflet-draw-tooltip {
+  visibility: visible!important;
+
+  background: $distributorColor!important;
+
+  @at-root #{&}::before {
+    border-right-color: $distributorColor!important;
+  }
+}
+
+// --------------------
+// Icons while editing circles/shapes...
+// --------------------
+.leaflet-marker-icon.leaflet-div-icon.leaflet-editing-icon {
+  // @todo
+}
+
+.leaflet-editing-icon.leaflet-edit-resize,
+.leaflet-editing-icon.leaflet-edit-move {
+  width: 30px !important;
+  height: 30px !important;
+
+  border: 1px solid $distributorColor;
+  border-radius: 50%;
+  background-color: white;
+}
+
+.leaflet-editing-icon.leaflet-edit-resize {
+  background-image: none;
+
+  @at-root #{&}::after {
+    position: absolute;
+    top: 0;
+    left: 6px;
+
+    content: '\f31e';
+
+    color: $distributorColor;
+
+    font-family: 'Font Awesome 5 Free';
+    font-size: 21px;
+    font-weight: 900;
+  }
+}
+
+.leaflet-editing-icon.leaflet-edit-move {
+  border: none;
+  background: none!important;
+}
+
+// --------------------
+// Leaflet Draw icons (edit bar)
+// --------------------
+.leaflet-touch .leaflet-draw-toolbar {
+  @at-root
+  #{&} .leaflet-draw-draw-circle,
+  #{&} .leaflet-draw-edit-edit,
+  #{&} .leaflet-draw-edit-remove {
+    position: relative;
+
+    background-image: none;
+  }
+
+  @at-root
+  #{&} .leaflet-draw-draw-circle::after,
+  #{&} .leaflet-draw-edit-edit::after,
+  #{&} .leaflet-draw-edit-remove::after {
+    position: absolute;
+    top: 0;
+    left: 9px;
+
+    color: #464646;
+
+    font-family: 'Font Awesome 5 Free';
+    font-size: 14px;
+    font-weight: 900;
+  }
+}
+
+.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-circle {
+  @at-root #{&}::after {
+    content: '\f111';
+
+    font-weight: 300;
+  }
+}
+
+.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-edit-edit {
+  @at-root #{&}::after {
+    content: '\f304';
+  }
+}
+
+.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-edit-remove {
+  @at-root #{&}::after {
+    content: '\f1f8';
+  }
+}
+
+// --------------------
+// Zoom
+// --------------------
+.leaflet-control-zoom {
+  @at-root
+  #{&}-in,
+  #{&}-out {
+    position: relative;
+
+    user-select: none;
+
+    color: transparent!important;
+    background-image: none;
+  }
+
+  @at-root
+  #{&}-in::after,
+  #{&}-out::after {
+    position: absolute;
+    top: 0;
+    left: 9px;
+
+    color: #464646;
+
+    font-family: 'Font Awesome 5 Free';
+    font-size: 14px;
+    font-weight: 900;
+  }
+}
+
+.leaflet-control-zoom-in::after {
+  content: '\f067';
+  //content: '\f00e';
+}
+
+.leaflet-control-zoom-out::after {
+  content: '\f068';
+  //content: '\f010';
+}
+
+// --------------------
+// Attribution
+// --------------------
+.leaflet-control-attribution {
+  display: none;
+}
+
+// --------------------
+// Leaflet Timeline
+// --------------------
+.leaflet-bottom.leaflet-left {
+  width: 100%;
+}
+
+.leaflet-control.leaflet-timeline-control {
+  position: absolute!important;
+  bottom: 0!important;
+  left: 3%!important;
+
+  box-sizing: border-box!important;
+  width: 96%!important;
+  margin-bottom: 10px!important;
+  margin-left: 0!important;
+
+  text-align: center!important;
+}
+
+.leaflet-control.leaflet-timeline-control .button-container button {
+  cursor: pointer;
+
+  border: 1px solid #ccc!important;
+
+  @at-root #{&}:focus {
+    outline: none;
+  }
+}
+
+.leaflet-control.leaflet-timeline-control .button-container button.play,
+.leaflet-control.leaflet-timeline-control .button-container button.pause {
+  margin-right: 3px;
+  margin-left: 3px;
+}
+
+#map[data-history-loaded='false'] .leaflet-control-layers.leaflet-control-layers-expanded.leaflet-timeline-control.leaflet-control {
+  visibility: hidden;
+}
