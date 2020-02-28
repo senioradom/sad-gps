@@ -110,7 +110,7 @@ class MapService {
         this._disableEditMode();
         this._deleteAllLayers();
 
-        Array.from(document.querySelectorAll('[id^="custom-zone-label-"]')).forEach(element => {
+        Array.from(document.querySelectorAll('[id^="js-map__custom-zone-label-"]')).forEach(element => {
             element.remove();
         });
 
@@ -386,7 +386,7 @@ class MapService {
     _guessZoneIndex() {
         const labelsArray = [];
 
-        document.querySelectorAll('[id^="custom-zone-label-"]').forEach(el => {
+        document.querySelectorAll('[id^="js-map__custom-zone-label-"]').forEach(el => {
             const zoneNumber = el.value.toLowerCase().match(/\d+/);
             if (zoneNumber) {
                 labelsArray.push(parseInt(zoneNumber[0], 10));
@@ -486,7 +486,7 @@ class MapService {
             if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
                 if (layer.feature.properties.drawtype === 'circle') {
                     const id = this.alertsGPSConfigurationShapesGroup.getLayerId(layer);
-                    if (!document.getElementById(`custom-zone-label-${id}`)) {
+                    if (!document.getElementById(`js-map__custom-zone-label-${id}`)) {
                         try {
                             layer.feature.properties.label = layer._popup._content
                                 .split('\n')
@@ -506,7 +506,7 @@ class MapService {
     }
 
     _labelArea(id, distance, save) {
-        const label = document.getElementById(`custom-zone-label-${id}`).value;
+        const label = document.getElementById(`js-map__custom-zone-label-${id}`).value;
         const layer = this.alertsGPSConfigurationShapesGroup.getLayer(id);
 
         layer.feature.properties.label = label;
@@ -534,7 +534,7 @@ class MapService {
 
         return `
             <input
-                id="custom-zone-label-${id}"
+                id="js-map__custom-zone-label-${id}"
                 class="map__custom-zone-label"
                 type="text"
                 value="${label}"
@@ -544,13 +544,13 @@ class MapService {
                 onkeyup="leafletDrawServiceInstance._onKeyUp(event);"
                 onfocusout="leafletDrawServiceInstance._labelArea(${id}, ${distance}, true);"
             >
-            <div id="custom-zone-distance-${id}" class="map__custom-zone-distance">${radiusInKm}</div>
+            <div id="js-map__custom-zone-distance-${id}" class="map__custom-zone-distance">${radiusInKm}</div>
         `;
     }
 
     _getDuplicatedLabels() {
         const labelsArray = [];
-        document.querySelectorAll('[id^="custom-zone-label-"]').forEach(el => {
+        document.querySelectorAll('[id^="js-map__custom-zone-label-"]').forEach(el => {
             labelsArray.push(el.value.toLowerCase());
         });
 
@@ -569,7 +569,7 @@ class MapService {
         const condDuplicated = this._getDuplicatedLabels().length === 0;
 
         let condNotEmpty = true;
-        document.querySelectorAll('[id^="custom-zone-label-"]').forEach(el => {
+        document.querySelectorAll('[id^="js-map__custom-zone-label-"]').forEach(el => {
             if (el.value === '') {
                 condNotEmpty = false;
             }
@@ -582,13 +582,15 @@ class MapService {
 
     _toggleLabelsValidStyles(isValid) {
         if (isValid) {
-            document.querySelectorAll('[id^="custom-zone-label-"].map__custom-zone-label--not-valid').forEach(el => {
-                el.classList.remove('map__custom-zone-label--not-valid');
-            });
+            document
+                .querySelectorAll('[id^="js-map__custom-zone-label-"].map__custom-zone-label--not-valid')
+                .forEach(el => {
+                    el.classList.remove('map__custom-zone-label--not-valid');
+                });
         } else {
             const duplicatedLabelsArray = this._getDuplicatedLabels();
 
-            document.querySelectorAll('[id^="custom-zone-label-"]').forEach(el => {
+            document.querySelectorAll('[id^="js-map__custom-zone-label-"]').forEach(el => {
                 if (duplicatedLabelsArray.includes(el.value.toLowerCase()) || el.value === '') {
                     el.classList.add('map__custom-zone-label--not-valid');
                 } else {
