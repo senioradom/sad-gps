@@ -1,0 +1,36 @@
+.notifications {
+  position: absolute;
+  z-index: 401;
+  right: 49px;
+  bottom: 70px;
+
+  display: none!important;
+
+  width: 120px;
+  height: 20px;
+
+  text-align: center;
+
+  background-color: white;
+
+  @at-root #{&}--saving {
+    display: block;
+
+    border: 1px solid #6c757d;
+    background-color: white;
+  }
+
+  @at-root #{&}--success {
+    display: block;
+
+    border: 1px solid #28a745;
+    background-color: #28a745;
+  }
+
+  @at-root #{&}--failure {
+    display: block;
+
+    border: 1px solid #dc3545;
+    background-color: #dc3545;
+  }
+}

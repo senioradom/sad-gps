@@ -23,6 +23,8 @@ $nodeModuleRoot: '../../node_modules/';
 // --------------------
 @import 'partials/app';
 
+@import 'partials/notifications';
+
 @import 'partials/map';
 
 @import 'partials/widget-dates';
