@@ -1,4 +1,4 @@
-import rome from 'rome';
+import rome from '@bevacqua/rome';
 import moment from 'moment';
 
 class DateTimesSelectorWidget {

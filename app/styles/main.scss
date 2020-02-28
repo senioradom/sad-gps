@@ -16,7 +16,7 @@ $nodeModuleRoot: '../../node_modules/';
 
 @import url('#{$nodeModuleRoot}leaflet-draw/dist/leaflet.draw.css');
 
-@import url('#{$nodeModuleRoot}rome/dist/rome.min.css');
+@import url('#{$nodeModuleRoot}@bevacqua/rome/dist/rome.min.css');
 
 // --------------------
 // App
