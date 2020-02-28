@@ -1,19 +1,16 @@
 import LeafletDrawService from './services/leaflet-draw-service';
 import NotificationService from './services/notification-service';
 import ApiService from './services/api-service';
-import DateTimesSelectorWidget from './widgets/DateTimesSelectorWidget';
+import DatesSelectorWidget from './widgets/DatesSelectorWidget';
 import '@fortawesome/fontawesome-free/js/all.min';
 
-class App {
-    constructor(contractRef, basicAuth) {
+class MapApp {
+    constructor(api, contractRef, basicAuth) {
         this.autosave = false;
 
-        this.contractRef = contractRef;
-        this.basicAuth = basicAuth;
-
         this.notificationService = new NotificationService();
-        this.gpsService = new ApiService(this.contractRef, this.basicAuth);
-        this.leafletDrawService = new LeafletDrawService(this.gpsService);
+        this.apiService = new ApiService(api, contractRef, basicAuth);
+        this.leafletDrawService = new LeafletDrawService(this.apiService);
 
         this.app = document.getElementById('app');
         this.map = document.getElementById('map');
@@ -32,32 +29,19 @@ class App {
     async init() {
         this._toggleLoadingIndicator(true);
 
-        const response = await fetch(
-            `https://gateway-pp.senioradom.com/api/3/contracts/${this.contractRef}/alert-configurations`,
-            {
-                headers: {
-                    authorization: `Basic ${this.basicAuth}`
-                },
-                method: 'GET'
-            }
-        );
+        this.apiService.getAlertConfigurations().then(configurations => {
+            [this.configuration] = [configurations.filter(conf => conf.alertCode === 'out_of_perimeter')[0]];
 
-        const configurations = await response.json();
-
-        [this.configuration] = [configurations.filter(conf => conf.alertCode === 'out_of_perimeter')[0]];
-
-        if (!this.configuration.preference.geoJson) {
-            this.configuration.preference.geoJson = `{
+            if (!this.configuration.preference.geoJson) {
+                this.configuration.preference.geoJson = `{
             'type': 'FeatureCollection',
             'features': []
         }`;
-        }
+            }
 
-        this.leafletDrawService.generateMap(this.map, this.configuration.preference.geoJson);
-        this._toggleLoadingIndicator(false);
-        // this._getAddress().then(r1 => console.log(r1));
-        // this._getLastPosition().then(r2 => console.log(r2));
-        // this._getPositions().then(r3 => console.log(r3));
+            this.leafletDrawService.generateMap(this.map, this.configuration.preference.geoJson);
+            this._toggleLoadingIndicator(false);
+        });
     }
 
     // --------------------
@@ -66,41 +50,6 @@ class App {
     // --
     // Methods
     // --------------------
-    /*
-    _zoomMapOnGPSLocation(lat, lng) {
-        this.leafletDrawService.addMarker(lat, lng);
-    }
-
-    _displayAddress(address) {
-        return address ? address.label : '';
-    }
-
-    _applyOptionSelected(event) {
-        const address = event.option.value;
-        this._zoomMapOnGPSLocation(address.lat, address.lng);
-    }
-    */
-
-    // _getLastPosition() {
-    //     return this.gpsService.getLastPosition();
-    // }
-    //
-    // _getPositions() {
-    //     return this.gpsService.getPositions();
-    // }
-    //
-    // _getAddress() {
-    //     return this.gpsService.getAddress();
-    // }
-
-    // eslint-disable-next-line class-methods-use-this
-    _handleErrors(response) {
-        if (!response.ok) {
-            throw Error(response.status);
-        }
-
-        return response;
-    }
 
     _save() {
         this._toggleLoadingIndicator(true);
@@ -109,18 +58,8 @@ class App {
         this.leafletDrawService.validateDrawings();
         this.configuration.preference.geoJson = this.leafletDrawService.exportGeoJSON();
 
-        fetch(
-            `https://gateway-pp.senioradom.com/api/3/contracts/${this.contractRef}/alert-configurations/${this.configuration.id}`,
-            {
-                headers: {
-                    authorization: `Basic ${this.basicAuth}`,
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(this.configuration),
-                method: 'PUT'
-            }
-        )
-            .then(this._handleErrors)
+        this.apiService
+            .saveAlertConfiguration(this.configuration)
             .then(() => {
                 this._toggleLoadingIndicator(false);
                 this.notificationService.notify('SUCCESS', 'OK');
@@ -160,7 +99,7 @@ class App {
     }
 
     _initDateTimesWidget() {
-        this.dateTimesSelectorWidget = new DateTimesSelectorWidget();
+        this.dateTimesSelectorWidget = new DatesSelectorWidget();
         this.showDateWigetButton.addEventListener('click', e => {
             document.querySelector('.widget-history__form').classList.toggle('widget-history__form--visible');
         });
@@ -194,4 +133,4 @@ class App {
     }
 }
 
-export default App;
+export default MapApp;

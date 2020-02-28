@@ -1,4 +1,4 @@
-import App from './app';
+import MapApp from './MapApp';
 
-const app = new App('contractRef', 'basicAuth');
-app.init();
+const mappApp = new MapApp('apiURL', 'contractRef', 'basicAuth');
+mappApp.init();
