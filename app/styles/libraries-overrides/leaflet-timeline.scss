@@ -8,10 +8,10 @@
 .leaflet-control.leaflet-timeline-control {
   position: absolute!important;
   bottom: 0!important;
-  left: 3%!important;
+  left: 50px!important;
 
   box-sizing: border-box!important;
-  width: 96%!important;
+  width: calc(100% - 60px) !important;
   margin-bottom: 10px!important;
   margin-left: 0!important;
 
