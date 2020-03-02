@@ -242,56 +242,67 @@ class MapService {
         let maximumDate;
 
         this._gpsService.getPositions(start, end).then(result => {
-            const moments = result.map(position => moment(position.createdAt));
+            if (result.length) {
+                const moments = result.map(position => moment(position.createdAt));
 
-            minimumDate = moment.min(moments);
-            maximumDate = moment.max(moments);
+                minimumDate = moment.min(moments);
+                maximumDate = moment.max(moments);
 
-            result.forEach((position, index) => {
-                if (index === 0) {
-                    lastPositionDateTime = moment(position.createdAt);
-                } else {
-                    if (moment(position.createdAt) < moment(lastPositionDateTime).add(5, 'minutes')) {
-                        return;
+                result.forEach((position, index) => {
+                    if (index === 0) {
+                        lastPositionDateTime = moment(position.createdAt);
+                    } else {
+                        if (moment(position.createdAt) < moment(lastPositionDateTime).add(5, 'minutes')) {
+                            return;
+                        }
+
+                        data.features[data.features.length - 1].properties.end = position.createdAt;
                     }
 
-                    data.features[data.features.length - 1].properties.end = position.createdAt;
-                }
+                    lastPositionDateTime = moment(position.createdAt);
 
-                lastPositionDateTime = moment(position.createdAt);
+                    data.features.push({
+                        type: 'Feature',
+                        properties: {
+                            start: position.createdAt
+                            // end: Added programmatically
+                        },
+                        geometry: {
+                            type: 'Point',
+                            coordinates: [position.longitude, position.latitude]
+                        }
+                    });
+                });
 
-                data.features.push({
-                    type: 'Feature',
-                    properties: {
-                        start: position.createdAt
-                        // end: Added programmatically
-                    },
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [position.longitude, position.latitude]
+                data.features[data.features.length - 1].properties.end =
+                    data.features[data.features.length - 1].properties.start;
+
+                Array.from(document.querySelectorAll('.leaflet-timeline-control')).forEach(element => {
+                    element.remove();
+                });
+
+                this.lastUserPositionGroup.clearLayers();
+                this.userPositionsHistoryGroup.clearLayers();
+
+                const duration = moment.duration(maximumDate.diff(minimumDate));
+                const hours = parseInt(duration.asHours(), 10);
+
+                this.timelineControl = L.timelineSliderControl({
+                    steps: hours,
+                    duration: hours * 1000,
+                    formatOutput(date) {
+                        return moment(date).format('DD/MM/YYYY - HH:mm');
                     }
                 });
-            });
+                this.timelineControl.addTo(this.map);
 
-            data.features[data.features.length - 1].properties.end =
-                data.features[data.features.length - 1].properties.start;
+                this._playGPSPositionsHistory(data);
+            } else {
+                Array.from(document.querySelectorAll('.leaflet-timeline-control')).forEach(element => {
+                    element.remove();
+                });
 
-            Array.from(document.querySelectorAll('.leaflet-timeline-control')).forEach(element => {
-                element.remove();
-            });
-
-            this.lastUserPositionGroup.clearLayers();
-            this.userPositionsHistoryGroup.clearLayers();
-
-            const duration = moment.duration(maximumDate.diff(minimumDate));
-            const hours = parseInt(duration.asHours(), 10);
-
-            this.timelineControl = L.timelineSliderControl({
-                steps: hours,
-                duration: hours * 1000,
-                formatOutput(date) {
-                    return moment(date).format('DD/MM/YYYY - HH:mm');
-                }
+                this.userPositionsHistoryGroup.clearLayers();
 
                 this._notificationService.notify(
                     'REPLAY.NO_DATA',
