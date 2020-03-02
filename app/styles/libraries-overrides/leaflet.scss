@@ -44,7 +44,7 @@
   content: '';
 
   border-radius: 50%;
-  background-color: $distributorColor;
+  background-color: var(--distributor-color);
 }
 
 .leaflet-popup-tip-container::after {
@@ -78,7 +78,7 @@
   background-color: #464646!important;
 
   @at-root #{&}:hover {
-    background-color: $distributorColor!important;
+    background-color: var(--distributor-color)!important;
   }
 }
 
@@ -91,10 +91,10 @@
 .leaflet-draw-tooltip {
   visibility: visible!important;
 
-  background: $distributorColor!important;
+  background: var(--distributor-color)!important;
 
   @at-root #{&}::before {
-    border-right-color: $distributorColor!important;
+    border-right-color: var(--distributor-color)!important;
   }
 }
 
@@ -110,7 +110,7 @@
   width: 30px !important;
   height: 30px !important;
 
-  border: 1px solid $distributorColor;
+  border: 1px solid var(--distributor-color);
   border-radius: 50%;
   background-color: white;
 }
@@ -125,7 +125,7 @@
 
     content: '\f31e';
 
-    color: $distributorColor;
+    color: var(--distributor-color);
 
     font-family: 'Font Awesome 5 Free';
     font-size: 21px;

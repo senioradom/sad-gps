@@ -27,14 +27,14 @@ class MapService {
 
     _initialShapes = 0;
 
-    _colors = {
-        circle: {
-            view: '#2c827d'
-        }
-    };
-
-    constructor(gpsService, notificationService, locale) {
+    constructor(gpsService, notificationService, locale, distributorColor) {
         drawLocales(locale);
+
+        this._colors = {
+            circle: {
+                view: distributorColor
+            }
+        };
 
         this._leafLetConfigOverrides();
         this._gpsService = gpsService;

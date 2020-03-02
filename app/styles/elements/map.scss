@@ -56,7 +56,7 @@
       text-indent: 100%;
 
       border: 3px solid #ccc;
-      border-top-color: $distributorColor;
+      border-top-color: var(--distributor-color);
       border-radius: 50%;
     }
 

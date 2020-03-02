@@ -39,12 +39,12 @@
 
     @at-root #{&}--save {
       color: white;
-      border: 1px solid $distributorColor;
-      background-color: $distributorColor;
+      border: 1px solid var(--distributor-color);
+      background-color: var(--distributor-color);
     }
 
     @at-root #{&}--reset {
-      color: $distributorColor;
+      color: var(--distributor-color);
       border: 1px solid #444;
       background-color: #fff;
     }

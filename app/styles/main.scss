@@ -4,8 +4,15 @@
 // --------------------
 // Configuration
 // --------------------
-$distributorColor: #2c827d;
 $nodeModuleRoot: '../../node_modules/';
+
+// --------------------
+// Variables
+// --------------------
+// Defined in AppMap() : document.documentElement.style.setProperty('--distributor-color', distributorColor);
+//:root {
+//    --distributor-color: #2c827d;
+//}
 
 // --------------------
 // Libraries
