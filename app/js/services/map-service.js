@@ -292,10 +292,13 @@ class MapService {
                 formatOutput(date) {
                     return moment(date).format('DD/MM/YYYY - HH:mm');
                 }
-            });
-            this.timelineControl.addTo(this.map);
 
-            this._playGPSPositionsHistory(data);
+                this._notificationService.notify(
+                    'REPLAY.NO_DATA',
+                    'Il n’y a pas de données sur la période sélectionnée.',
+                    'warning'
+                );
+            }
         });
     }
 
@@ -683,7 +686,7 @@ class MapService {
             this._toggleLabelsValidStyles(false);
             this._toggleButtonsState(false);
 
-            this._notificationService.notify('FAILURE', 'Labels validation failed...');
+            this._notificationService.notify('LABELS.VALIDATION.FAILURE', 'Labels validation failed...', 'danger');
         }
     }
 

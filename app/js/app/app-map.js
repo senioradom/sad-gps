@@ -52,7 +52,7 @@ class AppMap {
 
     _save() {
         this._toggleLoadingIndicator(true);
-        this._notificationService.notify('SAVING', 'Saving...');
+        this._notificationService.notify('SAVING.START', 'Saving...', 'light');
 
         this._mapService.validateDrawings();
         this.configuration.preference.geoJson = this._mapService.exportGeoJSON();
@@ -61,12 +61,12 @@ class AppMap {
             .saveAlertConfiguration(this.configuration)
             .then(() => {
                 this._toggleLoadingIndicator(false);
-                this._notificationService.notify('SUCCESS', 'OK');
+                this._notificationService.notify('SAVING.SUCCESS', 'Saving success', 'success');
                 this._mapService.updateInitialGeoJsonState();
             })
             .catch(() => {
                 this._toggleLoadingIndicator(false);
-                this._notificationService.notify('FAILURE', 'NOT');
+                this._notificationService.notify('SAVING.FAILURE', 'Saving failure', 'danger');
             });
     }
 

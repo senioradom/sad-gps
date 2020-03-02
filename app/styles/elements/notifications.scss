@@ -1,36 +1,69 @@
 .notifications {
+  $self: &;
+
   position: absolute;
   z-index: 401;
   right: 49px;
   bottom: 70px;
 
-  display: none!important;
+  display: none;
 
-  width: 120px;
-  height: 20px;
+  min-width: 120px;
+  min-height: 20px;
 
   text-align: center;
 
   background-color: white;
 
-  @at-root #{&}--saving {
-    display: block;
+  @at-root [data-map-mode='GPS-HISTORY-PLAYBACK-MODE']
 
-    border: 1px solid #6c757d;
-    background-color: white;
+
+
+  ~ .app-map__buttons-container ~ #{$self} {
+    right: 10px;
+    bottom: 10px;
+  }
+
+  @at-root
+  #{&}--light,
+  #{&}--info,
+  #{&}--success,
+  #{&}--danger,
+  #{&}--warning {
+    display: inline-block;
+
+    padding: 5px;
+
+    border-radius: 5px;
+  }
+
+  @at-root #{&}--info {
+    color: #004085;
+    border: 1px solid #004085;
+    background-color: #cce5ff;
   }
 
   @at-root #{&}--success {
-    display: block;
-
-    border: 1px solid #28a745;
-    background-color: #28a745;
+    color: #155724;
+    border: 1px solid #155724;
+    background-color: #d4edda;
   }
 
-  @at-root #{&}--failure {
-    display: block;
+  @at-root #{&}--danger {
+    color: #721c24;
+    border: 1px solid #721c24;
+    background-color: #f8d7da;
+  }
 
-    border: 1px solid #dc3545;
-    background-color: #dc3545;
+  @at-root #{&}--warning {
+    color: #856404;
+    border: 1px solid #856404;
+    background-color: #fff3cd;
+  }
+
+  @at-root #{&}--light {
+    color: #818182;
+    border: 1px solid #818182;
+    background-color: #fefefe;
   }
 }

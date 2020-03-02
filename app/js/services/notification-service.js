@@ -3,26 +3,24 @@ class NotificationService {
         this.element = document.getElementById('js-notifications');
     }
 
-    notify(type, message) {
+    notify(type, message, cssClass) {
         switch (type) {
-            case 'SAVING':
+            case 'SAVING.START':
+            case 'SAVING.SUCCESS':
+            case 'SAVING.FAILURE':
+            case 'LABELS.VALIDATION.FAILURE':
+                return;
+                // eslint-disable-next-line no-unreachable
                 this.element.className = 'notifications';
-                this.element.classList.add('notifications--saving');
-
-                this.element.innerHTML = message;
-                break;
-
-            case 'SUCCESS':
-                this.element.className = 'notifications';
-                this.element.classList.add('notifications--success');
+                this.element.classList.add(`notifications--${cssClass}`);
 
                 this.element.innerHTML = message;
                 this._resetState();
                 break;
 
-            case 'FAILURE':
+            case 'REPLAY.NO_DATA':
                 this.element.className = 'notifications';
-                this.element.classList.add('notifications--failure');
+                this.element.classList.add(`notifications--${cssClass}`);
 
                 this.element.innerHTML = message;
                 this._resetState();
@@ -37,7 +35,7 @@ class NotificationService {
         setTimeout(() => {
             this.element.className = 'notifications';
             this.element.innerHTML = '';
-        }, 2000);
+        }, 3500);
     }
 }
 
