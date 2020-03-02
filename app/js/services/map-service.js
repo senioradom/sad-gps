@@ -147,7 +147,9 @@ class MapService {
             this.lastUserPositionMarker.addTo(this.lastUserPositionGroup);
             this._centerMap('lastUserPositionGroup');
 
-            callback();
+            if (callback && typeof callback === 'function') {
+                callback();
+            }
         });
     }
 
@@ -203,6 +205,12 @@ class MapService {
         Object.entries(this.alertsGPSConfigurationLabelsGroup._layers).forEach(([key, layer]) => {
             layer.getElement().style.display = isHistoryPlaybackMode ? 'none' : 'block';
         });
+
+        if (isHistoryPlaybackMode) {
+            document.getElementById('js-close-replay').classList.remove('close-replay--hidden');
+        } else {
+            document.getElementById('js-close-replay').classList.add('close-replay--hidden');
+        }
 
         if (document.querySelector('.leaflet-control.leaflet-timeline-control')) {
             document.querySelector('.leaflet-control.leaflet-timeline-control').style.display = isHistoryPlaybackMode

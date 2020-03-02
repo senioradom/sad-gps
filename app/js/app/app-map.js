@@ -11,6 +11,7 @@ class AppMap {
         app: document.getElementById('js-app-map'),
         map: document.getElementById('js-map'),
         buttons: {
+            closeReplay: document.getElementById('js-close-replay__button'),
             reset: document.getElementById('js-app-map__button-reset'),
             save: document.getElementById('js-app-map__button-save')
         }
@@ -104,6 +105,10 @@ class AppMap {
         this._elements.buttons.reset.addEventListener('click', () => {
             this._mapService.resetMap();
             this._save();
+        });
+
+        this._elements.buttons.closeReplay.addEventListener('click', () => {
+            this._mapService.switchAlertsConfigurationToHistoryMode('GPS-ALERTS-CONFIGURATION-MODE');
         });
     }
 

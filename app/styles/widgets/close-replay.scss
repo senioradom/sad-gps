@@ -1,0 +1,33 @@
+.close-replay {
+  position: absolute;
+  z-index: 401;
+  top: 17px;
+  right: 10px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 3px;
+
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 0 0 2px 0 #000;
+
+  @at-root #{&}--hidden {
+    display: none;
+  }
+
+  @at-root #{&}__button {
+    cursor: pointer;
+    user-select: none;
+
+    border: none;
+    background-color: transparent;
+
+    font-size: 26px;
+
+    @at-root #{&}:focus {
+      outline: none;
+    }
+  }
+}
