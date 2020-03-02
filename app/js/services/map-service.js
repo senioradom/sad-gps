@@ -606,14 +606,14 @@ class MapService {
     }
 
     _toggleButtonsState(isValid) {
-        const buttons = document.querySelectorAll('.app__button');
+        const buttons = document.querySelectorAll('.app-map__button');
         if (isValid) {
             buttons.forEach(button => {
-                button.classList.remove('app__button--disabled');
+                button.classList.remove('app-map__button--disabled');
             });
         } else {
             buttons.forEach(button => {
-                button.classList.add('app__button--disabled');
+                button.classList.add('app-map__button--disabled');
             });
         }
     }
