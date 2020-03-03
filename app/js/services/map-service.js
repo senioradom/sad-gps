@@ -25,7 +25,7 @@ class MapService {
 
     _initialShapes = 0;
 
-    constructor(gpsService, notificationService, translationService, locale, distributorColor, isDevMode) {
+    constructor(apiService, notificationService, translationService, locale, distributorColor, isDevMode) {
         // List here : https://github.com/DenisCarriere/Leaflet.draw.locales
         if (['en', 'fr', 'es', 'sk', 'cs', 'zh'].includes(locale)) {
             drawLocales(locale);
@@ -38,7 +38,7 @@ class MapService {
         };
 
         this._leafLetConfigOverrides();
-        this._gpsService = gpsService;
+        this._apiService = apiService;
         this._notificationService = notificationService;
         this._translationService = translationService;
 
@@ -126,7 +126,7 @@ class MapService {
     }
 
     addCurrentPositionMarker(callback) {
-        this._gpsService.getLastPosition().then(result => {
+        this._apiService.getLastPosition().then(result => {
             if (!(result.latitude && result.longitude && result.createdAt)) {
                 return;
             }
@@ -244,7 +244,7 @@ class MapService {
         let minimumDate;
         let maximumDate;
 
-        this._gpsService.getPositions(start, end).then(result => {
+        this._apiService.getPositions(start, end).then(result => {
             if (result.length) {
                 const moments = result.map(position => moment(position.createdAt));
 
