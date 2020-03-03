@@ -6,7 +6,7 @@ class TranslationService {
         fr: {
             reset: 'Annuler',
             save: 'Sauvegarder',
-            zone: 'Zone',
+            zone: 'zone {{index}}',
             no_data_for_given_period: 'Il n’y a pas de données sur la période sélectionnée',
             saving: 'Enregistrement',
             success: 'Succès',
@@ -16,7 +16,7 @@ class TranslationService {
         en: {
             reset: 'Reset',
             save: 'Save',
-            zone: 'Zone',
+            zone: 'zone {{index}}',
             no_data_for_given_period: 'There are no data on the selected period',
             saving: 'Saving',
             success: 'Success',
@@ -26,7 +26,7 @@ class TranslationService {
         es: {
             reset: 'Anular',
             save: 'Guardar',
-            zone: 'Zona',
+            zone: 'zona {{index}}',
             no_data_for_given_period: 'No existen datos sobre el período seleccionado',
             saving: 'registro',
             success: 'Éxito',
@@ -34,21 +34,21 @@ class TranslationService {
             zones_validation_failure: 'Error de validación de las zonas'
         },
         sk: {
-            reset: 'zrušiť',
-            save: 'save',
-            zone: 'zóna',
+            reset: 'Zrušiť',
+            save: 'Save',
+            zone: 'zóna {{index}}',
             no_data_for_given_period: 'Nie sú k dispozícii žiadne údaje o zvolenom období',
-            saving: 'registrácia',
+            saving: 'Registrácia',
             success: 'Úspech',
             failure: 'Zlyhanie',
             zones_validation_failure: 'Zlyhanie validácia zóny'
         },
         cs: {
-            reset: 'zrušit',
-            save: 'save',
-            zone: 'Zóna',
+            reset: 'Zrušit',
+            save: 'Save',
+            zone: 'zóna  {{index}}',
             no_data_for_given_period: 'Nejsou k dispozici žádné údaje o zvoleném období',
-            saving: 'registrace',
+            saving: 'Registrace',
             success: 'Úspěch',
             failure: 'Selhání',
             zones_validation_failure: 'Selhání validace zóny'
@@ -56,7 +56,7 @@ class TranslationService {
         zh: {
             reset: '取消',
             save: '保存',
-            zone: '区',
+            zone: '区 {{index}}',
             no_data_for_given_period: '有选定的周期没有数据',
             saving: '注册',
             success: '成功',

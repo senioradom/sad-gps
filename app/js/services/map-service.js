@@ -423,6 +423,9 @@ class MapService {
             }
         });
 
+        labelsArray.push(0);
+        labelsArray.sort();
+
         const [zoneMin, zoneMax] = [Math.min(...labelsArray), Math.max(...labelsArray)];
         const missingZonesIndexes = Array.from(Array(zoneMax - zoneMin), (value, index) => index + zoneMin).filter(
             index => !labelsArray.includes(index)
@@ -439,7 +442,7 @@ class MapService {
         const id = this.alertsGPSConfigurationShapesGroup.getLayerId(layer);
         let { label } = layer.feature.properties;
         if (!label) {
-            label = `zone ${this._guessZoneIndex()}`;
+            label = this._translationService.translateString('zone', { index: this._guessZoneIndex() });
         }
 
         const popup = new L.popup({

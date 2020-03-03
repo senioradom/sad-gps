@@ -3,7 +3,7 @@
 
   position: absolute;
   z-index: 401;
-  right: 49px;
+  right: 10px;
   bottom: 70px;
 
   display: none;
@@ -15,12 +15,7 @@
 
   background-color: white;
 
-  @at-root [data-map-mode='GPS-HISTORY-PLAYBACK-MODE']
-
-
-
-  ~ .app-map__buttons-container ~ #{$self} {
-    right: 10px;
+  @at-root [data-map-mode='GPS-HISTORY-PLAYBACK-MODE'] ~ .app-map__buttons-container ~ #{$self} {
     bottom: 10px;
   }
 
