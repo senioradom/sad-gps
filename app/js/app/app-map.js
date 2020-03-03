@@ -3,22 +3,26 @@ import NotificationService from '../services/notification-service';
 import ApiService from '../services/api-service';
 import WidgetDates from '../widgets/widget-dates';
 import '@fortawesome/fontawesome-free/js/all.min';
+import TemplateService from '../services/template-service';
 
 class AppMap {
     _autoSave = false;
 
-    _elements = {
-        app: document.getElementById('js-app-map'),
-        map: document.getElementById('js-map'),
-        buttons: {
-            closeReplay: document.getElementById('js-close-replay__button'),
-            reset: document.getElementById('js-app-map__button-reset'),
-            save: document.getElementById('js-app-map__button-save')
-        }
-    };
-
-    constructor(api, contractRef, basicAuth, locale, distributorColor) {
+    constructor(htmlElement, api, contractRef, basicAuth, locale, distributorColor) {
         document.documentElement.style.setProperty('--distributor-color', distributorColor);
+
+        this._templateService = new TemplateService();
+        document.querySelector(htmlElement).innerHTML = this._templateService.getApplicationTemplate();
+
+        this._elements = {
+            app: document.getElementById('js-app-map'),
+            map: document.getElementById('js-map'),
+            buttons: {
+                closeReplay: document.getElementById('js-close-replay__button'),
+                reset: document.getElementById('js-app-map__button-reset'),
+                save: document.getElementById('js-app-map__button-save')
+            }
+        };
 
         this._apiService = new ApiService(api, contractRef, basicAuth);
         this._notificationService = new NotificationService();
