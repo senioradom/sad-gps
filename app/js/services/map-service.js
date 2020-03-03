@@ -246,7 +246,6 @@ class MapService {
         let maximumDate;
 
         this._gpsService.getPositions(start, end).then(result => {
-            result = [];
             if (result.length) {
                 const moments = result.map(position => moment(position.createdAt));
 
