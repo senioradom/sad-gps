@@ -4,64 +4,64 @@ import 'moment-timezone';
 class TranslationService {
     _strings = {
         fr: {
-            reset: 'Annuler',
-            save: 'Sauvegarder',
-            zone: 'zone {{index}}',
-            no_data_for_given_period: 'Il n’y a pas de données sur la période sélectionnée',
-            saving: 'Enregistrement',
-            success: 'Succès',
-            failure: 'Échec',
-            zones_validation_failure: 'Échec dans la validation des zones'
+            RESET: 'Annuler',
+            SAVE: 'Sauvegarder',
+            ZONE: 'zone {{index}}',
+            NO_DATA_FOR_GIVEN_PERIOD: 'Il n’y a pas de données sur la période sélectionnée',
+            SAVING: 'Enregistrement',
+            SUCCESS: 'Succès',
+            FAILURE: 'Échec',
+            ZONES_VALIDATION_FAILURE: 'Échec dans la validation des zones',
         },
         en: {
-            reset: 'Reset',
-            save: 'Save',
-            zone: 'zone {{index}}',
-            no_data_for_given_period: 'There are no data on the selected period',
-            saving: 'Saving',
-            success: 'Success',
-            failure: 'Failure',
-            zones_validation_failure: 'Zones validation failure'
+            RESET: 'Reset',
+            SAVE: 'Save',
+            ZONE: 'zone {{index}}',
+            NO_DATA_FOR_GIVEN_PERIOD: 'There are no data on the selected period',
+            SAVING: 'Saving',
+            SUCCESS: 'Success',
+            FAILURE: 'Failure',
+            ZONES_VALIDATION_FAILURE: 'Zones validation failure',
         },
         es: {
-            reset: 'Anular',
-            save: 'Guardar',
-            zone: 'zona {{index}}',
-            no_data_for_given_period: 'No existen datos sobre el período seleccionado',
-            saving: 'registro',
-            success: 'Éxito',
-            failure: 'Fracaso',
-            zones_validation_failure: 'Error de validación de las zonas'
+            RESET: 'Anular',
+            SAVE: 'Guardar',
+            ZONE: 'zona {{index}}',
+            NO_DATA_FOR_GIVEN_PERIOD: 'No existen datos sobre el período seleccionado',
+            SAVING: 'registro',
+            SUCCESS: 'Éxito',
+            FAILURE: 'Fracaso',
+            ZONES_VALIDATION_FAILURE: 'Error de validación de las zonas',
         },
         sk: {
-            reset: 'Zrušiť',
-            save: 'Save',
-            zone: 'zóna {{index}}',
-            no_data_for_given_period: 'Nie sú k dispozícii žiadne údaje o zvolenom období',
-            saving: 'Registrácia',
-            success: 'Úspech',
-            failure: 'Zlyhanie',
-            zones_validation_failure: 'Zlyhanie validácia zóny'
+            RESET: 'Zrušiť',
+            SAVE: 'Save',
+            ZONE: 'zóna {{index}}',
+            NO_DATA_FOR_GIVEN_PERIOD: 'Nie sú k dispozícii žiadne údaje o zvolenom období',
+            SAVING: 'Registrácia',
+            SUCCESS: 'Úspech',
+            FAILURE: 'Zlyhanie',
+            ZONES_VALIDATION_FAILURE: 'Zlyhanie validácia zóny',
         },
         cs: {
-            reset: 'Zrušit',
-            save: 'Save',
-            zone: 'zóna  {{index}}',
-            no_data_for_given_period: 'Nejsou k dispozici žádné údaje o zvoleném období',
-            saving: 'Registrace',
-            success: 'Úspěch',
-            failure: 'Selhání',
-            zones_validation_failure: 'Selhání validace zóny'
+            RESET: 'Zrušit',
+            SAVE: 'Save',
+            ZONE: 'zóna  {{index}}',
+            NO_DATA_FOR_GIVEN_PERIOD: 'Nejsou k dispozici žádné údaje o zvoleném období',
+            SAVING: 'Registrace',
+            SUCCESS: 'Úspěch',
+            FAILURE: 'Selhání',
+            ZONES_VALIDATION_FAILURE: 'Selhání validace zóny',
         },
         zh: {
-            reset: '取消',
-            save: '保存',
-            zone: '区 {{index}}',
-            no_data_for_given_period: '有选定的周期没有数据',
-            saving: '注册',
-            success: '成功',
-            failure: '失败',
-            zones_validation_failure: '区验证失败'
+            RESET: '取消',
+            SAVE: '保存',
+            ZONE: '区 {{index}}',
+            NO_DATA_FOR_GIVEN_PERIOD: '有选定的周期没有数据',
+            SAVING: '注册',
+            SUCCESS: '成功',
+            FAILURE: '失败',
+            ZONES_VALIDATION_FAILURE: '区验证失败',
         }
     };
 
@@ -78,6 +78,8 @@ class TranslationService {
     translateInterface() {
         document.querySelectorAll('[data-i18n]').forEach(el => {
             el.textContent = this._strings[this._language][el.dataset.i18n];
+        document.querySelectorAll('[data-i18n-text]').forEach(el => {
+            el.textContent = this._strings[this._language][el.dataset.i18nText];
         });
     }
 

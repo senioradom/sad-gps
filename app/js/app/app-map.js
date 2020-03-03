@@ -73,7 +73,7 @@ class AppMap {
     _save() {
         this._toggleLoadingIndicator(true);
         if (this._devMode) {
-            this._notificationService.notify(this._translationService.translateString('saving'), 'light');
+            this._notificationService.notify(this._translationService.translateString('SAVING'), 'light');
         }
 
         this._mapService.validateDrawings();
@@ -84,14 +84,14 @@ class AppMap {
             .then(() => {
                 this._toggleLoadingIndicator(false);
                 if (this._devMode) {
-                    this._notificationService.notify(this._translationService.translateString('success'), 'success');
+                    this._notificationService.notify(this._translationService.translateString('SUCCESS'), 'success');
                 }
                 this._mapService.updateInitialGeoJsonState();
             })
             .catch(() => {
                 this._toggleLoadingIndicator(false);
                 if (this._devMode) {
-                    this._notificationService.notify(this._translationService.translateString('failure'), 'danger');
+                    this._notificationService.notify(this._translationService.translateString('FAILURE'), 'danger');
                 }
             });
     }

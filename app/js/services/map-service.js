@@ -308,7 +308,7 @@ class MapService {
                 this.userPositionsHistoryGroup.clearLayers();
 
                 this._notificationService.notify(
-                    this._translationService.translateString('no_data_for_given_period'),
+                    this._translationService.translateString('NO_DATA_FOR_GIVEN_PERIOD'),
                     'warning'
                 );
             }
@@ -441,7 +441,7 @@ class MapService {
         const id = this.alertsGPSConfigurationShapesGroup.getLayerId(layer);
         let { label } = layer.feature.properties;
         if (!label) {
-            label = this._translationService.translateString('zone', { index: this._guessZoneIndex() });
+            label = this._translationService.translateString('ZONE', { index: this._guessZoneIndex() });
         }
 
         const popup = new L.popup({
@@ -703,7 +703,7 @@ class MapService {
             this._toggleButtonsState(false);
 
             this._notificationService.notify(
-                this._translationService.translateString('zones_validation_failure'),
+                this._translationService.translateString('ZONES_VALIDATION_FAILURE'),
                 'danger'
             );
         }

@@ -49,8 +49,8 @@ class TemplateService {
     Buttons
     ------------------- -->
     <div class="app-map__buttons-container" id="js-app-map__buttons-container">
-        <button class="app-map__button app-map__button--reset" id="js-app-map__button-reset" data-i18n="reset"></button>
-        <button class="app-map__button app-map__button--save" id="js-app-map__button-save" data-i18n="save"></button>
+        <button class="app-map__button app-map__button--reset" id="js-app-map__button-reset" data-i18n-text="RESET"></button>
+        <button class="app-map__button app-map__button--save" id="js-app-map__button-save" data-i18n-text="SAVE"></button>
     </div>
 
     <!-- ------------------
