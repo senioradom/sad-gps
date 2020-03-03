@@ -56,7 +56,6 @@ class MapService {
         this.map = L.map(el, {
             center: [this._FRANCE_CENTERED.lat, this._FRANCE_CENTERED.lng],
             zoom: this._FRANCE_CENTERED.zoom,
-            // doubleClickZoom: false,
             zoomControl: false,
             layers: [mapAsImage]
         });
@@ -811,21 +810,11 @@ class MapService {
         this._recoverStateBeforeDeletion();
     }
 
-    // _drawToolbarClosedEvent(e) {
-    //     this._regenerateTooltips();
-    // }
-
     _debugEvent(e) {
         console.log(`[debug] : Event : ${e.type}`);
 
         switch (e.type) {
-            // case 'draw:editstop':
-            // case 'draw:deletestop':
             case 'draw:toolbarclosed':
-                // setTimeout(() => {
-                //     this._regenerateTooltips();
-                //     console.log('foo');
-                // }, 1000)
                 break;
             default:
                 break;
