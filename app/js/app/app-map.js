@@ -9,6 +9,8 @@ import TranslationService from '../services/translation-service';
 class AppMap {
     _autoSave = false;
 
+    _devMode = true;
+
     constructor(htmlElement, api, contractRef, basicAuth, locale, distributorColor) {
         document.documentElement.style.setProperty('--distributor-color', distributorColor);
 
@@ -37,7 +39,8 @@ class AppMap {
             this._notificationService,
             this._translationService,
             this._locale,
-            distributorColor
+            distributorColor,
+            this._devMode
         );
 
         this._init();
@@ -66,7 +69,9 @@ class AppMap {
 
     _save() {
         this._toggleLoadingIndicator(true);
-        // this._notificationService.notify(this._translationService.translateString('saving'), 'light');
+        if (this._devMode) {
+            this._notificationService.notify(this._translationService.translateString('saving'), 'light');
+        }
 
         this._mapService.validateDrawings();
         this.configuration.preference.geoJson = this._mapService.exportGeoJSON();
@@ -75,12 +80,16 @@ class AppMap {
             .saveAlertConfiguration(this.configuration)
             .then(() => {
                 this._toggleLoadingIndicator(false);
-                // this._notificationService.notify(this._translationService.translateString('success'), 'success');
+                if (this._devMode) {
+                    this._notificationService.notify(this._translationService.translateString('success'), 'success');
+                }
                 this._mapService.updateInitialGeoJsonState();
             })
             .catch(() => {
                 this._toggleLoadingIndicator(false);
-                // this._notificationService.notify(this._translationService.translateString('failure'), 'danger');
+                if (this._devMode) {
+                    this._notificationService.notify(this._translationService.translateString('failure'), 'danger');
+                }
             });
     }
 
@@ -133,7 +142,9 @@ class AppMap {
         if (this._autoSave) {
             document.addEventListener('mapEdited', () => this._save());
         } else {
-            console.log('[info]: Autosave disabled...');
+            if (this._devMode) {
+                console.log('[info]: Autosave disabled...');
+            }
         }
     }
 }

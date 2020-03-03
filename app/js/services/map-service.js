@@ -13,8 +13,6 @@ class MapService {
         }
     };
 
-    _debug = true;
-
     _mode = 'GPS-ALERTS-CONFIGURATION-MODE';
 
     _MAX_NUMBER_OF_CIRCLES = 10;
@@ -27,7 +25,7 @@ class MapService {
 
     _initialShapes = 0;
 
-    constructor(gpsService, notificationService, translationService, locale, distributorColor) {
+    constructor(gpsService, notificationService, translationService, locale, distributorColor, isDevMode) {
         // List here : https://github.com/DenisCarriere/Leaflet.draw.locales
         if (['en', 'fr', 'es', 'sk', 'cs', 'zh'].includes(locale)) {
             drawLocales(locale);
@@ -44,7 +42,7 @@ class MapService {
         this._notificationService = notificationService;
         this._translationService = translationService;
 
-        window.mapServiceInstance = this;
+        this._devMode = isDevMode;
     }
 
     // --------------------
@@ -725,7 +723,7 @@ class MapService {
         this.map.on(L.Draw.Event.DELETESTOP, this._drawDeleteStopEvent.bind(this));
 
         // Events debugging
-        if (this._debug) {
+        if (this._devMode) {
             this.map.on(L.Draw.Event.DRAWSTART, this._debugEvent.bind(this));
             this.map.on(L.Draw.Event.DRAWSTOP, this._debugEvent.bind(this));
             this.map.on(L.Draw.Event.DRAWVERTEX, this._debugEvent.bind(this));
