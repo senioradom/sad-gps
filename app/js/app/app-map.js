@@ -4,6 +4,7 @@ import ApiService from '../services/api-service';
 import WidgetDates from '../widgets/widget-dates';
 import '@fortawesome/fontawesome-free/js/all.min';
 import TemplateService from '../services/template-service';
+import TranslationService from '../services/translation-service';
 
 class AppMap {
     _autoSave = false;
@@ -13,6 +14,9 @@ class AppMap {
 
         this._templateService = new TemplateService();
         document.querySelector(htmlElement).innerHTML = this._templateService.getApplicationTemplate();
+
+        this._translationService = new TranslationService(locale);
+        this._translationService.translateInterface();
 
         this._elements = {
             app: document.getElementById('js-app-map'),
@@ -28,7 +32,13 @@ class AppMap {
         this._notificationService = new NotificationService();
         this._locale = locale;
 
-        this._mapService = new MapService(this._apiService, this._notificationService, this._locale, distributorColor);
+        this._mapService = new MapService(
+            this._apiService,
+            this._notificationService,
+            this._translationService,
+            this._locale,
+            distributorColor
+        );
 
         this._init();
     }
@@ -56,7 +66,7 @@ class AppMap {
 
     _save() {
         this._toggleLoadingIndicator(true);
-        this._notificationService.notify('SAVING.START', 'Saving...', 'light');
+        // this._notificationService.notify(this._translationService.translateString('saving'), 'light');
 
         this._mapService.validateDrawings();
         this.configuration.preference.geoJson = this._mapService.exportGeoJSON();
@@ -65,12 +75,12 @@ class AppMap {
             .saveAlertConfiguration(this.configuration)
             .then(() => {
                 this._toggleLoadingIndicator(false);
-                this._notificationService.notify('SAVING.SUCCESS', 'Saving success', 'success');
+                // this._notificationService.notify(this._translationService.translateString('success'), 'success');
                 this._mapService.updateInitialGeoJsonState();
             })
             .catch(() => {
                 this._toggleLoadingIndicator(false);
-                this._notificationService.notify('SAVING.FAILURE', 'Saving failure', 'danger');
+                // this._notificationService.notify(this._translationService.translateString('failure'), 'danger');
             });
     }
 

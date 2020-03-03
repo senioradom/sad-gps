@@ -27,8 +27,11 @@ class MapService {
 
     _initialShapes = 0;
 
-    constructor(gpsService, notificationService, locale, distributorColor) {
-        drawLocales(locale);
+    constructor(gpsService, notificationService, translationService, locale, distributorColor) {
+        // List here : https://github.com/DenisCarriere/Leaflet.draw.locales
+        if (['en', 'fr', 'es', 'sk', 'cs', 'zh'].includes(locale)) {
+            drawLocales(locale);
+        }
 
         this._colors = {
             circle: {
@@ -39,6 +42,7 @@ class MapService {
         this._leafLetConfigOverrides();
         this._gpsService = gpsService;
         this._notificationService = notificationService;
+        this._translationService = translationService;
 
         window.mapServiceInstance = this;
     }
@@ -242,6 +246,7 @@ class MapService {
         let maximumDate;
 
         this._gpsService.getPositions(start, end).then(result => {
+            result = [];
             if (result.length) {
                 const moments = result.map(position => moment(position.createdAt));
 
@@ -305,8 +310,7 @@ class MapService {
                 this.userPositionsHistoryGroup.clearLayers();
 
                 this._notificationService.notify(
-                    'REPLAY.NO_DATA',
-                    'Il n’y a pas de données sur la période sélectionnée.',
+                    this._translationService.translateString('no_data_for_given_period'),
                     'warning'
                 );
             }
@@ -697,7 +701,10 @@ class MapService {
             this._toggleLabelsValidStyles(false);
             this._toggleButtonsState(false);
 
-            this._notificationService.notify('LABELS.VALIDATION.FAILURE', 'Labels validation failed...', 'danger');
+            this._notificationService.notify(
+                this._translationService.translateString('zones_validation_failure'),
+                'danger'
+            );
         }
     }
 
