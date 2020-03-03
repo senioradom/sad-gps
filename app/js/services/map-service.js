@@ -197,6 +197,8 @@ class MapService {
         if (isHistoryPlaybackMode) {
             this._elements.map.dataset.historyLoaded = false;
             this.addCurrentPositionMarker(callback);
+        } else if (callback && typeof callback === 'function') {
+            callback();
         }
 
         Object.entries(this.alertsGPSConfigurationShapesGroup._layers).forEach(([key, layer]) => {

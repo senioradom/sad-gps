@@ -23,6 +23,9 @@ class AppMap {
         this._elements = {
             app: document.getElementById('js-app-map'),
             map: document.getElementById('js-map'),
+            widgets: {
+                dates: document.getElementById('js-widget-dates__form')
+            },
             buttons: {
                 closeReplay: document.getElementById('js-close-replay__button'),
                 reset: document.getElementById('js-app-map__button-reset'),
@@ -131,7 +134,9 @@ class AppMap {
         });
 
         this._elements.buttons.closeReplay.addEventListener('click', () => {
-            this._mapService.switchAlertsConfigurationToHistoryMode('GPS-ALERTS-CONFIGURATION-MODE');
+            this._mapService.switchAlertsConfigurationToHistoryMode('GPS-ALERTS-CONFIGURATION-MODE', () => {
+                this._elements.widgets.dates.classList.remove('widget-dates__form--visible');
+            });
         });
     }
 

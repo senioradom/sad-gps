@@ -14,7 +14,7 @@ class TemplateService {
             <i class="fas fa-map-marked-alt"></i>
         </button>
 
-        <div class="widget-dates__form widget-dates__form--visible" id="js-widget-dates__form"><!-- Toggle class : widget-dates__form--visible -->
+        <div class="widget-dates__form" id="js-widget-dates__form"><!-- Toggle class : widget-dates__form--visible -->
             <div class="widget-dates__input-container">
                 <input id="js-widget-dates__date-start" class="widget-dates__input-date form-element">
             </div>
