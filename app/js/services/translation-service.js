@@ -12,6 +12,8 @@ class TranslationService {
             SUCCESS: 'Succès',
             FAILURE: 'Échec',
             ZONES_VALIDATION_FAILURE: 'Échec dans la validation des zones',
+            SEARCH_ADDRESS: 'Rechercher une localité',
+            NO_ADDRESS_FOUND: 'Aucune adresse n’a été trouvée'
         },
         en: {
             RESET: 'Reset',
@@ -22,6 +24,8 @@ class TranslationService {
             SUCCESS: 'Success',
             FAILURE: 'Failure',
             ZONES_VALIDATION_FAILURE: 'Zones validation failure',
+            SEARCH_ADDRESS: 'Location Search',
+            NO_ADDRESS_FOUND: 'No address found'
         },
         es: {
             RESET: 'Anular',
@@ -32,6 +36,8 @@ class TranslationService {
             SUCCESS: 'Éxito',
             FAILURE: 'Fracaso',
             ZONES_VALIDATION_FAILURE: 'Error de validación de las zonas',
+            SEARCH_ADDRESS: 'Buscar una localidad',
+            NO_ADDRESS_FOUND: 'Sin dirección encontrada'
         },
         sk: {
             RESET: 'Zrušiť',
@@ -42,6 +48,8 @@ class TranslationService {
             SUCCESS: 'Úspech',
             FAILURE: 'Zlyhanie',
             ZONES_VALIDATION_FAILURE: 'Zlyhanie validácia zóny',
+            SEARCH_ADDRESS: 'miesto Search',
+            NO_ADDRESS_FOUND: 'No adresa nebola nájdená'
         },
         cs: {
             RESET: 'Zrušit',
@@ -52,6 +60,8 @@ class TranslationService {
             SUCCESS: 'Úspěch',
             FAILURE: 'Selhání',
             ZONES_VALIDATION_FAILURE: 'Selhání validace zóny',
+            SEARCH_ADDRESS: 'Místo Search',
+            NO_ADDRESS_FOUND: 'No adresa nebyla nalezena'
         },
         zh: {
             RESET: '取消',
@@ -62,6 +72,8 @@ class TranslationService {
             SUCCESS: '成功',
             FAILURE: '失败',
             ZONES_VALIDATION_FAILURE: '区验证失败',
+            SEARCH_ADDRESS: '定位搜索',
+            NO_ADDRESS_FOUND: '没有找到地址'
         }
     };
 
@@ -76,8 +88,10 @@ class TranslationService {
     }
 
     translateInterface() {
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            el.textContent = this._strings[this._language][el.dataset.i18n];
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            el.placeholder = this._strings[this._language][el.dataset.i18nPlaceholder];
+        });
+
         document.querySelectorAll('[data-i18n-text]').forEach(el => {
             el.textContent = this._strings[this._language][el.dataset.i18nText];
         });

@@ -61,8 +61,8 @@ class ApiService {
             .catch(error => console.warn(error));
     }
 
-    getAddress() {
-        return fetch(`${this.api}/api/3/address?query=5%20avenue%20garenniere`, {
+    getAddress(address) {
+        return fetch(`${this.api}/api/3/address?query=${encodeURIComponent(address)}`, {
             headers: {
                 authorization: `Basic ${this.basicAuth}`
             },

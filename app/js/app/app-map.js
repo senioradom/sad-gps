@@ -5,6 +5,7 @@ import WidgetDates from '../widgets/widget-dates';
 import '@fortawesome/fontawesome-free/js/all.min';
 import TemplateService from '../services/template-service';
 import TranslationService from '../services/translation-service';
+import WidgetAddress from '../widgets/widget-address';
 
 class AppMap {
     _autoSave = false;
@@ -121,6 +122,13 @@ class AppMap {
 
     _initWidgets() {
         (() => new WidgetDates(this._mapService, this._locale))();
+        (() =>
+            new WidgetAddress(
+                this._apiService,
+                this._notificationService,
+                this._translationService,
+                this._mapService
+            ))();
     }
 
     _initClickEvents() {

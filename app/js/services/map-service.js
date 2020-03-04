@@ -324,6 +324,10 @@ class MapService {
         this.controlDraw._toolbars.edit._modes.remove.handler.disable();
     }
 
+    zoomAtCoordinates(latitude, longitude, zoomLevel) {
+        this._map.setView(new L.LatLng(latitude, longitude), zoomLevel);
+    }
+
     /**
      * @todo : Debug to remove
      */

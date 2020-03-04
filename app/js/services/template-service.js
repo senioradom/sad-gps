@@ -29,13 +29,30 @@ class TemplateService {
         </div>
     </div>
 
-    <!-- ------------------
-     Edit/replay toggle
-    ------------------- -->
     <div class="close-replay close-replay--hidden" id="js-close-replay">
         <button class="close-replay__button" id="js-close-replay__button">
             <i class="fas fa-times"></i>
         </button>
+    </div>
+
+    <!-- ------------------
+     Address search
+    ------------------- -->
+    <div class="widget-address" id="js-widget-address"><!-- widget-address--hidden -->
+        <div class="widget-address__input-search-container">
+            <input class="widget-address__input-search form-element" type="text" data-i18n-placeholder="SEARCH_ADDRESS" id="js-widget-address__input-search" value="">
+            <button class="widget-address__input-submit" id="js-widget-address__input-submit">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+        <div class="widget-address__result" id="js-widget-address__result">
+            <!--
+            // Dynamically generated dropdown list
+            <div class="widget-address__result-item">_________</div>
+            <div class="widget-address__result-item">_________</div>
+            <div class="widget-address__result-item">_________</div>
+            -->
+        </div>
     </div>
 
     <!-- ------------------
