@@ -1,3 +1,3 @@
-import AppMap from './app/app-map';
+import Demo from './demo/demo';
 
-(() => new AppMap('#sad-gps', 'apiURL', 'contractRef', 'basicAuth', 'fr', '#2c827d'))();
+(() => new Demo())();

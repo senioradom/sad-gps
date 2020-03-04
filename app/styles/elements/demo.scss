@@ -1,0 +1,49 @@
+// --------------------
+// Demo
+// --------------------
+.demo {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+
+  padding: 3px;
+
+  text-align: center;
+
+  border: 1px solid #2c827d;
+
+  @at-root #{&}__form {
+  }
+
+  @at-root #{&}__label {
+  }
+
+  @at-root #{&}__input {
+    min-height: 30px;
+
+    background-color: white;
+
+    @at-root #{&}--color {
+      position: relative;
+      top: 3px;
+    }
+
+    @at-root #{&}--submit {
+      display: inline-block;
+
+      cursor: pointer;
+
+      border: 1px solid rgb(117, 117, 117);
+      outline: none;
+
+      @at-root #{&}:hover {
+        color: white;
+        background-color: rgb(117, 117, 117);
+      }
+    }
+  }
+}

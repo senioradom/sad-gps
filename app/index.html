@@ -8,6 +8,39 @@
 </head>
 <body>
 
+<div class="demo">
+    <form class="demo__form">
+        <label for="js-config-username" class="demo__label">
+            <input class="demo__input" placeholder="username" type="text" id="js-config-username" name="config-username" autocomplete="off" value="AK0KV" required>
+        </label>
+
+        <label for="js-config-password" class="demo__label">
+            <input class="demo__input" placeholder="password" type="password" id="js-config-password" name="config-password" autocomplete="off" value="" required>
+        </label>
+
+        <label for="js-config-contract-ref" class="demo__label">
+            <input class="demo__input" placeholder="username" type="text" id="js-config-contract-ref" name="config-contract-ref" autocomplete="off" value="CLICK3RE" required>
+        </label>
+
+        <label for="js-config-language" class="demo__label">
+            <select class="demo__input" placeholder="language" id="js-config-language" name="config-password">
+                <option value="fr" selected>French</option>
+                <option value="en">English</option>
+                <option value="es">Spanish</option>
+                <option value="sk">Slovak</option>
+                <option value="cs">Czech</option>
+                <option value="zh">Chinese</option>
+            </select>
+        </label>
+
+        <label for="js-config-color" class="demo__label">
+            <input class="demo__input demo__input--color" type="color" id="js-config-color" name="config-color" value="#2c827d">
+        </label>
+
+        <input class="demo__input demo__input--submit" type="submit" value="Submit" id="js-demo__submit">
+    </form>
+</div>
+
 <div id="sad-gps"></div>
 
 <script src="./js/index.js"></script>

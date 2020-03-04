@@ -31,6 +31,11 @@ $nodeModuleRoot: '../../node_modules/';
 @import 'responsive-design/breakpoints';
 
 // --------------------
+// Demo
+// --------------------
+@import 'elements/demo';
+
+// --------------------
 // App
 // --------------------
 @import 'elements/app-map';

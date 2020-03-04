@@ -10,9 +10,8 @@ import WidgetAddress from '../widgets/widget-address';
 class AppMap {
     _autoSave = false;
 
-    _isDevEnvironment = true;
-
-    constructor(htmlElement, api, contractRef, basicAuth, locale, distributorColor) {
+    constructor(htmlElement, api, contractRef, basicAuth, locale, distributorColor, isDevEnvironment) {
+        this._isDevEnvironment = isDevEnvironment;
         document.documentElement.style.setProperty('--distributor-color', distributorColor);
 
         this._templateService = new TemplateService();
