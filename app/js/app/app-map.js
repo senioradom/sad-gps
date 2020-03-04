@@ -21,18 +21,7 @@ class AppMap {
         this._translationService = new TranslationService(locale);
         this._translationService.translateInterface();
 
-        this._elements = {
-            app: document.getElementById('js-app-map'),
-            map: document.getElementById('js-map'),
-            widgets: {
-                dates: document.getElementById('js-widget-dates__form')
-            },
-            buttons: {
-                closeReplay: document.getElementById('js-close-replay__button'),
-                reset: document.getElementById('js-app-map__button-reset'),
-                save: document.getElementById('js-app-map__button-save')
-            }
-        };
+        this._elements = this._initElements();
 
         this._apiService = new ApiService(api, contractRef, basicAuth);
         this._notificationService = new NotificationService();
@@ -154,11 +143,24 @@ class AppMap {
 
         if (this._autoSave) {
             document.addEventListener('mapEdited', () => this._save());
-        } else {
-            if (this._devMode) {
-                console.log('[info]: Autosave disabled...');
-            }
+        } else if (this._devMode) {
+            console.log('[info]: Autosave disabled...');
         }
+    }
+
+    _initElements() {
+        return {
+            app: document.getElementById('js-app-map'),
+            map: document.getElementById('js-map'),
+            widgets: {
+                dates: document.getElementById('js-widget-dates__form')
+            },
+            buttons: {
+                closeReplay: document.getElementById('js-close-replay__button'),
+                reset: document.getElementById('js-app-map__button-reset'),
+                save: document.getElementById('js-app-map__button-save')
+            }
+        };
     }
 }
 
