@@ -113,7 +113,6 @@ class AppMap {
     // Events handler
     // --------------------
     _promptUserLeavingThePageWhenUnsavedChanges() {
-        return;
         window.addEventListener('beforeunload', e => {
             if (this._mapService._isMapFormStateDirty()) {
                 e.preventDefault();
