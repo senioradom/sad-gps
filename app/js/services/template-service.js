@@ -40,7 +40,7 @@ class TemplateService {
     ------------------- -->
     <div class="widget-address" id="js-widget-address"><!-- widget-address--hidden -->
         <div class="widget-address__input-search-container">
-            <input class="widget-address__input-search form-element" type="text" data-i18n-placeholder="SEARCH_ADDRESS" id="js-widget-address__input-search" value="">
+            <input class="widget-address__input-search form-element" type="text" data-i18n-placeholder="SEARCH_ADDRESS" id="js-widget-address__input-search" value="" autocomplete="off">
             <button class="widget-address__input-submit" id="js-widget-address__input-submit">
                 <i class="fas fa-search"></i>
             </button>
