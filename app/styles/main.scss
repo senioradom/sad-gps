@@ -26,6 +26,11 @@ $nodeModuleRoot: '../../node_modules/';
 @import url('#{$nodeModuleRoot}@bevacqua/rome/dist/rome.min.css');
 
 // --------------------
+// Responsive design
+// --------------------
+@import 'responsive-design/breakpoints';
+
+// --------------------
 // App
 // --------------------
 @import 'elements/app-map';

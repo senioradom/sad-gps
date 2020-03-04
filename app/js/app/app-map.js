@@ -62,6 +62,8 @@ class AppMap {
         if (this._isDevEnvironment) {
             document.documentElement.classList.add('env-dev');
         }
+
+        this._checkScreenResolution();
     }
 
     _save() {
@@ -90,9 +92,14 @@ class AppMap {
             });
     }
 
-    // --
-    // Events handler
-    // --------------------
+    _checkScreenResolution() {
+        if (this._elements.app.offsetWidth < 1081) {
+            this._elements.app.classList.add('screen-size-small');
+        } else {
+            this._elements.app.classList.remove('screen-size-small');
+        }
+    }
+
     _toggleLoadingIndicator(isLoading) {
         if (isLoading) {
             this._elements.app.classList.add('app-map--loading');
@@ -146,6 +153,7 @@ class AppMap {
 
     _initEvents() {
         this._initClickEvents();
+        this._initOrientationAndWindowResizeEvents();
         this._promptUserLeavingThePageWhenUnsavedChanges();
 
         if (this._autoSave) {
@@ -168,6 +176,24 @@ class AppMap {
                 save: document.getElementById('js-app-map__button-save')
             }
         };
+    }
+
+    _initOrientationAndWindowResizeEvents() {
+        window.addEventListener(
+            'orientationchange',
+            () => {
+                this._checkScreenResolution();
+            },
+            false
+        );
+
+        window.addEventListener(
+            'resize',
+            () => {
+                this._checkScreenResolution();
+            },
+            false
+        );
     }
 }
 

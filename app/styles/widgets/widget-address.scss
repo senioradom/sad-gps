@@ -1,8 +1,15 @@
 .widget-address {
+  $self: &;
+
   position: absolute;
   z-index: 401;
   top: 10px;
   left: calc(50% - 116.5px);
+
+  @at-root .screen-size-small #{$self} {
+    top: 10px;
+    left: 10px;
+  }
 
   @at-root #{&}--hidden {
     display: none;

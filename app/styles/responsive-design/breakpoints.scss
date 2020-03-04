@@ -1,0 +1,88 @@
+// Extra small devices (portrait phones, less than 576px)
+// No media query for `xs` since this is the default in Bootstrap
+$viewport-xs-from: 0;
+$viewport-xs-to: '575.98px';
+
+// Small devices (landscape phones, 576px and up)
+$viewport-sm-from: '576px';
+$viewport-sm-to: '767.98px';
+
+// Medium devices (tablets, 768px and up)
+$viewport-md-from: '768px';
+$viewport-md-to: '991.98px';
+
+// Large devices (desktops, 992px and up)
+$viewport-lg-from: '992px';
+$viewport-lg-to: '1199.98px';
+
+// Extra large devices (large desktops, 1200px and up)
+$viewport-xl-from: '1200px';
+$viewport-xl-to: '999999px';
+
+html.env-dev {
+  position: relative;
+
+  @at-root #{&}:after {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+
+    width: 50px;
+
+    text-align: center;
+
+    color: white;
+    border: 1px solid black;
+    background: red;
+  }
+}
+
+@media screen and (min-width: #{$viewport-xs-from}) and (max-width: #{$viewport-xs-to}) {
+  html.env-dev {
+    background-color: #dfbac9;
+
+    @at-root #{&}:after {
+      content: 'XS';
+    }
+  }
+}
+
+@media screen and (min-width: #{$viewport-sm-from}) and (max-width: #{$viewport-sm-to}) {
+  html.env-dev {
+    background-color: #eec5b7;
+
+    @at-root #{&}:after {
+      content: 'SM';
+    }
+  }
+}
+
+@media screen and (min-width: #{$viewport-md-from}) and (max-width: #{$viewport-md-to}) {
+  html.env-dev {
+    background-color: #ffcebe;
+
+    @at-root #{&}:after {
+      content: 'MD';
+    }
+  }
+}
+
+@media screen and (min-width: #{$viewport-lg-from}) and (max-width: #{$viewport-lg-to}) {
+  html.env-dev {
+    background-color: #ffe3c0;
+
+    @at-root #{&}:after {
+      content: 'LG';
+    }
+  }
+}
+
+@media screen and (min-width: #{$viewport-xl-from}) and (max-width: #{$viewport-xl-to}) {
+  html.env-dev {
+    background-color: #ffe9f0;
+
+    @at-root #{&}:after {
+      content: 'XL';
+    }
+  }
+}
