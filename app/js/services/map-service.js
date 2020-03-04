@@ -319,6 +319,8 @@ class MapService {
     }
 
     validateDrawings() {
+        this._checkMaxNumberOfCircles();
+
         if (this.controlDraw._toolbars.draw._modes.circle) {
             this.controlDraw._toolbars.draw._modes.circle.handler.disable();
         }
@@ -400,6 +402,19 @@ class MapService {
             this._toggleButtonsState(labelsAreValid);
 
             this._centerMap('alertsGPSConfigurationShapesGroup');
+        }
+    }
+
+    _checkMaxNumberOfCircles() {
+        if (Object.keys(this.alertsGPSConfigurationShapesGroup._layers).length < this._MAX_NUMBER_OF_CIRCLES) {
+            this.controlDraw.setDrawingOptions({
+                circle: true,
+                shapeOptions: {
+                    color: this._colors.circle.view
+                }
+            });
+            this._map.removeControl(this.controlDraw);
+            this._map.addControl(this.controlDraw);
         }
     }
 
@@ -797,16 +812,7 @@ class MapService {
     }
 
     _drawDeletedEvent() {
-        if (Object.keys(this.alertsGPSConfigurationShapesGroup._layers).length < this._MAX_NUMBER_OF_CIRCLES) {
-            this.controlDraw.setDrawingOptions({
-                circle: true,
-                shapeOptions: {
-                    color: this._colors.circle.view
-                }
-            });
-            this.map.removeControl(this.controlDraw);
-            this.map.addControl(this.controlDraw);
-        }
+        this.checkMaxNumberOfCircles();
 
         this._emitEvent('mapEdited');
     }
