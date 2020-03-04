@@ -7,29 +7,17 @@ import 'moment-timezone';
 
 class MapService {
     constructor(apiService, notificationService, translationService, locale, distributorColor, isDevEnvironment) {
-        this._initializeVariables();
-        this._mode = this._elements.app.dataset.mapMode;
+        this._initializeVariables(distributorColor, isDevEnvironment);
 
         // List here : https://github.com/DenisCarriere/Leaflet.draw.locales
         if (['en', 'fr', 'es', 'sk', 'cs', 'zh'].includes(locale)) {
             drawLocales(locale);
         }
 
-        this._colors = {
-            circle: {
-                view: distributorColor
-            }
-        };
-
         this._overridesLeafLetConfiguration();
         this._apiService = apiService;
         this._notificationService = notificationService;
         this._translationService = translationService;
-
-        window.sad = window.sad || {};
-        window.sad.mapServiceInstance = this;
-
-        this._isDevEnvironment = isDevEnvironment;
     }
 
     // --------------------
@@ -281,7 +269,7 @@ class MapService {
     // --
     // Methods
     // --------------------
-    _initializeVariables() {
+    _initializeVariables(distributorColor, isDevEnvironment) {
         this._elements = {
             app: document.getElementById('js-app-map'),
             map: document.getElementById('js-map'),
@@ -302,6 +290,19 @@ class MapService {
         };
 
         this._initialShapes = 0;
+
+        this._colors = {
+            circle: {
+                view: distributorColor
+            }
+        };
+
+        this._mode = this._elements.app.dataset.mapMode;
+
+        window.sad = window.sad || {};
+        window.sad.mapServiceInstance = this;
+
+        this._isDevEnvironment = isDevEnvironment;
     }
 
     _importGeoJSON(geojson) {
@@ -655,9 +656,9 @@ class MapService {
                 const divIcon = L.divIcon({
                     className: 'user',
                     html: `
-<i class="user__icon fas fa-portrait"></i>
-<div class="user__label">${moment(data.properties.start).format('DD/MM/YYYY - HH:mm')}</div>
-`,
+                        <i class="user__icon fas fa-portrait"></i>
+                        <div class="user__label">${moment(data.properties.start).format('DD/MM/YYYY - HH:mm')}</div>
+                    `,
                     iconSize: [30, 42],
                     iconAnchor: [15, 42]
                 });
