@@ -56,7 +56,7 @@ class MapService {
             noWrap: true
         });
 
-        this.map = L.map(el, {
+        this._map = L.map(el, {
             center: [this._FRANCE_CENTERED.lat, this._FRANCE_CENTERED.lng],
             zoom: this._FRANCE_CENTERED.zoom,
             zoomControl: false,
@@ -64,16 +64,16 @@ class MapService {
         });
 
         this.alertsGPSConfigurationShapesGroup = new L.FeatureGroup();
-        this.alertsGPSConfigurationShapesGroup.addTo(this.map);
+        this.alertsGPSConfigurationShapesGroup.addTo(this._map);
 
         this.alertsGPSConfigurationLabelsGroup = new L.FeatureGroup();
-        this.alertsGPSConfigurationLabelsGroup.addTo(this.map);
+        this.alertsGPSConfigurationLabelsGroup.addTo(this._map);
 
         this.lastUserPositionGroup = new L.FeatureGroup();
-        this.lastUserPositionGroup.addTo(this.map);
+        this.lastUserPositionGroup.addTo(this._map);
 
         this.userPositionsHistoryGroup = new L.FeatureGroup();
-        this.userPositionsHistoryGroup.addTo(this.map);
+        this.userPositionsHistoryGroup.addTo(this._map);
 
         this.controlDraw = new L.Control.Draw({
             position: 'topright',
@@ -97,9 +97,9 @@ class MapService {
                 }
             }
         });
-        this.controlDraw.addTo(this.map);
+        this.controlDraw.addTo(this._map);
 
-        this.map.addControl(L.control.zoom({ position: 'bottomleft' }));
+        this._map.addControl(L.control.zoom({ position: 'bottomleft' }));
 
         this._initEventListeners();
 
@@ -134,7 +134,7 @@ class MapService {
                 return;
             }
 
-            this.map.panTo(new L.LatLng(result.latitude, result.longitude));
+            this._map.panTo(new L.LatLng(result.latitude, result.longitude));
 
             this.lastUserPositionMarker = new L.marker([result.latitude, result.longitude], {
                 icon: L.divIcon({
@@ -300,7 +300,7 @@ class MapService {
                         return moment(date).format('DD/MM/YYYY - HH:mm');
                     }
                 });
-                this.timelineControl.addTo(this.map);
+                this.timelineControl.addTo(this._map);
 
                 this._playGPSPositionsHistory(data);
             } else {
@@ -337,7 +337,7 @@ class MapService {
      * @todo : Debug to remove
      */
     debugLayers() {
-        console.log('map', this.map._layers);
+        console.log('map', this._map._layers);
         console.log('alertsGPSConfigurationShapesGroup', this.alertsGPSConfigurationShapesGroup._layers);
         console.log('alertsGPSConfigurationLabelsGroup', this.alertsGPSConfigurationLabelsGroup._layers);
         console.log('lastUserPositionGroup', this.lastUserPositionGroup._layers);
@@ -505,8 +505,8 @@ class MapService {
             }
         });
 
-        this.map.removeControl(this.controlDraw);
-        this.map.addControl(this.controlDraw);
+        this._map.removeControl(this.controlDraw);
+        this._map.addControl(this.controlDraw);
     }
 
     _setFeatureProperties(layer) {
@@ -521,12 +521,12 @@ class MapService {
 
     _centerMap(layer) {
         if (!(Object.keys(this[layer].getBounds()).length === 0 && this[layer].getBounds().constructor === Object)) {
-            this.map.fitBounds(this[layer].getBounds());
+            this._map.fitBounds(this[layer].getBounds());
         }
     }
 
     _regenerateTooltips() {
-        this.map.eachLayer(layer => {
+        this._map.eachLayer(layer => {
             if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
                 if (layer.feature.properties.drawtype === 'circle') {
                     this._labelArea(this.alertsGPSConfigurationShapesGroup.getLayerId(layer), false, false);
@@ -536,7 +536,7 @@ class MapService {
     }
 
     _recoverStateBeforeDeletion() {
-        this.map.eachLayer(layer => {
+        this._map.eachLayer(layer => {
             if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
                 if (layer.feature.properties.drawtype === 'circle') {
                     const id = this.alertsGPSConfigurationShapesGroup.getLayerId(layer);
@@ -733,31 +733,31 @@ class MapService {
 
     _initEventListeners() {
         // Events listeners
-        this.map.on(L.Draw.Event.CREATED, this._drawCreatedEvent.bind(this));
+        this._map.on(L.Draw.Event.CREATED, this._drawCreatedEvent.bind(this));
 
-        this.map.on(L.Draw.Event.EDITED, this._drawEditedEvent.bind(this));
+        this._map.on(L.Draw.Event.EDITED, this._drawEditedEvent.bind(this));
 
-        this.map.on(L.Draw.Event.DELETED, this._drawDeletedEvent.bind(this));
+        this._map.on(L.Draw.Event.DELETED, this._drawDeletedEvent.bind(this));
 
-        this.map.on(L.Draw.Event.EDITRESIZE, this._drawEditedResizeEvent.bind(this));
+        this._map.on(L.Draw.Event.EDITRESIZE, this._drawEditedResizeEvent.bind(this));
 
-        this.map.on(L.Draw.Event.EDITSTOP, this._drawEditStopEvent.bind(this));
+        this._map.on(L.Draw.Event.EDITSTOP, this._drawEditStopEvent.bind(this));
 
-        this.map.on(L.Draw.Event.DELETESTOP, this._drawDeleteStopEvent.bind(this));
+        this._map.on(L.Draw.Event.DELETESTOP, this._drawDeleteStopEvent.bind(this));
 
         // Events debugging
         if (this._devMode) {
-            this.map.on(L.Draw.Event.DRAWSTART, this._debugEvent.bind(this));
-            this.map.on(L.Draw.Event.DRAWSTOP, this._debugEvent.bind(this));
-            this.map.on(L.Draw.Event.DRAWVERTEX, this._debugEvent.bind(this));
-            this.map.on(L.Draw.Event.EDITSTART, this._debugEvent.bind(this));
-            this.map.on(L.Draw.Event.EDITMOVE, this._debugEvent.bind(this));
-            this.map.on(L.Draw.Event.EDITVERTEX, this._debugEvent.bind(this));
-            this.map.on(L.Draw.Event.DELETESTART, this._debugEvent.bind(this));
-            this.map.on(L.Draw.Event.DELETESTOP, this._debugEvent.bind(this));
-            this.map.on(L.Draw.Event.TOOLBAROPENED, this._debugEvent.bind(this));
-            this.map.on(L.Draw.Event.TOOLBARCLOSED, this._debugEvent.bind(this));
-            this.map.on(L.Draw.Event.MARKERCONTEXT, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.DRAWSTART, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.DRAWSTOP, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.DRAWVERTEX, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.EDITSTART, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.EDITMOVE, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.EDITVERTEX, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.DELETESTART, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.DELETESTOP, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.TOOLBAROPENED, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.TOOLBARCLOSED, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.MARKERCONTEXT, this._debugEvent.bind(this));
         }
     }
 
