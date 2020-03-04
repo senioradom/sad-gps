@@ -42,6 +42,9 @@ class MapService {
         this._notificationService = notificationService;
         this._translationService = translationService;
 
+        window.sad = window.sad || {};
+        window.sad.mapServiceInstance = this;
+
         this._devMode = isDevMode;
     }
 
@@ -577,8 +580,8 @@ class MapService {
                 required
                 autocomplete="off"
                 maxlength="10"
-                onkeyup="mapServiceInstance._onKeyUp(event);"
-                onfocusout="mapServiceInstance._labelArea(${id}, ${distance}, true);"
+                onkeyup="window.sad.mapServiceInstance._onKeyUp(event);"
+                onfocusout="window.sad.mapServiceInstance._labelArea(${id}, ${distance}, true);"
             >
             <div id="js-map__custom-zone-distance-${id}" class="map__custom-zone-distance">${radiusInKm}</div>
         `;
