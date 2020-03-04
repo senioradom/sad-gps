@@ -114,7 +114,7 @@ class AppMap {
     // --------------------
     _promptUserLeavingThePageWhenUnsavedChanges() {
         window.addEventListener('beforeunload', e => {
-            if (this._mapService._isMapFormStateDirty()) {
+            if (this._mapService.isMapFormStateDirty()) {
                 e.preventDefault();
                 e.returnValue = ''; // Required by Chrome
             }

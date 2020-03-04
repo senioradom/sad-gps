@@ -267,6 +267,10 @@ class MapService {
         this._map.setView(new L.LatLng(latitude, longitude), zoomLevel);
     }
 
+    isMapFormStateDirty() {
+        return this._originalGeoJson !== this.exportGeoJSON();
+    }
+
     // --------------------
     // Privates
     // --------------------
@@ -604,10 +608,6 @@ class MapService {
                 callback();
             }
         });
-    }
-
-    _isMapFormStateDirty() {
-        return this._originalGeoJson !== this.exportGeoJSON();
     }
 
     _addRemoveSaveResetButtonsDisabledState(isEnabled) {
