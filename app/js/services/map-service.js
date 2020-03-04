@@ -375,36 +375,13 @@ class MapService {
         });
     }
 
-    _guessZoneIndex() {
-        const labelsArray = [];
-
-        document.querySelectorAll(this._elements.selectors.inputTextLabels).forEach(el => {
-            const zoneNumber = el.value.toLowerCase().match(/\d+/);
-            if (zoneNumber) {
-                labelsArray.push(parseInt(zoneNumber[0], 10));
-            }
-        });
-
-        labelsArray.push(0);
-        labelsArray.sort();
-
-        const [zoneMin, zoneMax] = [Math.min(...labelsArray), Math.max(...labelsArray)];
-        const missingZonesIndexes = Array.from(Array(zoneMax - zoneMin), (value, index) => index + zoneMin).filter(
-            index => !labelsArray.includes(index)
-        );
-
-        if (missingZonesIndexes[0]) {
-            return missingZonesIndexes[0];
-        }
-
-        return this._alertsGPSConfigurationShapesGroup.getLayers().length;
-    }
-
     _createZone(layer) {
         const id = this._alertsGPSConfigurationShapesGroup.getLayerId(layer);
         let { label } = layer.feature.properties;
         if (!label) {
-            label = this._translationService.translateString('ZONE', { index: this._guessZoneIndex() });
+            label = this._translationService.translateString('ZONE', {
+                index: this._alertsGPSConfigurationShapesGroup.getLayers().length
+            });
         }
 
         const popup = new L.popup({
