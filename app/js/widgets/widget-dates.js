@@ -55,8 +55,8 @@ class WidgetDates {
         });
 
         this._elements.buttons.submit.addEventListener('click', e => {
-            this._mapService.switchAlertsConfigurationToHistoryMode('GPS-HISTORY-PLAYBACK-MODE', () => {
-                this._mapService.initTimeLine(this._getStart().toISOString(), this._getEnd().toISOString());
+            this._mapService.switchMode('GPS-HISTORY-PLAYBACK-MODE', () => {
+                this._mapService.playGPSHistory(this._getStart().toISOString(), this._getEnd().toISOString());
             });
         });
     }

@@ -6,25 +6,8 @@ import moment from 'moment';
 import 'moment-timezone';
 
 class MapService {
-    _elements = {
-        app: document.getElementById('js-app-map'),
-        map: document.getElementById('js-map'),
-        buttons: {
-            container: document.getElementById('js-app-map__buttons-container')
-        }
-    };
-
-    _MAX_NUMBER_OF_CIRCLES = 10;
-
-    _FRANCE_CENTERED = {
-        lat: 46.92,
-        lng: 2.68,
-        zoom: 6
-    };
-
-    _initialShapes = 0;
-
     constructor(apiService, notificationService, translationService, locale, distributorColor, isDevEnvironment) {
+        this._initializeVariables();
         this._mode = this._elements.app.dataset.mapMode;
 
         // List here : https://github.com/DenisCarriere/Leaflet.draw.locales
@@ -38,7 +21,7 @@ class MapService {
             }
         };
 
-        this._leafLetConfigOverrides();
+        this._overridesLeafLetConfiguration();
         this._apiService = apiService;
         this._notificationService = notificationService;
         this._translationService = translationService;
@@ -64,19 +47,19 @@ class MapService {
             layers: [mapAsImage]
         });
 
-        this.alertsGPSConfigurationShapesGroup = new L.FeatureGroup();
-        this.alertsGPSConfigurationShapesGroup.addTo(this._map);
+        this._alertsGPSConfigurationShapesGroup = new L.FeatureGroup();
+        this._alertsGPSConfigurationShapesGroup.addTo(this._map);
 
-        this.alertsGPSConfigurationLabelsGroup = new L.FeatureGroup();
-        this.alertsGPSConfigurationLabelsGroup.addTo(this._map);
+        this._alertsGPSConfigurationLabelsGroup = new L.FeatureGroup();
+        this._alertsGPSConfigurationLabelsGroup.addTo(this._map);
 
-        this.lastUserPositionGroup = new L.FeatureGroup();
-        this.lastUserPositionGroup.addTo(this._map);
+        this._lastUserPositionGroup = new L.FeatureGroup();
+        this._lastUserPositionGroup.addTo(this._map);
 
-        this.userPositionsHistoryGroup = new L.FeatureGroup();
-        this.userPositionsHistoryGroup.addTo(this._map);
+        this._userPositionsHistoryGroup = new L.FeatureGroup();
+        this._userPositionsHistoryGroup.addTo(this._map);
 
-        this.controlDraw = new L.Control.Draw({
+        this._controlDraw = new L.Control.Draw({
             position: 'topright',
             draw: {
                 circle: {
@@ -89,7 +72,7 @@ class MapService {
                 rectangle: false
             },
             edit: {
-                featureGroup: this.alertsGPSConfigurationShapesGroup,
+                featureGroup: this._alertsGPSConfigurationShapesGroup,
                 edit: {
                     selectedPathOptions: {
                         color: this._colors.circle.view,
@@ -98,7 +81,7 @@ class MapService {
                 }
             }
         });
-        this.controlDraw.addTo(this._map);
+        this._controlDraw.addTo(this._map);
 
         this._map.addControl(L.control.zoom({ position: 'bottomleft' }));
 
@@ -110,57 +93,24 @@ class MapService {
         }
     }
 
-    isMapDirty() {
-        return this._initialGeoJsonState !== this.exportGeoJSON();
-    }
-
     updateInitialGeoJsonState() {
         this._initialGeoJsonState = this.exportGeoJSON();
     }
 
-    resetMap() {
+    resetMapToOriginalStage() {
         this._disableEditMode();
         this._deleteAllLayers();
 
-        Array.from(document.querySelectorAll('[id^="js-map__custom-zone-label-"]')).forEach(element => {
+        Array.from(document.querySelectorAll(this._elements.selectors.inputTextLabels)).forEach(element => {
             element.remove();
         });
 
         this._importGeoJSON(this._initialGeoJsonState);
     }
 
-    addCurrentPositionMarker(callback) {
-        this._apiService.getLastPosition().then(result => {
-            if (!(result.latitude && result.longitude && result.createdAt)) {
-                return;
-            }
-
-            this._map.panTo(new L.LatLng(result.latitude, result.longitude));
-
-            this.lastUserPositionMarker = new L.marker([result.latitude, result.longitude], {
-                icon: L.divIcon({
-                    className: 'user',
-                    html: `
-<i class="user__icon fas fa-portrait"></i>
-<div class="user__label">${moment(result.createdAt).format('DD/MM/YYYY - HH:mm')}</div>
-`,
-                    iconSize: [30, 42],
-                    iconAnchor: [15, 42]
-                })
-            });
-
-            this.lastUserPositionMarker.addTo(this.lastUserPositionGroup);
-            this._centerMap('lastUserPositionGroup');
-
-            if (callback && typeof callback === 'function') {
-                callback();
-            }
-        });
-    }
-
     exportGeoJSON() {
-        const geoJson = this.alertsGPSConfigurationShapesGroup.toGeoJSON();
-        const layers = this.alertsGPSConfigurationShapesGroup._layers;
+        const geoJson = this._alertsGPSConfigurationShapesGroup.toGeoJSON();
+        const layers = this._alertsGPSConfigurationShapesGroup._layers;
 
         let matchingLayer = null;
 
@@ -191,7 +141,7 @@ class MapService {
         return JSON.stringify(geoJson);
     }
 
-    switchAlertsConfigurationToHistoryMode(mode, callback) {
+    switchMode(mode, callback) {
         this._mode = mode;
 
         const isHistoryPlaybackMode = this._mode === 'GPS-HISTORY-PLAYBACK-MODE';
@@ -200,26 +150,26 @@ class MapService {
 
         if (isHistoryPlaybackMode) {
             this._elements.map.dataset.historyLoaded = false;
-            this.addCurrentPositionMarker(callback);
+            this._addLastKnownUserGPSLocation(callback);
         } else if (callback && typeof callback === 'function') {
             callback();
         }
 
-        Object.entries(this.alertsGPSConfigurationShapesGroup._layers).forEach(([key, layer]) => {
+        Object.entries(this._alertsGPSConfigurationShapesGroup._layers).forEach(([key, layer]) => {
             layer.getElement().style.display = isHistoryPlaybackMode ? 'none' : 'block';
         });
 
-        Object.entries(this.alertsGPSConfigurationLabelsGroup._layers).forEach(([key, layer]) => {
+        Object.entries(this._alertsGPSConfigurationLabelsGroup._layers).forEach(([key, layer]) => {
             layer.getElement().style.display = isHistoryPlaybackMode ? 'none' : 'block';
         });
 
         if (!isHistoryPlaybackMode) {
-            this.userPositionsHistoryGroup.clearLayers();
-            this._centerMap('alertsGPSConfigurationShapesGroup');
+            this._userPositionsHistoryGroup.clearLayers();
+            this._centerMapFromProvidedLayer('_alertsGPSConfigurationShapesGroup');
         }
     }
 
-    initTimeLine(start, end) {
+    playGPSHistory(start, end) {
         const data = {
             type: 'FeatureCollection',
             features: []
@@ -270,28 +220,28 @@ class MapService {
                     element.remove();
                 });
 
-                this.lastUserPositionGroup.clearLayers();
-                this.userPositionsHistoryGroup.clearLayers();
+                this._lastUserPositionGroup.clearLayers();
+                this._userPositionsHistoryGroup.clearLayers();
 
                 const duration = moment.duration(maximumDate.diff(minimumDate));
                 const hours = parseInt(duration.asHours(), 10);
 
-                this.timelineControl = L.timelineSliderControl({
+                this._timelineControl = L.timelineSliderControl({
                     steps: hours,
                     duration: hours * 1000,
                     formatOutput(date) {
                         return moment(date).format('DD/MM/YYYY - HH:mm');
                     }
                 });
-                this.timelineControl.addTo(this._map);
+                this._timelineControl.addTo(this._map);
 
-                this._playGPSPositionsHistory(data);
+                this._addTimelineElementAndEvents(data);
             } else {
                 Array.from(document.querySelectorAll('.leaflet-timeline-control')).forEach(element => {
                     element.remove();
                 });
 
-                this.userPositionsHistoryGroup.clearLayers();
+                this._userPositionsHistoryGroup.clearLayers();
 
                 this._notificationService.notify(
                     this._translationService.translateString('NO_DATA_FOR_GIVEN_PERIOD'),
@@ -301,31 +251,28 @@ class MapService {
         });
     }
 
-    validateDrawings() {
-        this._checkMaxNumberOfCircles();
-
-        if (this.controlDraw._toolbars.draw._modes.circle) {
-            this.controlDraw._toolbars.draw._modes.circle.handler.disable();
+    checkNumberOfCirclesAndEnableDisableNewAdditions() {
+        if (Object.keys(this._alertsGPSConfigurationShapesGroup._layers).length < this._MAX_NUMBER_OF_CIRCLES) {
+            this._controlDraw.setDrawingOptions({
+                circle: true,
+                shapeOptions: {
+                    color: this._colors.circle.view
+                }
+            });
+            this._map.removeControl(this._controlDraw);
+            this._map.addControl(this._controlDraw);
         }
 
-        this.controlDraw._toolbars.edit._modes.edit.handler.disable();
-        this.controlDraw._toolbars.edit._modes.remove.handler.disable();
+        if (this._controlDraw._toolbars.draw._modes.circle) {
+            this._controlDraw._toolbars.draw._modes.circle.handler.disable();
+        }
+
+        this._controlDraw._toolbars.edit._modes.edit.handler.disable();
+        this._controlDraw._toolbars.edit._modes.remove.handler.disable();
     }
 
     zoomAtCoordinates(latitude, longitude, zoomLevel) {
         this._map.setView(new L.LatLng(latitude, longitude), zoomLevel);
-    }
-
-    /**
-     * @todo : Debug to remove
-     */
-    debugLayers() {
-        console.log('map', this._map._layers);
-        console.log('alertsGPSConfigurationShapesGroup', this.alertsGPSConfigurationShapesGroup._layers);
-        console.log('alertsGPSConfigurationLabelsGroup', this.alertsGPSConfigurationLabelsGroup._layers);
-        console.log('lastUserPositionGroup', this.lastUserPositionGroup._layers);
-        console.log('userPositionsHistoryGroup', this.userPositionsHistoryGroup._layers);
-        console.log('controlDraw', this.controlDraw._layers);
     }
 
     // --------------------
@@ -334,6 +281,29 @@ class MapService {
     // --
     // Methods
     // --------------------
+    _initializeVariables() {
+        this._elements = {
+            app: document.getElementById('js-app-map'),
+            map: document.getElementById('js-map'),
+            buttons: {
+                container: document.getElementById('js-app-map__buttons-container')
+            },
+            selectors: {
+                inputTextLabels: '[id^="js-map__custom-zone-label-"]'
+            }
+        };
+
+        this._MAX_NUMBER_OF_CIRCLES = 10;
+
+        this._FRANCE_CENTERED = {
+            lat: 46.92,
+            lng: 2.68,
+            zoom: 6
+        };
+
+        this._initialShapes = 0;
+    }
+
     _importGeoJSON(geojson) {
         if (geojson) {
             let features;
@@ -354,7 +324,7 @@ class MapService {
                         let handler;
                         if (feature.properties.drawtype === L.Draw.Circle.TYPE) {
                             this._initialShapes += 1;
-                            handler = this.controlDraw._toolbars.draw._modes.circle.handler;
+                            handler = this._controlDraw._toolbars.draw._modes.circle.handler;
 
                             this.circle = new L.Circle(latLng, feature.properties.radius, {
                                 color: this._colors.circle.view,
@@ -367,7 +337,7 @@ class MapService {
                         } else {
                             this._initialShapes += 1;
 
-                            handler = this.controlDraw._toolbars.draw._modes.marker.handler;
+                            handler = this._controlDraw._toolbars.draw._modes.marker.handler;
 
                             const layer = new L.Marker(latLng, handler.options);
 
@@ -381,38 +351,25 @@ class MapService {
 
             const labelsAreValid = this._checkLabelsAreValid();
 
-            this._toggleLabelsValidStyles(labelsAreValid);
-            this._toggleButtonsState(labelsAreValid);
+            this._addLabelsValidOrNotStates(labelsAreValid);
+            this._addRemoveSaveResetButtonsDisabledState(labelsAreValid);
 
-            this._centerMap('alertsGPSConfigurationShapesGroup');
-        }
-    }
-
-    _checkMaxNumberOfCircles() {
-        if (Object.keys(this.alertsGPSConfigurationShapesGroup._layers).length < this._MAX_NUMBER_OF_CIRCLES) {
-            this.controlDraw.setDrawingOptions({
-                circle: true,
-                shapeOptions: {
-                    color: this._colors.circle.view
-                }
-            });
-            this._map.removeControl(this.controlDraw);
-            this._map.addControl(this.controlDraw);
+            this._centerMapFromProvidedLayer('_alertsGPSConfigurationShapesGroup');
         }
     }
 
     _deleteAllLayers() {
-        this.alertsGPSConfigurationShapesGroup.clearLayers();
-        this.alertsGPSConfigurationLabelsGroup.clearLayers();
+        this._alertsGPSConfigurationShapesGroup.clearLayers();
+        this._alertsGPSConfigurationLabelsGroup.clearLayers();
     }
 
     _disableEditMode() {
-        Object.keys(this.controlDraw._toolbars).forEach(key => {
+        Object.keys(this._controlDraw._toolbars).forEach(key => {
             if (
-                Object.prototype.hasOwnProperty.call(this.controlDraw._toolbars, key) &&
-                this.controlDraw._toolbars[key] instanceof L.EditToolbar
+                Object.prototype.hasOwnProperty.call(this._controlDraw._toolbars, key) &&
+                this._controlDraw._toolbars[key] instanceof L.EditToolbar
             ) {
-                this.controlDraw._toolbars[key].disable();
+                this._controlDraw._toolbars[key].disable();
             }
         });
     }
@@ -420,7 +377,7 @@ class MapService {
     _guessZoneIndex() {
         const labelsArray = [];
 
-        document.querySelectorAll('[id^="js-map__custom-zone-label-"]').forEach(el => {
+        document.querySelectorAll(this._elements.selectors.inputTextLabels).forEach(el => {
             const zoneNumber = el.value.toLowerCase().match(/\d+/);
             if (zoneNumber) {
                 labelsArray.push(parseInt(zoneNumber[0], 10));
@@ -439,11 +396,11 @@ class MapService {
             return missingZonesIndexes[0];
         }
 
-        return this.alertsGPSConfigurationShapesGroup.getLayers().length;
+        return this._alertsGPSConfigurationShapesGroup.getLayers().length;
     }
 
-    _initPopup(layer) {
-        const id = this.alertsGPSConfigurationShapesGroup.getLayerId(layer);
+    _createZone(layer) {
+        const id = this._alertsGPSConfigurationShapesGroup.getLayerId(layer);
         let { label } = layer.feature.properties;
         if (!label) {
             label = this._translationService.translateString('ZONE', { index: this._guessZoneIndex() });
@@ -457,19 +414,13 @@ class MapService {
             closeOnEscapeKey: false
         });
 
-        popup.setContent(this._createPopUpContent(id, label));
+        popup.setContent(this._createHTMLInputWithKmRadius(id, label));
         popup.setLatLng(layer.getLatLng());
 
         layer.bindPopup(popup);
         layer.off('click', this.openPopup);
 
-        popup.addTo(this.alertsGPSConfigurationLabelsGroup);
-    }
-
-    _disableEditIfMaxNumberOfCircleslReached() {
-        if (this.alertsGPSConfigurationShapesGroup.getLayers().length >= this._MAX_NUMBER_OF_CIRCLES) {
-            this._disableEdit();
-        }
+        popup.addTo(this._alertsGPSConfigurationLabelsGroup);
     }
 
     _disableEdit() {
@@ -481,18 +432,18 @@ class MapService {
     }
 
     _toggleEdit(bool) {
-        this.controlDraw.setDrawingOptions({
+        this._controlDraw.setDrawingOptions({
             circle: bool,
             shapeOptions: {
                 color: this._colors.circle.view
             }
         });
 
-        this._map.removeControl(this.controlDraw);
-        this._map.addControl(this.controlDraw);
+        this._map.removeControl(this._controlDraw);
+        this._map.addControl(this._controlDraw);
     }
 
-    _setFeatureProperties(layer) {
+    _addLayerPropertiesSuchAsTypeAndRadius(layer) {
         if (layer instanceof L.Circle) {
             layer.feature.properties.radius = layer.getRadius();
             layer.feature.properties.drawtype = L.Draw.Circle.TYPE;
@@ -502,17 +453,21 @@ class MapService {
         }
     }
 
-    _centerMap(layer) {
+    _centerMapFromProvidedLayer(layer) {
         if (!(Object.keys(this[layer].getBounds()).length === 0 && this[layer].getBounds().constructor === Object)) {
             this._map.fitBounds(this[layer].getBounds());
         }
     }
 
-    _regenerateTooltips() {
+    _regenerateZones() {
         this._map.eachLayer(layer => {
             if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
                 if (layer.feature.properties.drawtype === 'circle') {
-                    this._labelArea(this.alertsGPSConfigurationShapesGroup.getLayerId(layer), false, false);
+                    this._addLabelAndDistanceToCircle(
+                        this._alertsGPSConfigurationShapesGroup.getLayerId(layer),
+                        false,
+                        false
+                    );
                 }
             }
         });
@@ -522,7 +477,7 @@ class MapService {
         this._map.eachLayer(layer => {
             if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
                 if (layer.feature.properties.drawtype === 'circle') {
-                    const id = this.alertsGPSConfigurationShapesGroup.getLayerId(layer);
+                    const id = this._alertsGPSConfigurationShapesGroup.getLayerId(layer);
                     if (!document.getElementById(`js-map__custom-zone-label-${id}`)) {
                         try {
                             layer.feature.properties.label = layer._popup._content
@@ -532,7 +487,7 @@ class MapService {
                                 .replace('value="', '')
                                 .replace(/"$/, '');
 
-                            this._initPopup(layer);
+                            this._createZone(layer);
                         } catch (e) {
                             layer.remove();
                         }
@@ -542,24 +497,24 @@ class MapService {
         });
     }
 
-    _labelArea(id, distance, save) {
+    _addLabelAndDistanceToCircle(id, distance, save) {
         const label = document.getElementById(`js-map__custom-zone-label-${id}`).value;
-        const layer = this.alertsGPSConfigurationShapesGroup.getLayer(id);
+        const layer = this._alertsGPSConfigurationShapesGroup.getLayer(id);
 
         layer.feature.properties.label = label;
-        layer.setPopupContent(this._createPopUpContent(id, label, distance));
+        layer.setPopupContent(this._createHTMLInputWithKmRadius(id, label, distance));
 
         if (save) {
             this._emitEvent('mapEdited');
         }
     }
 
-    _createPopUpContent(id, label, distance) {
+    _createHTMLInputWithKmRadius(id, label, distance) {
         let radiusInKm;
         if (distance) {
             radiusInKm = distance / 1000;
         } else {
-            radiusInKm = this.alertsGPSConfigurationShapesGroup.getLayer(id).getRadius() / 1000;
+            radiusInKm = this._alertsGPSConfigurationShapesGroup.getLayer(id).getRadius() / 1000;
         }
 
         if (radiusInKm < 1) {
@@ -578,16 +533,16 @@ class MapService {
                 required
                 autocomplete="off"
                 maxlength="10"
-                onkeyup="window.sad.mapServiceInstance._onKeyUp(event);"
-                onfocusout="window.sad.mapServiceInstance._labelArea(${id}, ${distance}, true);"
+                onkeyup="window.sad.mapServiceInstance._labelOnKeyUpEvent(event);"
+                onfocusout="window.sad.mapServiceInstance._addLabelAndDistanceToCircle(${id}, ${distance}, true);"
             >
             <div id="js-map__custom-zone-distance-${id}" class="map__custom-zone-distance">${radiusInKm}</div>
         `;
     }
 
-    _getDuplicatedLabels() {
+    _getArrayOfDuplicatedLabels() {
         const labelsArray = [];
-        document.querySelectorAll('[id^="js-map__custom-zone-label-"]').forEach(el => {
+        document.querySelectorAll(this._elements.selectors.inputTextLabels).forEach(el => {
             labelsArray.push(el.value.toLowerCase());
         });
 
@@ -603,10 +558,10 @@ class MapService {
     }
 
     _checkLabelsAreValid() {
-        const condDuplicated = this._getDuplicatedLabels().length === 0;
+        const condDuplicated = this._getArrayOfDuplicatedLabels().length === 0;
 
         let condNotEmpty = true;
-        document.querySelectorAll('[id^="js-map__custom-zone-label-"]').forEach(el => {
+        document.querySelectorAll(this._elements.selectors.inputTextLabels).forEach(el => {
             if (el.value === '') {
                 condNotEmpty = false;
             }
@@ -617,7 +572,7 @@ class MapService {
         return condNotEmpty && condDuplicated;
     }
 
-    _toggleLabelsValidStyles(isValid) {
+    _addLabelsValidOrNotStates(isValid) {
         if (isValid) {
             document
                 .querySelectorAll('[id^="js-map__custom-zone-label-"].map__custom-zone-label--not-valid')
@@ -625,9 +580,9 @@ class MapService {
                     el.classList.remove('map__custom-zone-label--not-valid');
                 });
         } else {
-            const duplicatedLabelsArray = this._getDuplicatedLabels();
+            const duplicatedLabelsArray = this._getArrayOfDuplicatedLabels();
 
-            document.querySelectorAll('[id^="js-map__custom-zone-label-"]').forEach(el => {
+            document.querySelectorAll(this._elements.selectors.inputTextLabels).forEach(el => {
                 if (duplicatedLabelsArray.includes(el.value.toLowerCase()) || el.value === '') {
                     el.classList.add('map__custom-zone-label--not-valid');
                 } else {
@@ -637,9 +592,42 @@ class MapService {
         }
     }
 
-    _toggleButtonsState(isValid) {
+    _addLastKnownUserGPSLocation(callback) {
+        this._apiService.getLastPosition().then(result => {
+            if (!(result.latitude && result.longitude && result.createdAt)) {
+                return;
+            }
+
+            this._map.panTo(new L.LatLng(result.latitude, result.longitude));
+
+            this._lastUserPositionMarker = new L.marker([result.latitude, result.longitude], {
+                icon: L.divIcon({
+                    className: 'user',
+                    html: `
+<i class="user__icon fas fa-portrait"></i>
+<div class="user__label">${moment(result.createdAt).format('DD/MM/YYYY - HH:mm')}</div>
+`,
+                    iconSize: [30, 42],
+                    iconAnchor: [15, 42]
+                })
+            });
+
+            this._lastUserPositionMarker.addTo(this._lastUserPositionGroup);
+            this._centerMapFromProvidedLayer('_lastUserPositionGroup');
+
+            if (callback && typeof callback === 'function') {
+                callback();
+            }
+        });
+    }
+
+    _isMapFormStateDirty() {
+        return this._initialGeoJsonState !== this.exportGeoJSON();
+    }
+
+    _addRemoveSaveResetButtonsDisabledState(isEnabled) {
         const buttons = document.querySelectorAll('.app-map__button');
-        if (isValid) {
+        if (isEnabled) {
             buttons.forEach(button => {
                 button.classList.remove('app-map__button--disabled');
             });
@@ -650,7 +638,7 @@ class MapService {
         }
     }
 
-    _leafLetConfigOverrides() {
+    _overridesLeafLetConfiguration() {
         L.Draw.Circle = L.Draw.Circle.extend({
             options: {
                 shapeOptions: {
@@ -661,8 +649,8 @@ class MapService {
         });
     }
 
-    _playGPSPositionsHistory(positionsHistoryData) {
-        this.timeline = L.timeline(positionsHistoryData, {
+    _addTimelineElementAndEvents(positionsHistoryData) {
+        this._timeline = L.timeline(positionsHistoryData, {
             pointToLayer(data, latlng) {
                 const divIcon = L.divIcon({
                     className: 'user',
@@ -680,18 +668,27 @@ class MapService {
             }
         });
 
-        this.timelineControl.addTimelines(this.timeline);
-        this.timeline.addTo(this.userPositionsHistoryGroup);
+        this._timelineControl.addTimelines(this._timeline);
+        this._timeline.addTo(this._userPositionsHistoryGroup);
 
         document.querySelector('.leaflet-timeline-control .play').click();
 
-        this.timeline.on('change', e => {
+        this._timeline.on('change', e => {
             try {
-                this._centerMap('userPositionsHistoryGroup');
+                this._centerMapFromProvidedLayer('_userPositionsHistoryGroup');
             } catch (exception) {}
         });
 
         this._elements.map.dataset.historyLoaded = true;
+    }
+
+    _debugLayers() {
+        console.log('map', this._map._layers);
+        console.log('alertsGPSConfigurationShapesGroup', this._alertsGPSConfigurationShapesGroup._layers);
+        console.log('alertsGPSConfigurationLabelsGroup', this._alertsGPSConfigurationLabelsGroup._layers);
+        console.log('lastUserPositionGroup', this._lastUserPositionGroup._layers);
+        console.log('userPositionsHistoryGroup', this._userPositionsHistoryGroup._layers);
+        console.log('controlDraw', this._controlDraw._layers);
     }
 
     // --
@@ -699,13 +696,13 @@ class MapService {
     // --------------------
     _emitEvent(type) {
         if (this._checkLabelsAreValid()) {
-            this._toggleLabelsValidStyles(true);
-            this._toggleButtonsState(true);
+            this._addLabelsValidOrNotStates(true);
+            this._addRemoveSaveResetButtonsDisabledState(true);
 
             document.dispatchEvent(new Event(type));
         } else {
-            this._toggleLabelsValidStyles(false);
-            this._toggleButtonsState(false);
+            this._addLabelsValidOrNotStates(false);
+            this._addRemoveSaveResetButtonsDisabledState(false);
 
             this._notificationService.notify(
                 this._translationService.translateString('ZONES_VALIDATION_FAILURE'),
@@ -744,7 +741,7 @@ class MapService {
         }
     }
 
-    _onKeyUp(event) {
+    _labelOnKeyUpEvent(event) {
         if (event.keyCode === 13) {
             if (document && document.activeElement) {
                 document.activeElement.blur();
@@ -752,26 +749,28 @@ class MapService {
         }
 
         if (this._checkLabelsAreValid()) {
-            this._toggleLabelsValidStyles(true);
+            this._addLabelsValidOrNotStates(true);
         } else {
-            this._toggleLabelsValidStyles(false);
+            this._addLabelsValidOrNotStates(false);
         }
     }
 
     _drawCreatedEvent(e) {
-        this.alertsGPSConfigurationShapesGroup.addLayer(e.layer);
+        this._alertsGPSConfigurationShapesGroup.addLayer(e.layer);
 
         e.layer.feature = e.layer.feature || {};
         e.layer.feature.properties = e.layer.feature.properties || {};
         e.layer.feature.type = 'Feature';
 
-        this._setFeatureProperties(e.layer);
+        this._addLayerPropertiesSuchAsTypeAndRadius(e.layer);
 
-        this._disableEditIfMaxNumberOfCircleslReached();
+        if (this._alertsGPSConfigurationShapesGroup.getLayers().length >= this._MAX_NUMBER_OF_CIRCLES) {
+            this._disableEdit();
+        }
 
-        this._initPopup(
-            this.alertsGPSConfigurationShapesGroup.getLayers()[
-                this.alertsGPSConfigurationShapesGroup.getLayers().length - 1
+        this._createZone(
+            this._alertsGPSConfigurationShapesGroup.getLayers()[
+                this._alertsGPSConfigurationShapesGroup.getLayers().length - 1
             ]
         );
 
@@ -783,25 +782,25 @@ class MapService {
     }
 
     _drawEditedResizeEvent(e) {
-        this._labelArea(e.layer._leaflet_id, e.layer.getRadius(), false);
+        this._addLabelAndDistanceToCircle(e.layer._leaflet_id, e.layer.getRadius(), false);
     }
 
     _drawEditedEvent(e) {
         e.layers.eachLayer(layer => {
-            this._setFeatureProperties.bind(this, layer);
+            this._addLayerPropertiesSuchAsTypeAndRadius.bind(this, layer);
         });
 
         this._emitEvent('mapEdited');
     }
 
     _drawDeletedEvent() {
-        this.checkMaxNumberOfCircles();
+        this.checkNumberOfCirclesAndEnableDisableNewAdditions();
 
         this._emitEvent('mapEdited');
     }
 
     _drawEditStopEvent() {
-        this._regenerateTooltips();
+        this._regenerateZones();
     }
 
     _drawDeleteStopEvent() {

@@ -43,7 +43,7 @@ class AppMap {
         this._initWidgets();
         this._initEvents();
 
-        this._toggleLoadingIndicator(true);
+        this._showLoadingIndicator(true);
 
         this._apiService.getAlertConfigurations().then(configurations => {
             [this.configuration] = [configurations.filter(conf => conf.alertCode === 'out_of_perimeter')[0]];
@@ -56,7 +56,7 @@ class AppMap {
             }
 
             this._mapService.generateMap(this._elements.map, this.configuration.preference.geoJson);
-            this._toggleLoadingIndicator(false);
+            this._showLoadingIndicator(false);
         });
 
         if (this._isDevEnvironment) {
@@ -67,25 +67,25 @@ class AppMap {
     }
 
     _save() {
-        this._toggleLoadingIndicator(true);
+        this._showLoadingIndicator(true);
         if (this._isDevEnvironment) {
             this._notificationService.notify(this._translationService.translateString('SAVING'), 'light');
         }
 
-        this._mapService.validateDrawings();
+        this._mapService.checkNumberOfCirclesAndEnableDisableNewAdditions();
         this.configuration.preference.geoJson = this._mapService.exportGeoJSON();
 
         this._apiService
             .saveAlertConfiguration(this.configuration)
             .then(() => {
-                this._toggleLoadingIndicator(false);
+                this._showLoadingIndicator(false);
                 if (this._isDevEnvironment) {
                     this._notificationService.notify(this._translationService.translateString('SUCCESS'), 'success');
                 }
                 this._mapService.updateInitialGeoJsonState();
             })
             .catch(() => {
-                this._toggleLoadingIndicator(false);
+                this._showLoadingIndicator(false);
                 if (this._isDevEnvironment) {
                     this._notificationService.notify(this._translationService.translateString('FAILURE'), 'danger');
                 }
@@ -100,7 +100,7 @@ class AppMap {
         }
     }
 
-    _toggleLoadingIndicator(isLoading) {
+    _showLoadingIndicator(isLoading) {
         if (isLoading) {
             this._elements.app.classList.add('app-map--loading');
             this._elements.map.classList.add('map--loading');
@@ -116,7 +116,7 @@ class AppMap {
     _promptUserLeavingThePageWhenUnsavedChanges() {
         return;
         window.addEventListener('beforeunload', e => {
-            if (this._mapService.isMapDirty()) {
+            if (this._mapService._isMapFormStateDirty()) {
                 e.preventDefault();
                 e.returnValue = ''; // Required by Chrome
             }
@@ -140,12 +140,12 @@ class AppMap {
         });
 
         this._elements.buttons.reset.addEventListener('click', () => {
-            this._mapService.resetMap();
+            this._mapService.resetMapToOriginalStage();
             this._save();
         });
 
         this._elements.buttons.closeReplay.addEventListener('click', () => {
-            this._mapService.switchAlertsConfigurationToHistoryMode('GPS-ALERTS-CONFIGURATION-MODE', () => {
+            this._mapService.switchMode('GPS-ALERTS-CONFIGURATION-MODE', () => {
                 this._elements.widgets.dates.classList.remove('widget-dates__form--visible');
             });
         });
