@@ -152,6 +152,10 @@ class MapService {
         });
 
         if (!isHistoryPlaybackMode) {
+            Array.from(document.querySelectorAll('.leaflet-timeline-control')).forEach(element => {
+                element.remove();
+            });
+
             this._userPositionsHistoryGroup.clearLayers();
             this._centerMapFromProvidedLayer('_alertsGPSConfigurationShapesGroup');
         }
