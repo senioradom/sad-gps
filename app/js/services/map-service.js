@@ -76,24 +76,9 @@ class MapService {
         this._initEventListeners();
 
         if (geoJSON) {
-            this._initialGeoJsonState = geoJSON;
+            this._originalGeoJson = geoJSON;
             this._importGeoJSON(geoJSON);
         }
-    }
-
-    updateInitialGeoJsonState() {
-        this._initialGeoJsonState = this.exportGeoJSON();
-    }
-
-    resetMapToOriginalStage() {
-        this._disableEditMode();
-        this._deleteAllLayers();
-
-        Array.from(document.querySelectorAll(this._elements.selectors.inputTextLabels)).forEach(element => {
-            element.remove();
-        });
-
-        this._importGeoJSON(this._initialGeoJsonState);
     }
 
     exportGeoJSON() {
@@ -127,6 +112,21 @@ class MapService {
         });
 
         return JSON.stringify(geoJson);
+    }
+
+    resetMapToOriginalStage() {
+        this._disableEditMode();
+        this._deleteAllLayers();
+
+        Array.from(document.querySelectorAll(this._elements.selectors.inputTextLabels)).forEach(element => {
+            element.remove();
+        });
+
+        this._importGeoJSON(this._originalGeoJson);
+    }
+
+    backupOriginalGeoJson() {
+        this._originalGeoJson = this.exportGeoJSON();
     }
 
     switchMode(mode, callback) {
@@ -585,9 +585,9 @@ class MapService {
                 icon: L.divIcon({
                     className: 'user',
                     html: `
-<i class="user__icon fas fa-portrait"></i>
-<div class="user__label">${moment(result.createdAt).format('DD/MM/YYYY - HH:mm')}</div>
-`,
+                        <i class="user__icon fas fa-portrait"></i>
+                        <div class="user__label">${moment(result.createdAt).format('DD/MM/YYYY - HH:mm')}</div>
+                    `,
                     iconSize: [30, 42],
                     iconAnchor: [15, 42]
                 })
@@ -603,7 +603,7 @@ class MapService {
     }
 
     _isMapFormStateDirty() {
-        return this._initialGeoJsonState !== this.exportGeoJSON();
+        return this._originalGeoJson !== this.exportGeoJSON();
     }
 
     _addRemoveSaveResetButtonsDisabledState(isEnabled) {
@@ -790,13 +790,6 @@ class MapService {
 
     _debugEvent(e) {
         console.log(`[debug] : Event : ${e.type}`);
-
-        switch (e.type) {
-            case 'draw:toolbarclosed':
-                break;
-            default:
-                break;
-        }
     }
 }
 

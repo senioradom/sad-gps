@@ -82,7 +82,7 @@ class AppMap {
                 if (this._isDevEnvironment) {
                     this._notificationService.notify(this._translationService.translateString('SUCCESS'), 'success');
                 }
-                this._mapService.updateInitialGeoJsonState();
+                this._mapService.backupOriginalGeoJson();
             })
             .catch(() => {
                 this._showLoadingIndicator(false);
