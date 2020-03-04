@@ -10,7 +10,7 @@ import WidgetAddress from '../widgets/widget-address';
 class AppMap {
     _autoSave = false;
 
-    _devMode = true;
+    _isDevEnvironment = true;
 
     constructor(htmlElement, api, contractRef, basicAuth, locale, distributorColor) {
         document.documentElement.style.setProperty('--distributor-color', distributorColor);
@@ -33,7 +33,7 @@ class AppMap {
             this._translationService,
             this._locale,
             distributorColor,
-            this._devMode
+            this._isDevEnvironment
         );
 
         this._init();
@@ -58,11 +58,15 @@ class AppMap {
             this._mapService.generateMap(this._elements.map, this.configuration.preference.geoJson);
             this._toggleLoadingIndicator(false);
         });
+
+        if (this._isDevEnvironment) {
+            document.documentElement.classList.add('env-dev');
+        }
     }
 
     _save() {
         this._toggleLoadingIndicator(true);
-        if (this._devMode) {
+        if (this._isDevEnvironment) {
             this._notificationService.notify(this._translationService.translateString('SAVING'), 'light');
         }
 
@@ -73,14 +77,14 @@ class AppMap {
             .saveAlertConfiguration(this.configuration)
             .then(() => {
                 this._toggleLoadingIndicator(false);
-                if (this._devMode) {
+                if (this._isDevEnvironment) {
                     this._notificationService.notify(this._translationService.translateString('SUCCESS'), 'success');
                 }
                 this._mapService.updateInitialGeoJsonState();
             })
             .catch(() => {
                 this._toggleLoadingIndicator(false);
-                if (this._devMode) {
+                if (this._isDevEnvironment) {
                     this._notificationService.notify(this._translationService.translateString('FAILURE'), 'danger');
                 }
             });
@@ -99,6 +103,9 @@ class AppMap {
         }
     }
 
+    // --
+    // Events handler
+    // --------------------
     _promptUserLeavingThePageWhenUnsavedChanges() {
         return;
         window.addEventListener('beforeunload', e => {
@@ -143,7 +150,7 @@ class AppMap {
 
         if (this._autoSave) {
             document.addEventListener('mapEdited', () => this._save());
-        } else if (this._devMode) {
+        } else if (this._isDevEnvironment) {
             console.log('[info]: Autosave disabled...');
         }
     }

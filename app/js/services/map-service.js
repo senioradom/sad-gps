@@ -45,7 +45,7 @@ class MapService {
         window.sad = window.sad || {};
         window.sad.mapServiceInstance = this;
 
-        this._devMode = isDevMode;
+        this._isDevEnvironment = isDevMode;
     }
 
     // --------------------
@@ -746,7 +746,7 @@ class MapService {
         this._map.on(L.Draw.Event.DELETESTOP, this._drawDeleteStopEvent.bind(this));
 
         // Events debugging
-        if (this._devMode) {
+        if (this._isDevEnvironment) {
             this._map.on(L.Draw.Event.DRAWSTART, this._debugEvent.bind(this));
             this._map.on(L.Draw.Event.DRAWSTOP, this._debugEvent.bind(this));
             this._map.on(L.Draw.Event.DRAWVERTEX, this._debugEvent.bind(this));
