@@ -1,18 +1,6 @@
 class WidgetAddress {
-    _elements = {
-        root: document.getElementById('js-widget-address'),
-        results: {
-            container: document.getElementById('js-widget-address__result')
-        },
-        inputs: {
-            search: document.getElementById('js-widget-address__input-search'),
-            submit: document.getElementById('js-widget-address__input-submit')
-        }
-    };
-
-    constructor(apiService, notificationService, translationService, mapService) {
+    constructor(apiService, translationService, mapService) {
         this._apiService = apiService;
-        this._notificationService = notificationService;
         this._translationService = translationService;
         this._mapService = mapService;
 
@@ -20,6 +8,17 @@ class WidgetAddress {
     }
 
     _init() {
+        this._elements = {
+            root: document.getElementById('js-widget-address'),
+            results: {
+                container: document.getElementById('js-widget-address__result')
+            },
+            inputs: {
+                search: document.getElementById('js-widget-address__input-search'),
+                submit: document.getElementById('js-widget-address__input-submit')
+            }
+        };
+
         this._initSubmitEvent();
         this._initEnterKeyAsSubmitEvent();
         this._initClickSelectedAddress();

@@ -125,13 +125,7 @@ class AppMap {
 
     _initWidgets() {
         (() => new WidgetDates(this._mapService, this._locale))();
-        (() =>
-            new WidgetAddress(
-                this._apiService,
-                this._notificationService,
-                this._translationService,
-                this._mapService
-            ))();
+        (() => new WidgetAddress(this._apiService, this._translationService, this._mapService))();
     }
 
     _initClickEvents() {

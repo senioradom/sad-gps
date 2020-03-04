@@ -3,6 +3,9 @@ import 'moment-timezone';
 
 class TranslationService {
     _strings = {
+        // --------------------
+        // French
+        // --------------------
         fr: {
             RESET: 'Annuler',
             SAVE: 'Sauvegarder',
@@ -15,6 +18,9 @@ class TranslationService {
             SEARCH_ADDRESS: 'Rechercher une localité',
             NO_ADDRESS_FOUND: 'Aucune adresse n’a été trouvée'
         },
+        // --------------------
+        // English
+        // --------------------
         en: {
             RESET: 'Reset',
             SAVE: 'Save',
@@ -27,6 +33,9 @@ class TranslationService {
             SEARCH_ADDRESS: 'Location Search',
             NO_ADDRESS_FOUND: 'No address found'
         },
+        // --------------------
+        // Spanish
+        // --------------------
         es: {
             RESET: 'Anular',
             SAVE: 'Guardar',
@@ -39,6 +48,9 @@ class TranslationService {
             SEARCH_ADDRESS: 'Buscar una localidad',
             NO_ADDRESS_FOUND: 'Sin dirección encontrada'
         },
+        // --------------------
+        // Slovak
+        // --------------------
         sk: {
             RESET: 'Zrušiť',
             SAVE: 'Save',
@@ -51,6 +63,9 @@ class TranslationService {
             SEARCH_ADDRESS: 'miesto Search',
             NO_ADDRESS_FOUND: 'No adresa nebola nájdená'
         },
+        // --------------------
+        // Czech
+        // --------------------
         cs: {
             RESET: 'Zrušit',
             SAVE: 'Save',
@@ -63,6 +78,9 @@ class TranslationService {
             SEARCH_ADDRESS: 'Místo Search',
             NO_ADDRESS_FOUND: 'No adresa nebyla nalezena'
         },
+        // --------------------
+        // Chinese
+        // --------------------
         zh: {
             RESET: '取消',
             SAVE: '保存',

@@ -3,18 +3,6 @@ import moment from 'moment';
 import 'moment/locale/fr';
 
 class WidgetDates {
-    _elements = {
-        buttons: {
-            toggle: document.getElementById('js-widget-dates__toggle'),
-            submit: document.getElementById('js-widget-dates__submit')
-        },
-        form: {
-            form: document.getElementById('js-widget-dates__form'),
-            start: document.getElementById('js-widget-dates__date-start'),
-            end: document.getElementById('js-widget-dates__date-end')
-        }
-    };
-
     constructor(mapService, locale) {
         this._mapService = mapService;
 
@@ -27,6 +15,18 @@ class WidgetDates {
     }
 
     _init() {
+        this._elements = {
+            buttons: {
+                toggle: document.getElementById('js-widget-dates__toggle'),
+                submit: document.getElementById('js-widget-dates__submit')
+            },
+            form: {
+                form: document.getElementById('js-widget-dates__form'),
+                start: document.getElementById('js-widget-dates__date-start'),
+                end: document.getElementById('js-widget-dates__date-end')
+            }
+        };
+
         this._initEvents();
 
         this._dates = {

@@ -5,6 +5,9 @@ class ApiService {
         this.basicAuth = basicAuth;
     }
 
+    // --------------------
+    // Alerts configuration
+    // --------------------
     getAlertConfigurations() {
         return fetch(`${this.api}/api/3/contracts/${this.contractRef}/alert-configurations`, {
             headers: {
@@ -30,6 +33,9 @@ class ApiService {
         }).then(this._handleErrors);
     }
 
+    // --------------------
+    // GPS Positions
+    // --------------------
     getLastPosition() {
         return fetch(`${this.api}/api/4/contracts/${this.contractRef}/actimetry/gps-positions/last`, {
             headers: {
@@ -61,6 +67,9 @@ class ApiService {
             .catch(error => console.warn(error));
     }
 
+    // --------------------
+    // Search addresses
+    // --------------------
     getAddress(address) {
         return fetch(`${this.api}/api/3/address?query=${encodeURIComponent(address)}`, {
             headers: {
@@ -75,6 +84,9 @@ class ApiService {
             .catch(error => console.warn(error));
     }
 
+    // --------------------
+    // Error handler
+    // --------------------
     _handleErrors(response) {
         if (!response.ok) {
             throw Error(response.status);
