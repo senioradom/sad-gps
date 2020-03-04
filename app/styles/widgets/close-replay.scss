@@ -1,4 +1,6 @@
 .close-replay {
+  $self: &;
+
   position: absolute;
   z-index: 401;
   top: 17px;
@@ -13,7 +15,7 @@
   background-color: #fff;
   box-shadow: 0 0 2px 0 #000;
 
-  @at-root #{&}--hidden {
+  @at-root [data-map-mode='GPS-ALERTS-CONFIGURATION-MODE'] #{$self} {
     display: none;
   }
 

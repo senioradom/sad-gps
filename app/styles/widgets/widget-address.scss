@@ -11,6 +11,10 @@
     left: 10px;
   }
 
+  @at-root [data-map-mode='GPS-HISTORY-PLAYBACK-MODE'] #{$self} {
+    display: none;
+  }
+
   @at-root #{&}--hidden {
     display: none;
   }

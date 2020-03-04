@@ -37,3 +37,11 @@
 #map[data-history-loaded='false'] .leaflet-control-layers.leaflet-control-layers-expanded.leaflet-timeline-control.leaflet-control {
   visibility: hidden;
 }
+
+[data-map-mode='GPS-HISTORY-PLAYBACK-MODE'] .leaflet-control.leaflet-timeline-control {
+  display: block;
+}
+
+[data-map-mode='GPS-HISTORY-PLAYBACK-MODE'] .leaflet-draw.leaflet-control {
+  display: none;
+}

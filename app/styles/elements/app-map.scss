@@ -16,6 +16,8 @@
   // Buttons
   // --------------------
   @at-root #{&}__buttons-container {
+    $self: &;
+
     position: absolute;
     z-index: 401;
     right: 10px;
@@ -24,6 +26,10 @@
     padding: 10px;
 
     background: transparent;
+
+    @at-root [data-map-mode='GPS-HISTORY-PLAYBACK-MODE'] #{$self} {
+      display: none;
+    }
   }
 
   @at-root #{&}__button {

@@ -15,8 +15,8 @@
 
   background-color: white;
 
-  @at-root [data-map-mode='GPS-HISTORY-PLAYBACK-MODE'] ~ .app-map__buttons-container ~ #{$self} {
-    bottom: 10px;
+  @at-root [data-map-mode='GPS-HISTORY-PLAYBACK-MODE'] #{$self} {
+    bottom: 10px!important;
   }
 
   @at-root

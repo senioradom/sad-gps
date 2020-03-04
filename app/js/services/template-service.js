@@ -4,7 +4,7 @@ class TemplateService {
 <!-- ------------------
  Application
 ------------------- -->
-<div class="app-map app-map--loading" id="js-app-map">
+<div class="app-map app-map--loading" id="js-app-map" data-map-mode="GPS-ALERTS-CONFIGURATION-MODE">
 
     <!-- ------------------
      Widget : DateTime picker
@@ -58,7 +58,7 @@ class TemplateService {
     <!-- ------------------
     Map
     ------------------- -->
-    <div class="map map--loading" id="js-map" data-map-mode="GPS-ALERTS-CONFIGURATION-MODE" data-history-loaded="false">
+    <div class="map map--loading" id="js-map" data-history-loaded="false">
         <div class="map__loading-overlay"></div>
     </div>
 

@@ -7,13 +7,12 @@ import 'moment-timezone';
 
 class MapService {
     _elements = {
+        app: document.getElementById('js-app-map'),
         map: document.getElementById('js-map'),
         buttons: {
             container: document.getElementById('js-app-map__buttons-container')
         }
     };
-
-    _mode = 'GPS-ALERTS-CONFIGURATION-MODE';
 
     _MAX_NUMBER_OF_CIRCLES = 10;
 
@@ -25,7 +24,9 @@ class MapService {
 
     _initialShapes = 0;
 
-    constructor(apiService, notificationService, translationService, locale, distributorColor, isDevMode) {
+    constructor(apiService, notificationService, translationService, locale, distributorColor, isDevEnvironment) {
+        this._mode = this._elements.app.dataset.mapMode;
+
         // List here : https://github.com/DenisCarriere/Leaflet.draw.locales
         if (['en', 'fr', 'es', 'sk', 'cs', 'zh'].includes(locale)) {
             drawLocales(locale);
@@ -45,7 +46,7 @@ class MapService {
         window.sad = window.sad || {};
         window.sad.mapServiceInstance = this;
 
-        this._isDevEnvironment = isDevMode;
+        this._isDevEnvironment = isDevEnvironment;
     }
 
     // --------------------
@@ -195,7 +196,7 @@ class MapService {
 
         const isHistoryPlaybackMode = this._mode === 'GPS-HISTORY-PLAYBACK-MODE';
 
-        this._elements.map.dataset.mapMode = this._mode;
+        this._elements.app.dataset.mapMode = this._mode;
 
         if (isHistoryPlaybackMode) {
             this._elements.map.dataset.historyLoaded = false;
@@ -211,24 +212,6 @@ class MapService {
         Object.entries(this.alertsGPSConfigurationLabelsGroup._layers).forEach(([key, layer]) => {
             layer.getElement().style.display = isHistoryPlaybackMode ? 'none' : 'block';
         });
-
-        if (isHistoryPlaybackMode) {
-            document.getElementById('js-close-replay').classList.remove('close-replay--hidden');
-        } else {
-            document.getElementById('js-close-replay').classList.add('close-replay--hidden');
-        }
-
-        if (document.querySelector('.leaflet-control.leaflet-timeline-control')) {
-            document.querySelector('.leaflet-control.leaflet-timeline-control').style.display = isHistoryPlaybackMode
-                ? 'block'
-                : 'none';
-        }
-
-        document.querySelector('.leaflet-draw.leaflet-control').style.display = isHistoryPlaybackMode
-            ? 'none'
-            : 'block';
-
-        this._elements.buttons.container.style.display = isHistoryPlaybackMode ? 'none' : 'block';
 
         if (!isHistoryPlaybackMode) {
             this.userPositionsHistoryGroup.clearLayers();
