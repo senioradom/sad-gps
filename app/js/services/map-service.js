@@ -539,15 +539,18 @@ class MapService {
         const condDuplicated = this._getArrayOfDuplicatedLabels().length === 0;
 
         let condNotEmpty = true;
+        let condMaxLength = true;
+
         document.querySelectorAll(this._elements.selectors.inputTextLabels).forEach(el => {
             if (el.value === '') {
                 condNotEmpty = false;
             }
+            if (el.length > 10) {
+                condMaxLength = false;
+            }
         });
 
-        // @todo : Can do with extra check on 10 chars max length (currently checked via HTML input rule)
-
-        return condNotEmpty && condDuplicated;
+        return condNotEmpty && condMaxLength && condDuplicated;
     }
 
     _addLabelsValidOrNotStates(isValid) {
