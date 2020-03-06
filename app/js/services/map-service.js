@@ -289,7 +289,13 @@ class MapService {
             }
         };
 
+        this._isDevEnvironment = isDevEnvironment;
+
+        this._DRAWING_MODE = false;
+        this._mode = this._elements.app.dataset.mapMode;
+
         this._MAX_NUMBER_OF_CIRCLES = 10;
+        this._initialShapes = 0;
 
         this._FRANCE_CENTERED = {
             lat: 46.92,
@@ -297,20 +303,14 @@ class MapService {
             zoom: 6
         };
 
-        this._initialShapes = 0;
-
         this._colors = {
             circle: {
                 view: distributorColor
             }
         };
 
-        this._mode = this._elements.app.dataset.mapMode;
-
         window.sad = window.sad || {};
         window.sad.mapServiceInstance = this;
-
-        this._isDevEnvironment = isDevEnvironment;
     }
 
     _importGeoJSON(geojson) {
