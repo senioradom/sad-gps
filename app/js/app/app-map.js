@@ -113,12 +113,14 @@ class AppMap {
     // Events handler
     // --------------------
     _promptUserLeavingThePageWhenUnsavedChanges() {
-        window.addEventListener('beforeunload', e => {
-            if (this._mapService.isMapFormStateDirty()) {
-                e.preventDefault();
-                e.returnValue = ''; // Required by Chrome
-            }
-        });
+        if (!this._isDevEnvironment) {
+            window.addEventListener('beforeunload', e => {
+                if (this._mapService.isMapFormStateDirty()) {
+                    e.preventDefault();
+                    e.returnValue = ''; // Required by Chrome
+                }
+            });
+        }
     }
 
     _initWidgets() {
