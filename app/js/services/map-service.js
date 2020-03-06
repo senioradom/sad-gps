@@ -383,7 +383,60 @@ class MapService {
         });
     }
 
-    _createZone(layer) {
+    _createZoneFromClickEvent(event) {
+        const { handler } = this._controlDraw._toolbars.draw._modes.circle;
+        const zoomLevel = this._map.getZoom();
+
+        let radius = 1000;
+        switch (true) {
+            case zoomLevel >= 17:
+                radius = 100;
+                break;
+
+            case zoomLevel >= 15:
+                radius = 500;
+                break;
+
+            case zoomLevel >= 12:
+                radius = 1000;
+                break;
+
+            case zoomLevel >= 10:
+                radius = 10000;
+                break;
+
+            case zoomLevel <= 9:
+                radius = 50000;
+                break;
+
+            default:
+                break;
+        }
+
+        const circle = new L.Circle(event.latlng, radius, {
+            color: this._colors.circle.view,
+            weight: 2
+        });
+
+        circle.feature = {
+            properties: {
+                radius: 1000,
+                drawtype: 'circle',
+                label: this._translationService.translateString('ZONE', {
+                    index: this._alertsGPSConfigurationShapesGroup.getLayers().length + 1
+                })
+            },
+            type: 'Feature',
+            geometry: {
+                type: 'Point',
+                coordinates: event.latlng
+            }
+        };
+
+        L.Draw.SimpleShape.prototype._fireCreatedEvent.call(handler, circle);
+    }
+
+    _createZoneFromLayer(layer) {
         const id = this._alertsGPSConfigurationShapesGroup.getLayerId(layer);
         let { label } = layer.feature.properties;
         if (!label) {
@@ -473,7 +526,7 @@ class MapService {
                                 .replace('value="', '')
                                 .replace(/"$/, '');
 
-                            this._createZone(layer);
+                            this._createZoneFromLayer(layer);
                         } catch (e) {
                             layer.remove();
                         }
@@ -698,6 +751,14 @@ class MapService {
 
     _initEventListeners() {
         // Events listeners
+        this._map.on('click', e => {
+            // This is a request from the marketing to be able to click and create zone rather than the default
+            // behavior (click and drag) that Leaflet.Draw provides
+            if (this._DRAWING_MODE) {
+                this._createZoneFromClickEvent(e);
+            }
+        });
+
         this._map.on(L.Draw.Event.CREATED, this._drawCreatedEvent.bind(this));
 
         this._map.on(L.Draw.Event.EDITED, this._drawEditedEvent.bind(this));
@@ -709,6 +770,10 @@ class MapService {
         this._map.on(L.Draw.Event.EDITSTOP, this._drawEditStopEvent.bind(this));
 
         this._map.on(L.Draw.Event.DELETESTOP, this._drawDeleteStopEvent.bind(this));
+
+        this._map.on(L.Draw.Event.DRAWSTART, this._drawDrawStart.bind(this));
+
+        this._map.on(L.Draw.Event.DRAWSTOP, this._drawDrawStop.bind(this));
 
         // Events debugging
         if (this._isDevEnvironment) {
@@ -749,6 +814,7 @@ class MapService {
     }
 
     _drawCreatedEvent(e) {
+        this._DRAWING_MODE = false;
         this._alertsGPSConfigurationShapesGroup.addLayer(e.layer);
 
         e.layer.feature = e.layer.feature || {};
@@ -761,7 +827,7 @@ class MapService {
             this._disableEdit();
         }
 
-        this._createZone(
+        this._createZoneFromLayer(
             this._alertsGPSConfigurationShapesGroup.getLayers()[
                 this._alertsGPSConfigurationShapesGroup.getLayers().length - 1
             ]
@@ -800,8 +866,23 @@ class MapService {
         this._recoverStateBeforeDeletion();
     }
 
+    _drawDrawStart() {
+        this._DRAWING_MODE = true;
+    }
+
+    _drawDrawStop() {
+        setTimeout(() => {
+            this._DRAWING_MODE = false;
+        }, 500);
+    }
+
     _debugEvent(e) {
         console.log(`[debug] : Event : ${e.type}`);
+
+        switch (e.type) {
+            default:
+                break;
+        }
     }
 }
 
