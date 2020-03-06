@@ -4,7 +4,8 @@ class Demo {
     constructor() {
         this._config = {
             api: 'https://gateway-pp.senioradom.com',
-            htmlElement: '#sad-gps'
+            htmlElement: '#sad-gps',
+            isDevEnvironment: true
         };
 
         this._elements = {
@@ -25,7 +26,15 @@ class Demo {
 
     _startApp(contractRef, basicAuth, language, color) {
         (() =>
-            new AppMap(this._config.htmlElement, this._config.api, contractRef, basicAuth, language, color, false))();
+            new AppMap(
+                this._config.htmlElement,
+                this._config.api,
+                contractRef,
+                basicAuth,
+                language,
+                color,
+                this._config.isDevEnvironment
+            ))();
     }
 
     _initEvents() {
