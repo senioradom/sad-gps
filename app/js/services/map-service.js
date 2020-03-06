@@ -343,7 +343,7 @@ class MapService {
                             this.circle.feature = feature;
 
                             L.Draw.SimpleShape.prototype._fireCreatedEvent.call(handler, this.circle);
-                        } else {
+                        } else if (this._controlDraw._toolbars.draw._modes.marker) {
                             this._initialShapes += 1;
 
                             handler = this._controlDraw._toolbars.draw._modes.marker.handler;
