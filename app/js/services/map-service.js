@@ -712,6 +712,14 @@ class MapService {
 
         // Events debugging
         if (this._isDevEnvironment) {
+            // Events already associated
+            this._map.on(L.Draw.Event.CREATED, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.EDITED, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.DELETED, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.EDITRESIZE, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.EDITSTOP, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.DELETESTOP, this._debugEvent.bind(this));
+            // No associated events
             this._map.on(L.Draw.Event.DRAWSTART, this._debugEvent.bind(this));
             this._map.on(L.Draw.Event.DRAWSTOP, this._debugEvent.bind(this));
             this._map.on(L.Draw.Event.DRAWVERTEX, this._debugEvent.bind(this));
