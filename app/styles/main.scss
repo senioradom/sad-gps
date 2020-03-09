@@ -42,7 +42,9 @@ $nodeModuleRoot: '../../node_modules/';
 
 @import 'elements/map';
 
-@import 'elements/user';
+@import 'elements/pointer-user';
+
+@import 'elements/pointer-map-pin';
 
 @import 'elements/notifications';
 

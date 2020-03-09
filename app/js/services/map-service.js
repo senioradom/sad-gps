@@ -47,6 +47,9 @@ class MapService {
         this._userPositionsHistoryGroup = new L.FeatureGroup();
         this._userPositionsHistoryGroup.addTo(this._map);
 
+        this._addressSearchGroup = new L.FeatureGroup();
+        this._addressSearchGroup.addTo(this._map);
+
         this._controlDraw = new L.Control.Draw({
             position: 'topright',
             draw: {
@@ -130,6 +133,8 @@ class MapService {
     }
 
     switchMode(mode, callback) {
+        this._addressSearchGroup.clearLayers();
+
         this._mode = mode;
 
         const isHistoryPlaybackMode = this._mode === 'GPS-HISTORY-PLAYBACK-MODE';
@@ -263,8 +268,21 @@ class MapService {
         this._controlDraw._toolbars.edit._modes.remove.handler.disable();
     }
 
-    zoomAtCoordinates(latitude, longitude, zoomLevel) {
-        this._map.setView(new L.LatLng(latitude, longitude), zoomLevel);
+    zoomAtCoordinates(latitude, longitude) {
+        this._addressSearchGroup.clearLayers();
+        this._map.panTo(new L.LatLng(latitude, longitude));
+
+        const pinPositionMarkerIcon = new L.marker([latitude, longitude], {
+            icon: L.divIcon({
+                className: 'pointer-map-pin',
+                html: `<i class="pointer-map-pin__icon fas fa-map-pin"></i>`,
+                iconSize: [30, 42],
+                iconAnchor: [15, 42]
+            })
+        });
+
+        pinPositionMarkerIcon.addTo(this._addressSearchGroup);
+        this._centerMapFromProvidedLayer('_addressSearchGroup');
     }
 
     isMapFormStateDirty() {
@@ -642,19 +660,19 @@ class MapService {
 
             this._map.panTo(new L.LatLng(result.latitude, result.longitude));
 
-            this._lastUserPositionMarker = new L.marker([result.latitude, result.longitude], {
+            const lastUserPositionMarker = new L.marker([result.latitude, result.longitude], {
                 icon: L.divIcon({
-                    className: 'user',
+                    className: 'pointer-user',
                     html: `
-                        <i class="user__icon fas fa-portrait"></i>
-                        <div class="user__label">${moment(result.createdAt).format('DD/MM/YYYY - HH:mm')}</div>
+                        <i class="pointer-user__icon fas fa-portrait"></i>
+                        <div class="pointer-user__label">${moment(result.createdAt).format('DD/MM/YYYY - HH:mm')}</div>
                     `,
                     iconSize: [30, 42],
                     iconAnchor: [15, 42]
                 })
             });
 
-            this._lastUserPositionMarker.addTo(this._lastUserPositionGroup);
+            lastUserPositionMarker.addTo(this._lastUserPositionGroup);
             this._centerMapFromProvidedLayer('_lastUserPositionGroup');
 
             if (callback && typeof callback === 'function') {
@@ -691,10 +709,12 @@ class MapService {
         this._timeline = L.timeline(positionsHistoryData, {
             pointToLayer(data, latlng) {
                 const divIcon = L.divIcon({
-                    className: 'user',
+                    className: 'pointer-user',
                     html: `
-                        <i class="user__icon fas fa-portrait"></i>
-                        <div class="user__label">${moment(data.properties.start).format('DD/MM/YYYY - HH:mm')}</div>
+                        <i class="pointer-user__icon fas fa-portrait"></i>
+                        <div class="pointer-user__label">${moment(data.properties.start).format(
+                            'DD/MM/YYYY - HH:mm'
+                        )}</div>
                     `,
                     iconSize: [30, 42],
                     iconAnchor: [15, 42]
@@ -871,6 +891,8 @@ class MapService {
     }
 
     _drawDrawStop() {
+        this._addressSearchGroup.clearLayers();
+
         setTimeout(() => {
             this._DRAWING_MODE = false;
         }, 500);

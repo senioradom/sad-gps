@@ -44,8 +44,7 @@ class WidgetAddress {
             if (e.target.dataset.hasOwnProperty('widgetAddress')) {
                 this._mapService.zoomAtCoordinates(
                     e.target.dataset.widgetAddressGpsLat,
-                    e.target.dataset.widgetAddressGpsLng,
-                    20
+                    e.target.dataset.widgetAddressGpsLng
                 );
 
                 this._elements.results.container.innerHTML = '';
