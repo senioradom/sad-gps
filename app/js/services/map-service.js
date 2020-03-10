@@ -14,10 +14,11 @@ class MapService {
             drawLocales(locale);
         }
 
-        this._overridesLeafLetConfiguration();
         this._apiService = apiService;
         this._notificationService = notificationService;
         this._translationService = translationService;
+
+        this._overridesLeafLetConfiguration();
     }
 
     // --------------------
@@ -713,6 +714,10 @@ class MapService {
                 }
             }
         });
+
+        L.drawLocal.edit.handlers.remove.tooltip.text = this._translationService.translateString(
+            'CLICK_ZONE_TO_DELETE'
+        );
     }
 
     _addTimelineElementAndEvents(positionsHistoryData) {
