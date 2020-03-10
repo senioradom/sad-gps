@@ -672,6 +672,7 @@ class MapService {
                 })
             });
 
+            this._lastUserPositionGroup.clearLayers();
             lastUserPositionMarker.addTo(this._lastUserPositionGroup);
             this._centerMapFromProvidedLayer('_lastUserPositionGroup');
 
