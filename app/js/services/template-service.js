@@ -23,7 +23,7 @@ class TemplateService {
                 <input id="js-widget-dates__date-end" class="widget-dates__input-date form-element">
             </div>
 
-            <button class="widget-dates__button widget-dates__button--play" id="js-widget-dates__submit">
+            <button class="widget-dates__button widget-dates__button--play" id="js-widget-dates__submit" data-i18n-title="VISUALIZE_THE_CLICK_LOCATION_HOURLY">
                 <i class="fas fa-play"></i>
             </button>
         </div>

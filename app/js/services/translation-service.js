@@ -18,7 +18,8 @@ class TranslationService {
             SEARCH_ADDRESS: 'Rechercher une localité',
             NO_ADDRESS_FOUND: 'Aucune adresse n’a été trouvée',
             LAST_GPS_LOCATION: 'Dernière position',
-            CLICK_ZONE_TO_DELETE: 'Cliquez sur une zone pour la supprimer.'
+            CLICK_ZONE_TO_DELETE: 'Cliquez sur une zone pour la supprimer.',
+            VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Visualisez la position du Click heure par heure.'
         },
         // --------------------
         // English
@@ -35,7 +36,8 @@ class TranslationService {
             SEARCH_ADDRESS: 'Location Search',
             NO_ADDRESS_FOUND: 'No address found',
             LAST_GPS_LOCATION: 'Last location',
-            CLICK_ZONE_TO_DELETE: 'Click a zone to delete it.'
+            CLICK_ZONE_TO_DELETE: 'Click a zone to delete it.',
+            VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Visualize Click location hourly.'
         },
         // --------------------
         // Spanish
@@ -52,7 +54,8 @@ class TranslationService {
             SEARCH_ADDRESS: 'Buscar una localidad',
             NO_ADDRESS_FOUND: 'Sin dirección encontrada',
             LAST_GPS_LOCATION: 'Última posición',
-            CLICK_ZONE_TO_DELETE: 'Haga clic en un área para eliminarlo.'
+            CLICK_ZONE_TO_DELETE: 'Haga clic en un área para eliminarlo.',
+            VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Visualizar la posición de clic por hora.'
         },
         // --------------------
         // Slovak
@@ -69,7 +72,8 @@ class TranslationService {
             SEARCH_ADDRESS: 'miesto Search',
             NO_ADDRESS_FOUND: 'No adresa nebola nájdená',
             LAST_GPS_LOCATION: 'Poslednej pozície',
-            CLICK_ZONE_TO_DELETE: 'Tlačidlom myši na plochu, aby ho odstrániť.'
+            CLICK_ZONE_TO_DELETE: 'Tlačidlom myši na plochu, aby ho odstrániť.',
+            VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Vizualizovať pozíciu Click každú hodinu.'
         },
         // --------------------
         // Czech
@@ -86,7 +90,8 @@ class TranslationService {
             SEARCH_ADDRESS: 'Místo Search',
             NO_ADDRESS_FOUND: 'No adresa nebyla nalezena',
             LAST_GPS_LOCATION: 'Poslední pozice',
-            CLICK_ZONE_TO_DELETE: 'Tlačítkem myši na plochu, aby jej odstranit.'
+            CLICK_ZONE_TO_DELETE: 'Tlačítkem myši na plochu, aby jej odstranit.',
+            VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Vizualizovat pozici Click každou hodinu.'
         },
         // --------------------
         // Chinese
@@ -103,7 +108,8 @@ class TranslationService {
             SEARCH_ADDRESS: '定位搜索',
             NO_ADDRESS_FOUND: '没有找到地址',
             LAST_GPS_LOCATION: '最后一个位置',
-            CLICK_ZONE_TO_DELETE: '单击某一区域将其删除。'
+            CLICK_ZONE_TO_DELETE: '单击某一区域将其删除。',
+            VISUALIZE_THE_CLICK_LOCATION_HOURLY: '可视化点击的位置每小时。'
         }
     };
 
@@ -124,6 +130,10 @@ class TranslationService {
 
         document.querySelectorAll('[data-i18n-text]').forEach(el => {
             el.textContent = this._strings[this._language][el.dataset.i18nText];
+        });
+
+        document.querySelectorAll('[data-i18n-title]').forEach(el => {
+            el.title = this._strings[this._language][el.dataset.i18nTitle];
         });
     }
 
