@@ -16,7 +16,8 @@ class TranslationService {
             FAILURE: 'Échec',
             ZONES_VALIDATION_FAILURE: 'Échec dans la validation des zones',
             SEARCH_ADDRESS: 'Rechercher une localité',
-            NO_ADDRESS_FOUND: 'Aucune adresse n’a été trouvée'
+            NO_ADDRESS_FOUND: 'Aucune adresse n’a été trouvée',
+            LAST_GPS_LOCATION: 'Dernière position'
         },
         // --------------------
         // English
@@ -31,7 +32,8 @@ class TranslationService {
             FAILURE: 'Failure',
             ZONES_VALIDATION_FAILURE: 'Zones validation failure',
             SEARCH_ADDRESS: 'Location Search',
-            NO_ADDRESS_FOUND: 'No address found'
+            NO_ADDRESS_FOUND: 'No address found',
+            LAST_GPS_LOCATION: 'Last location'
         },
         // --------------------
         // Spanish
@@ -46,7 +48,8 @@ class TranslationService {
             FAILURE: 'Fracaso',
             ZONES_VALIDATION_FAILURE: 'Error de validación de las zonas',
             SEARCH_ADDRESS: 'Buscar una localidad',
-            NO_ADDRESS_FOUND: 'Sin dirección encontrada'
+            NO_ADDRESS_FOUND: 'Sin dirección encontrada',
+            LAST_GPS_LOCATION: 'Última posición'
         },
         // --------------------
         // Slovak
@@ -61,7 +64,8 @@ class TranslationService {
             FAILURE: 'Zlyhanie',
             ZONES_VALIDATION_FAILURE: 'Zlyhanie validácia zóny',
             SEARCH_ADDRESS: 'miesto Search',
-            NO_ADDRESS_FOUND: 'No adresa nebola nájdená'
+            NO_ADDRESS_FOUND: 'No adresa nebola nájdená',
+            LAST_GPS_LOCATION: 'Poslednej pozície'
         },
         // --------------------
         // Czech
@@ -76,7 +80,8 @@ class TranslationService {
             FAILURE: 'Selhání',
             ZONES_VALIDATION_FAILURE: 'Selhání validace zóny',
             SEARCH_ADDRESS: 'Místo Search',
-            NO_ADDRESS_FOUND: 'No adresa nebyla nalezena'
+            NO_ADDRESS_FOUND: 'No adresa nebyla nalezena',
+            LAST_GPS_LOCATION: 'Poslední pozice'
         },
         // --------------------
         // Chinese
@@ -91,7 +96,8 @@ class TranslationService {
             FAILURE: '失败',
             ZONES_VALIDATION_FAILURE: '区验证失败',
             SEARCH_ADDRESS: '定位搜索',
-            NO_ADDRESS_FOUND: '没有找到地址'
+            NO_ADDRESS_FOUND: '没有找到地址',
+            LAST_GPS_LOCATION: '最后一个位置'
         }
     };
 

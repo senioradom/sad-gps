@@ -16,6 +16,34 @@
     visibility: hidden;
   }
 
+  @at-root #{&}__description {
+    padding-top: 3px;
+    padding-bottom: 3px;
+
+    color: grey;
+
+    font-size: 12px;
+    line-height: 13px;
+  }
+
+  @at-root #{&}__pulsing-icon {
+    display: inline-block;
+
+    width: 13px;
+    height: 13px;
+
+    cursor: pointer;
+    animation: pulse 2s infinite;
+
+    border-radius: 50%;
+    background: #0ab04a;
+    box-shadow: 0 0 0 rgba(57,255,20,.4);
+
+    @at-root #{&}:hover {
+      animation: none;
+    }
+  }
+
   @at-root #{&}__label {
     position: absolute;
     top: 7px;
@@ -49,3 +77,19 @@
   }
 }
 
+// --------------------
+// Animation
+// --------------------
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(57,255,20, .4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(57,255,20, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(57,255,20, 0);
+  }
+}

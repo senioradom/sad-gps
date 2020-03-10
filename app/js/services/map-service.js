@@ -242,7 +242,8 @@ class MapService {
 
                 this._notificationService.notify(
                     this._translationService.translateString('NO_DATA_FOR_GIVEN_PERIOD'),
-                    'warning'
+                    'warning',
+                    7000
                 );
             }
         });
@@ -665,7 +666,15 @@ class MapService {
                     className: 'pointer-user',
                     html: `
                         <i class="pointer-user__icon fas fa-portrait"></i>
-                        <div class="pointer-user__label">${moment(result.createdAt).format('DD/MM/YYYY - HH:mm')}</div>
+                        <div class="pointer-user__label">
+                            <div class="pointer-user__date">${moment(result.createdAt).format(
+                                'DD/MM/YYYY - HH:mm'
+                            )}</div>
+                            <div class="pointer-user__description">
+                                <span class="pointer-user__pulsing-icon"></span>
+                                ${this._translationService.translateString('LAST_GPS_LOCATION')}
+                            </div>
+                        </div>
                     `,
                     iconSize: [30, 42],
                     iconAnchor: [15, 42]
