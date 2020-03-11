@@ -134,6 +134,7 @@ class MapService {
     }
 
     switchMode(mode, callback) {
+        this._lastUserPositionGroup.clearLayers();
         this._addressSearchGroup.clearLayers();
 
         this._mode = mode;
