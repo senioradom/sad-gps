@@ -20,6 +20,8 @@ class TranslationService {
             LAST_GPS_LOCATION: 'Dernière position',
             CLICK_ZONE_TO_DELETE: 'Cliquez sur une zone pour la supprimer.',
             VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Visualisez la position du Click heure par heure.'
+            ZOOM_IN: 'Zoomer',
+            ZOOM_OUT: 'Dézoomer'
         },
         // --------------------
         // English
@@ -38,6 +40,8 @@ class TranslationService {
             LAST_GPS_LOCATION: 'Last location',
             CLICK_ZONE_TO_DELETE: 'Click a zone to delete it.',
             VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Visualize Click location hourly.'
+            ZOOM_IN: 'Zoom in',
+            ZOOM_OUT: 'Zoom out'
         },
         // --------------------
         // Spanish
@@ -56,6 +60,8 @@ class TranslationService {
             LAST_GPS_LOCATION: 'Última posición',
             CLICK_ZONE_TO_DELETE: 'Haga clic en un área para eliminarlo.',
             VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Visualizar la posición de clic por hora.'
+            ZOOM_IN: 'Acercarse',
+            ZOOM_OUT: 'Disminuir el zoom'
         },
         // --------------------
         // Slovak
@@ -74,6 +80,8 @@ class TranslationService {
             LAST_GPS_LOCATION: 'Poslednej pozície',
             CLICK_ZONE_TO_DELETE: 'Tlačidlom myši na plochu, aby ho odstrániť.',
             VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Vizualizovať pozíciu Click každú hodinu.'
+            ZOOM_IN: 'Priblížiť',
+            ZOOM_OUT: 'Oddialiť'
         },
         // --------------------
         // Czech
@@ -92,6 +100,8 @@ class TranslationService {
             LAST_GPS_LOCATION: 'Poslední pozice',
             CLICK_ZONE_TO_DELETE: 'Tlačítkem myši na plochu, aby jej odstranit.',
             VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Vizualizovat pozici Click každou hodinu.'
+            ZOOM_IN: 'Přiblížit',
+            ZOOM_OUT: 'Oddálit'
         },
         // --------------------
         // Chinese
@@ -110,6 +120,8 @@ class TranslationService {
             LAST_GPS_LOCATION: '最后一个位置',
             CLICK_ZONE_TO_DELETE: '单击某一区域将其删除。',
             VISUALIZE_THE_CLICK_LOCATION_HOURLY: '可视化点击的位置每小时。'
+            ZOOM_IN: '放大',
+            ZOOM_OUT: '缩小'
         }
     };
 

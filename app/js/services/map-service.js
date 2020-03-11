@@ -75,7 +75,13 @@ class MapService {
         });
         this._controlDraw.addTo(this._map);
 
-        this._map.addControl(L.control.zoom({ position: 'bottomleft' }));
+        this._map.addControl(
+            L.control.zoom({
+                zoomInTitle: this._translationService.translateString('ZOOM_IN'),
+                zoomOutTitle: this._translationService.translateString('ZOOM_OUT'),
+                position: 'bottomleft'
+            })
+        );
 
         this._initEventListeners();
 
