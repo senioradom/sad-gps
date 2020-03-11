@@ -404,6 +404,19 @@ class MapService {
         });
     }
 
+    _zoomOnClickedZoneEvent(event) {
+        Object.entries(this._alertsGPSConfigurationShapesGroup._layers).some(([key, circleLayer]) => {
+            const clickedLatLng = new L.LatLng(event.latlng.lat, event.latlng.lng);
+            if (Math.abs(circleLayer.getLatLng().distanceTo(clickedLatLng)) <= circleLayer.getRadius()) {
+                this._map.fitBounds(circleLayer.getBounds());
+
+                return true;
+            }
+
+            return false;
+        });
+    }
+
     _createZoneFromClickEvent(event) {
         const { handler } = this._controlDraw._toolbars.draw._modes.circle;
         const zoomLevel = this._map.getZoom();
@@ -788,10 +801,12 @@ class MapService {
     _initEventListeners() {
         // Events listeners
         this._map.on('click', e => {
-            // This is a request from the marketing to be able to click and create zone rather than the default
-            // behavior (click and drag) that Leaflet.Draw provides
             if (this._DRAWING_MODE) {
+                // This is a request from the marketing to be able to click and create zone rather than the default
+                // behavior (click and drag) that Leaflet.Draw provides
                 this._createZoneFromClickEvent(e);
+            } else {
+                this._zoomOnClickedZoneEvent(e);
             }
         });
 
