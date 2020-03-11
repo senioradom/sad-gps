@@ -735,9 +735,17 @@ class MapService {
             }
         });
 
+        this._customizeApplicationTextualContent();
+    }
+
+    _customizeApplicationTextualContent() {
         L.drawLocal.edit.handlers.remove.tooltip.text = this._translationService.translateString(
             'CLICK_ZONE_TO_DELETE'
         );
+
+        L.drawLocal.edit.toolbar.buttons.edit = this._translationService.translateString('UPDATE_ZONES');
+        L.drawLocal.edit.toolbar.buttons.remove = this._translationService.translateString('DELETE_ZONES');
+        L.drawLocal.draw.toolbar.buttons.circle = this._translationService.translateString('ADD_ZONE');
     }
 
     _addTimelineElementAndEvents(positionsHistoryData) {

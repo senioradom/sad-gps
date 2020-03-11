@@ -19,7 +19,10 @@ class TranslationService {
             NO_ADDRESS_FOUND: 'Aucune adresse n’a été trouvée',
             LAST_GPS_LOCATION: 'Dernière position',
             CLICK_ZONE_TO_DELETE: 'Cliquez sur une zone pour la supprimer.',
-            VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Visualisez la position du Click heure par heure.'
+            VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Visualisez la position du Click heure par heure.',
+            ADD_ZONE: 'Ajouter une zone.',
+            UPDATE_ZONES: 'Modifier les zones.',
+            DELETE_ZONES: 'Supprimer des zones.',
             ZOOM_IN: 'Zoomer',
             ZOOM_OUT: 'Dézoomer'
         },
@@ -39,7 +42,10 @@ class TranslationService {
             NO_ADDRESS_FOUND: 'No address found',
             LAST_GPS_LOCATION: 'Last location',
             CLICK_ZONE_TO_DELETE: 'Click a zone to delete it.',
-            VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Visualize Click location hourly.'
+            VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Visualize Click location hourly.',
+            ADD_ZONE: 'Add zone.',
+            UPDATE_ZONES: 'Edit areas.',
+            DELETE_ZONES: 'Remove areas.',
             ZOOM_IN: 'Zoom in',
             ZOOM_OUT: 'Zoom out'
         },
@@ -59,7 +65,10 @@ class TranslationService {
             NO_ADDRESS_FOUND: 'Sin dirección encontrada',
             LAST_GPS_LOCATION: 'Última posición',
             CLICK_ZONE_TO_DELETE: 'Haga clic en un área para eliminarlo.',
-            VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Visualizar la posición de clic por hora.'
+            VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Visualizar la posición de clic por hora.',
+            ADD_ZONE: 'Añadir zona.',
+            UPDATE_ZONES: 'Áreas de edición.',
+            DELETE_ZONES: 'áreas quitar.',
             ZOOM_IN: 'Acercarse',
             ZOOM_OUT: 'Disminuir el zoom'
         },
@@ -79,7 +88,10 @@ class TranslationService {
             NO_ADDRESS_FOUND: 'No adresa nebola nájdená',
             LAST_GPS_LOCATION: 'Poslednej pozície',
             CLICK_ZONE_TO_DELETE: 'Tlačidlom myši na plochu, aby ho odstrániť.',
-            VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Vizualizovať pozíciu Click každú hodinu.'
+            VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Vizualizovať pozíciu Click každú hodinu.',
+            ADD_ZONE: 'Pridať zone.',
+            UPDATE_ZONES: 'Úprava oblastí.',
+            DELETE_ZONES: 'Odstráňte oblastiach.',
             ZOOM_IN: 'Priblížiť',
             ZOOM_OUT: 'Oddialiť'
         },
@@ -99,7 +111,10 @@ class TranslationService {
             NO_ADDRESS_FOUND: 'No adresa nebyla nalezena',
             LAST_GPS_LOCATION: 'Poslední pozice',
             CLICK_ZONE_TO_DELETE: 'Tlačítkem myši na plochu, aby jej odstranit.',
-            VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Vizualizovat pozici Click každou hodinu.'
+            VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Vizualizovat pozici Click každou hodinu.',
+            ADD_ZONE: 'Přidat zone.',
+            UPDATE_ZONES: 'Úprava oblastí.',
+            DELETE_ZONES: 'Odstraňte oblastech.',
             ZOOM_IN: 'Přiblížit',
             ZOOM_OUT: 'Oddálit'
         },
@@ -119,7 +134,10 @@ class TranslationService {
             NO_ADDRESS_FOUND: '没有找到地址',
             LAST_GPS_LOCATION: '最后一个位置',
             CLICK_ZONE_TO_DELETE: '单击某一区域将其删除。',
-            VISUALIZE_THE_CLICK_LOCATION_HOURLY: '可视化点击的位置每小时。'
+            VISUALIZE_THE_CLICK_LOCATION_HOURLY: '可视化点击的位置每小时。',
+            ADD_ZONE: '添加区域。',
+            UPDATE_ZONES: '编辑区域。',
+            DELETE_ZONES: '删除的区域。',
             ZOOM_IN: '放大',
             ZOOM_OUT: '缩小'
         }
