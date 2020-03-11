@@ -25,6 +25,8 @@ $nodeModuleRoot: '../../node_modules/';
 
 @import url('#{$nodeModuleRoot}@bevacqua/rome/dist/rome.min.css');
 
+@import url('#{$nodeModuleRoot}tippy.js/dist/tippy.css');
+
 // --------------------
 // Responsive design
 // --------------------

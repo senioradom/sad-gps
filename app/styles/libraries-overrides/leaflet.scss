@@ -91,10 +91,10 @@
 .leaflet-draw-tooltip {
   visibility: visible!important;
 
-  background: var(--distributor-color)!important;
+  background: #464646!important;
 
   @at-root #{&}::before {
-    border-right-color: var(--distributor-color)!important;
+    border-right-color: #464646!important;
   }
 }
 

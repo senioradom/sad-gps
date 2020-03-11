@@ -1,3 +1,4 @@
+import tippy from 'tippy.js';
 import L from 'leaflet';
 import 'leaflet-draw';
 import 'leaflet.timeline';
@@ -89,6 +90,8 @@ class MapService {
             this._originalGeoJson = geoJSON;
             this._importGeoJSON(geoJSON);
         }
+
+        this._generateTooltips();
     }
 
     exportGeoJSON() {
@@ -275,6 +278,8 @@ class MapService {
 
         this._controlDraw._toolbars.edit._modes.edit.handler.disable();
         this._controlDraw._toolbars.edit._modes.remove.handler.disable();
+
+        this._generateTooltips();
     }
 
     zoomAtCoordinates(latitude, longitude) {
@@ -407,6 +412,19 @@ class MapService {
             ) {
                 this._controlDraw._toolbars[key].disable();
             }
+        });
+
+        this._generateTooltips();
+    }
+
+    _generateTooltips() {
+        this._elements.app.querySelectorAll('[title]:not([data-is-tooltip="true"])').forEach((el, i) => {
+            el.dataset.isTooltip = true;
+
+            tippy(el, {
+                appendTo: this._elements.app,
+                content: el.title
+            });
         });
     }
 
@@ -840,6 +858,8 @@ class MapService {
 
         this._map.on(L.Draw.Event.DRAWSTOP, this._drawDrawStop.bind(this));
 
+        this._map.on(L.Draw.Event.TOOLBARCLOSED, this._drawDrawToolBarClosed.bind(this));
+
         // Events debugging
         if (this._isDevEnvironment) {
             // Events already associated
@@ -849,6 +869,7 @@ class MapService {
             this._map.on(L.Draw.Event.EDITRESIZE, this._debugEvent.bind(this));
             this._map.on(L.Draw.Event.EDITSTOP, this._debugEvent.bind(this));
             this._map.on(L.Draw.Event.DELETESTOP, this._debugEvent.bind(this));
+            this._map.on(L.Draw.Event.TOOLBARCLOSED, this._debugEvent.bind(this));
             // No associated events
             this._map.on(L.Draw.Event.DRAWSTART, this._debugEvent.bind(this));
             this._map.on(L.Draw.Event.DRAWSTOP, this._debugEvent.bind(this));
@@ -859,7 +880,6 @@ class MapService {
             this._map.on(L.Draw.Event.DELETESTART, this._debugEvent.bind(this));
             this._map.on(L.Draw.Event.DELETESTOP, this._debugEvent.bind(this));
             this._map.on(L.Draw.Event.TOOLBAROPENED, this._debugEvent.bind(this));
-            this._map.on(L.Draw.Event.TOOLBARCLOSED, this._debugEvent.bind(this));
             this._map.on(L.Draw.Event.MARKERCONTEXT, this._debugEvent.bind(this));
         }
     }
@@ -941,6 +961,10 @@ class MapService {
         setTimeout(() => {
             this._DRAWING_MODE = false;
         }, 500);
+    }
+
+    _drawDrawToolBarClosed() {
+        this._generateTooltips();
     }
 
     _debugEvent(e) {
