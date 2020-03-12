@@ -7,7 +7,15 @@ import moment from 'moment';
 import 'moment-timezone';
 
 class MapService {
-    constructor(apiService, notificationService, translationService, locale, distributorColor, isDevEnvironment) {
+    constructor(
+        apiService,
+        notificationService,
+        translationService,
+        locale,
+        screenSize,
+        distributorColor,
+        isDevEnvironment
+    ) {
         this._initializeVariables(distributorColor, isDevEnvironment);
 
         // List here : https://github.com/DenisCarriere/Leaflet.draw.locales
@@ -18,6 +26,8 @@ class MapService {
         this._apiService = apiService;
         this._notificationService = notificationService;
         this._translationService = translationService;
+
+        this._screenSize = screenSize;
 
         this._overridesLeafLetConfiguration();
     }
@@ -418,14 +428,16 @@ class MapService {
     }
 
     _generateTooltips() {
-        this._elements.app.querySelectorAll('[title]:not([data-is-tooltip="true"])').forEach((el, i) => {
-            el.dataset.isTooltip = true;
+        if (this._screenSize === 'BIG_SCREEN') {
+            this._elements.app.querySelectorAll('[title]:not([data-is-tooltip="true"])').forEach((el, i) => {
+                el.dataset.isTooltip = true;
 
-            tippy(el, {
-                appendTo: this._elements.app,
-                content: el.title
+                tippy(el, {
+                    appendTo: this._elements.app,
+                    content: el.title
+                });
             });
-        });
+        }
     }
 
     _zoomOnClickedZoneEvent(event) {

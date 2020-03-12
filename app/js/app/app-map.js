@@ -32,6 +32,7 @@ class AppMap {
             this._notificationService,
             this._translationService,
             this._locale,
+            this._screenSize,
             distributorColor,
             this._isDevEnvironment
         );
