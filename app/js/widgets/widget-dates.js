@@ -56,11 +56,11 @@ class WidgetDates {
         });
 
         this._elements.buttons.submit.addEventListener('click', e => {
-            this._mapService.switchMode('GPS-HISTORY-PLAYBACK-MODE', () => {
-                if (this._screenSize === 'SMALL_SCREEN') {
-                    this._elements.form.form.classList.remove('widget-dates__form--visible');
-                }
+            if (this._screenSize === 'SMALL_SCREEN') {
+                this._elements.form.form.classList.remove('widget-dates__form--visible');
+            }
 
+            this._mapService.switchMode('GPS-HISTORY-PLAYBACK-MODE', () => {
                 this._mapService.playGPSHistory(this._getStart().toISOString(), this._getEnd().toISOString());
             });
         });
