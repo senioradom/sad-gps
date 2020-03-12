@@ -906,6 +906,10 @@ class MapService {
         e.layer.feature.properties = e.layer.feature.properties || {};
         e.layer.feature.type = 'Feature';
 
+        if (e.layer.getRadius() < 10) {
+            e.layer.setRadius(10);
+        }
+
         this._addLayerPropertiesSuchAsTypeAndRadius(e.layer);
 
         if (this._alertsGPSConfigurationShapesGroup.getLayers().length >= this._MAX_NUMBER_OF_CIRCLES) {
