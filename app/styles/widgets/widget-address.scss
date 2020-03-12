@@ -57,6 +57,8 @@
     padding-left: 13px;
 
     cursor: pointer;
+
+    border: 1px solid rgba(0,0,0,.2);
   }
 
   @at-root #{&}__result {

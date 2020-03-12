@@ -10,11 +10,16 @@
   align-items: center;
   align-content: center;
 
+  height: 34px;
   padding: 3px;
 
   text-align: center;
 
   border: 1px solid #2c827d;
+
+  @media screen and (max-width: #{$viewport-sm-from}) {
+    height: 70px;
+  }
 
   @at-root #{&}__form {
   }
@@ -45,5 +50,13 @@
         background-color: rgb(117, 117, 117);
       }
     }
+  }
+}
+
+.sad-gps {
+  height: calc(100vh - 44px);
+
+  @media screen and (max-width: #{$viewport-sm-from}) {
+    height: calc(100vh - 70px);
   }
 }

@@ -8,12 +8,11 @@
 .leaflet-control.leaflet-timeline-control {
   position: absolute!important;
   bottom: 0!important;
-  left: 50px!important;
 
   box-sizing: border-box!important;
-  width: calc(100% - 60px) !important;
+  width: calc(100% - 20px) !important;
   margin-bottom: 10px!important;
-  margin-left: 0!important;
+  margin-left: 10px!important;
 
   text-align: center!important;
 }
@@ -38,6 +37,11 @@
   visibility: hidden;
 }
 
+// Hide/show zoom control
+[data-map-mode='GPS-HISTORY-PLAYBACK-MODE'] .leaflet-control-zoom {
+  display: none;
+}
+
 [data-map-mode='GPS-HISTORY-PLAYBACK-MODE'] .leaflet-control.leaflet-timeline-control {
   display: block;
 }
@@ -45,3 +49,15 @@
 [data-map-mode='GPS-HISTORY-PLAYBACK-MODE'] .leaflet-draw.leaflet-control {
   display: none;
 }
+
+// Hide slider on small devices
+@media screen and (max-width: #{$viewport-sm-from}) {
+  .leaflet-control.leaflet-timeline-control .sldr-ctrl-container {
+    width: 100%!important;
+  }
+
+  .leaflet-control.leaflet-timeline-control input[type=range] {
+    display: none!important;
+  }
+}
+

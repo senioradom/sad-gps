@@ -15,6 +15,10 @@
   background-color: #fff;
   box-shadow: 0 0 2px 0 #000;
 
+  @media screen and (max-width: #{$viewport-sm-from}) {
+    right: 21px;
+  }
+
   @at-root [data-map-mode='GPS-ALERTS-CONFIGURATION-MODE'] #{$self} {
     display: none;
   }

@@ -24,6 +24,7 @@ html.env-dev {
 
   @at-root #{&}:after {
     position: fixed;
+    z-index: 401;
     right: 0;
     bottom: 0;
 

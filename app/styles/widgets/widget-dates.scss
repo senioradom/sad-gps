@@ -15,8 +15,16 @@
   background-color: #fff;
   box-shadow: 0 0 2px 0 #000;
 
-  @at-root .screen-size-small #{$self} {
+  @at-root [data-map-mode='GPS-ALERTS-CONFIGURATION-MODE'].screen-size-small #{$self} {
     top: 65px;
+  }
+
+  @at-root [data-map-mode='GPS-HISTORY-PLAYBACK-MODE'].screen-size-small #{$self} {
+    top: 65px;
+
+    @media screen and (max-width: #{$viewport-sm-from}) {
+      top: 17px;
+    }
   }
 
   @at-root #{&}__button {
@@ -47,6 +55,12 @@
       border-radius: 50%;
 
       font-size: 13px;
+
+      @media screen and (max-width: #{$viewport-sm-from}) {
+        margin: auto;
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
     }
   }
 
@@ -55,6 +69,10 @@
 
     @at-root #{&}--visible {
       display: flex;
+
+      @media screen and (max-width: #{$viewport-sm-from}) {
+        display: block;
+      }
     }
   }
 
@@ -73,6 +91,10 @@
       content: '';
 
       background-color: #ccc;
+
+      @media screen and (max-width: #{$viewport-sm-from}) {
+        background-color: transparent;
+      }
     }
   }
 
