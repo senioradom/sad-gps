@@ -21,6 +21,7 @@ class AppMap {
         this._translationService.translateInterface();
 
         this._elements = this._initElements();
+        this._screenSize = this._elements.app.offsetWidth < 1081 ? 'SMALL_SCREEN' : 'BIG_SCREEN';
 
         this._apiService = new ApiService(api, contractRef, basicAuth);
         this._notificationService = new NotificationService();
@@ -92,10 +93,15 @@ class AppMap {
     }
 
     _checkScreenResolution() {
-        if (this._elements.app.offsetWidth < 1081) {
-            this._elements.app.classList.add('screen-size-small');
-        } else {
-            this._elements.app.classList.remove('screen-size-small');
+        switch (this._screenSize) {
+            case 'BIG_SCREEN':
+                this._elements.app.classList.remove('screen-size-small');
+                break;
+            case 'SMALL_SCREEN':
+                this._elements.app.classList.add('screen-size-small');
+                break;
+            default:
+                break;
         }
     }
 
@@ -124,7 +130,7 @@ class AppMap {
     }
 
     _initWidgets() {
-        (() => new WidgetDates(this._mapService, this._locale))();
+        (() => new WidgetDates(this._mapService, this._locale, this._screenSize))();
         (() => new WidgetAddress(this._apiService, this._translationService, this._mapService))();
     }
 

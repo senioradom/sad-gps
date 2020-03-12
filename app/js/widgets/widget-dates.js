@@ -3,8 +3,9 @@ import moment from 'moment';
 import 'moment/locale/fr';
 
 class WidgetDates {
-    constructor(mapService, locale) {
+    constructor(mapService, locale, screenSize) {
         this._mapService = mapService;
+        this._screenSize = screenSize;
 
         if (['en', 'fr', 'es', 'sk', 'cs', 'zh'].includes(locale)) {
             moment.locale(locale);
@@ -56,6 +57,10 @@ class WidgetDates {
 
         this._elements.buttons.submit.addEventListener('click', e => {
             this._mapService.switchMode('GPS-HISTORY-PLAYBACK-MODE', () => {
+                if (this._screenSize === 'SMALL_SCREEN') {
+                    this._elements.form.form.classList.remove('widget-dates__form--visible');
+                }
+
                 this._mapService.playGPSHistory(this._getStart().toISOString(), this._getEnd().toISOString());
             });
         });
