@@ -65,6 +65,11 @@ $nodeModuleRoot: '../../node_modules/';
 @import 'widgets/close-replay';
 
 // --------------------
+// Light theme : Mode override : "Last position mode"
+// --------------------
+@import 'common/last-position-mode';
+
+// --------------------
 // Libraries overrides
 // --------------------
 @import 'libraries-overrides/font-awesome-v5';

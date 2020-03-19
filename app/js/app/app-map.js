@@ -10,11 +10,12 @@ import WidgetAddress from '../widgets/widget-address';
 class AppMap {
     _autoSave = false;
 
-    constructor(htmlElement, api, contractRef, basicAuth, locale, distributorColor, isDevEnvironment) {
+    constructor(htmlElement, api, contractRef, basicAuth, locale, distributorColor, isFullMode, isDevEnvironment) {
+        this._selectedMode = isFullMode ? 'GPS-ALERTS-CONFIGURATION-MODE' : 'LAST-POSITION-MODE';
         this._isDevEnvironment = isDevEnvironment;
         document.documentElement.style.setProperty('--distributor-color', distributorColor);
 
-        this._templateService = new TemplateService();
+        this._templateService = new TemplateService(this._selectedMode);
         document.querySelector(htmlElement).innerHTML = this._templateService.getApplicationTemplate();
 
         this._translationService = new TranslationService(locale);
@@ -41,6 +42,12 @@ class AppMap {
     }
 
     async _init() {
+        if (this._isDevEnvironment) {
+            document.documentElement.classList.add('env-dev');
+        }
+
+        this._checkScreenResolution();
+
         this._initWidgets();
         this._initEvents();
 
@@ -58,13 +65,15 @@ class AppMap {
 
             this._mapService.generateMap(this._elements.map, this.configuration.preference.geoJson);
             this._showLoadingIndicator(false);
+
+            if (this._selectedMode === 'LAST-POSITION-MODE') {
+                this._mapService.addLastKnownUserGPSLocation();
+
+                setInterval(() => {
+                    this._mapService.addLastKnownUserGPSLocation();
+                }, 1000 * 60 * 2);
+            }
         });
-
-        if (this._isDevEnvironment) {
-            document.documentElement.classList.add('env-dev');
-        }
-
-        this._checkScreenResolution();
     }
 
     _save() {

@@ -59,4 +59,9 @@
   @media screen and (max-width: #{$viewport-sm-from}) {
     height: calc(100vh - 70px);
   }
+
+  @at-root #{&}--last-position-mode {
+    width: 400px;
+    height: 300px;
+  }
 }

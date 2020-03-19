@@ -5,6 +5,7 @@ class Demo {
         this._config = {
             api: 'https://gateway-pp.senioradom.com',
             htmlElement: '#sad-gps',
+            isFullMode: true, // true : GPS/History replay modes, false : Last position tile mode
             isDevEnvironment: true
         };
 
@@ -33,6 +34,7 @@ class Demo {
                 basicAuth,
                 language,
                 color,
+                this._config.isFullMode,
                 this._config.isDevEnvironment
             ))();
     }

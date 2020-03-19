@@ -1,10 +1,14 @@
 class TemplateService {
+    constructor(selectedMode) {
+        this._selectedModeOnMount = selectedMode;
+    }
+
     getApplicationTemplate() {
         return `
 <!-- ------------------
  Application
 ------------------- -->
-<div class="app-map app-map--loading" id="js-app-map" data-map-mode="GPS-ALERTS-CONFIGURATION-MODE">
+<div class="app-map app-map--loading" id="js-app-map" data-map-mode="${this._selectedModeOnMount}">
 
     <!-- ------------------
      Widget : DateTime picker

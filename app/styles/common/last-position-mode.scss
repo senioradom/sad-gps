@@ -1,0 +1,21 @@
+// This is specific for the light mode showing the last position, typically used on the dashboard tile.
+#js-app-map[data-map-mode='LAST-POSITION-MODE'] {
+  // Leaflet controls
+  .leaflet-draw.leaflet-control,
+  path.leaflet-interactive,
+  //.leaflet-control-container, // This removes the zoom icons
+  // Dates widget
+  .widget-dates,
+  #js-close-replay,
+  // Address widget
+  #js-widget-address,
+  //
+  [id^='js-map__custom-zone-label-'],
+  [id^='js-map__custom-zone-distance-'],
+  .leaflet-popup-tip-container:before,
+  .leaflet-popup-tip-container:after,
+  // Save/reset buttons
+  #js-app-map__buttons-container {
+    display: none!important;
+  }
+}

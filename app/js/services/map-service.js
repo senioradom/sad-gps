@@ -164,7 +164,7 @@ class MapService {
 
         if (isHistoryPlaybackMode) {
             this._elements.map.dataset.historyLoaded = false;
-            this._addLastKnownUserGPSLocation(callback);
+            this.addLastKnownUserGPSLocation(callback);
         } else if (callback && typeof callback === 'function') {
             callback();
         }
@@ -311,6 +311,44 @@ class MapService {
 
     isMapFormStateDirty() {
         return this._originalGeoJson !== this.exportGeoJSON();
+    }
+
+    addLastKnownUserGPSLocation(callback) {
+        this._apiService.getLastPosition().then(result => {
+            if (!(result.latitude && result.longitude && result.createdAt)) {
+                return;
+            }
+
+            this._map.panTo(new L.LatLng(result.latitude, result.longitude));
+
+            const lastUserPositionMarker = new L.marker([result.latitude, result.longitude], {
+                icon: L.divIcon({
+                    className: 'pointer-user',
+                    html: `
+                        <i class="pointer-user__icon fas fa-portrait"></i>
+                        <div class="pointer-user__label">
+                            <div class="pointer-user__date">${moment(result.createdAt).format(
+                                'DD/MM/YYYY - HH:mm'
+                            )}</div>
+                            <div class="pointer-user__description">
+                                <span class="pointer-user__pulsing-icon"></span>
+                                ${this._translationService.translateString('LAST_GPS_LOCATION')}
+                            </div>
+                        </div>
+                    `,
+                    iconSize: [30, 42],
+                    iconAnchor: [15, 42]
+                })
+            });
+
+            this._lastUserPositionGroup.clearLayers();
+            lastUserPositionMarker.addTo(this._lastUserPositionGroup);
+            this._centerMapFromProvidedLayer('_lastUserPositionGroup');
+
+            if (callback && typeof callback === 'function') {
+                callback();
+            }
+        });
     }
 
     // --------------------
@@ -702,44 +740,6 @@ class MapService {
                 }
             });
         }
-    }
-
-    _addLastKnownUserGPSLocation(callback) {
-        this._apiService.getLastPosition().then(result => {
-            if (!(result.latitude && result.longitude && result.createdAt)) {
-                return;
-            }
-
-            this._map.panTo(new L.LatLng(result.latitude, result.longitude));
-
-            const lastUserPositionMarker = new L.marker([result.latitude, result.longitude], {
-                icon: L.divIcon({
-                    className: 'pointer-user',
-                    html: `
-                        <i class="pointer-user__icon fas fa-portrait"></i>
-                        <div class="pointer-user__label">
-                            <div class="pointer-user__date">${moment(result.createdAt).format(
-                                'DD/MM/YYYY - HH:mm'
-                            )}</div>
-                            <div class="pointer-user__description">
-                                <span class="pointer-user__pulsing-icon"></span>
-                                ${this._translationService.translateString('LAST_GPS_LOCATION')}
-                            </div>
-                        </div>
-                    `,
-                    iconSize: [30, 42],
-                    iconAnchor: [15, 42]
-                })
-            });
-
-            this._lastUserPositionGroup.clearLayers();
-            lastUserPositionMarker.addTo(this._lastUserPositionGroup);
-            this._centerMapFromProvidedLayer('_lastUserPositionGroup');
-
-            if (callback && typeof callback === 'function') {
-                callback();
-            }
-        });
     }
 
     _addRemoveSaveResetButtonsDisabledState(isEnabled) {
