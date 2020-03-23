@@ -6,3 +6,4 @@ yarn.lock
 /.dev/
 /images/
 /package-lock.json
+/yarn-error.log
