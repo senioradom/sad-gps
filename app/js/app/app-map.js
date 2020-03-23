@@ -2,7 +2,6 @@ import MapService from '../services/map-service';
 import NotificationService from '../services/notification-service';
 import ApiService from '../services/api-service';
 import WidgetDates from '../widgets/widget-dates';
-import '@fortawesome/fontawesome-free/js/all.min';
 import TemplateService from '../services/template-service';
 import TranslationService from '../services/translation-service';
 import WidgetAddress from '../widgets/widget-address';
