@@ -2,6 +2,33 @@
 // Leaflet
 // --------------------
 // --------------------
+// Assets
+// --------------------
+// node_modules/leaflet/dist/leaflet.css
+.leaflet-control-layers-toggle {
+  background-image: url('/assets/images/leaflet/layers.png');
+}
+
+.leaflet-retina .leaflet-control-layers-toggle {
+  background-image: url('/assets/images/leaflet/layers-2x.png');
+}
+
+.leaflet-default-icon-path {
+  background-image: url('/assets/images/leaflet/marker-icon.png');
+}
+
+// node_modules/leaflet-draw/dist/leaflet.draw-src.css
+.leaflet-draw-toolbar a {
+  background-image: url('/assets/images/leaflet/spritesheet.png');
+  background-image: linear-gradient(transparent, transparent), url('/assets/images/leaflet/spritesheet.svg');
+}
+
+.leaflet-retina .leaflet-draw-toolbar a {
+  background-image: url('/assets/images/leaflet/spritesheet-2x.png');
+  background-image: linear-gradient(transparent, transparent), url('/assets/images/leaflet/spritesheet.svg');
+}
+
+// --------------------
 // Popup
 // --------------------
 .leaflet-popup-content-wrapper {
@@ -59,7 +86,7 @@
   transform: rotate(180deg);
 
   color: white;
-  text-shadow: 0 0 1px rgba(0,0,0,.81);
+  text-shadow: 0 0 1px rgba(0, 0, 0, .81);
 
   font-family: 'Font Awesome 5 Free';
   font-size: 34px;
@@ -75,26 +102,26 @@
 // Tooltip
 // --------------------
 .leaflet-draw-actions a {
-  background-color: #464646!important;
+  background-color: #464646 !important;
 
   @at-root #{&}:hover {
-    background-color: var(--distributor-color)!important;
+    background-color: var(--distributor-color) !important;
   }
 }
 
 .leaflet-draw-tooltip-subtext {
-  color: white!important;
+  color: white !important;
 
   font-weight: bold;
 }
 
 .leaflet-draw-tooltip {
-  visibility: visible!important;
+  visibility: visible !important;
 
-  background: #464646!important;
+  background: #464646 !important;
 
   @at-root #{&}::before {
-    border-right-color: #464646!important;
+    border-right-color: #464646 !important;
   }
 }
 
@@ -135,7 +162,7 @@
 
 .leaflet-editing-icon.leaflet-edit-move {
   border: none;
-  background: none!important;
+  background: none !important;
 }
 
 // --------------------
@@ -198,7 +225,7 @@
 
     user-select: none;
 
-    color: transparent!important;
+    color: transparent !important;
     background-image: none;
   }
 

@@ -2,11 +2,6 @@
 // Application
 // --------------------------------------------
 // --------------------
-// Configuration
-// --------------------
-$nodeModuleRoot: '../../node_modules/';
-
-// --------------------
 // Variables
 // --------------------
 // Defined in AppMap() : document.documentElement.style.setProperty('--distributor-color', distributorColor);
@@ -17,15 +12,15 @@ $nodeModuleRoot: '../../node_modules/';
 // --------------------
 // Libraries
 // --------------------
-@import url('#{$nodeModuleRoot}@fortawesome/fontawesome-free/css/all.min.css');
+@import '../../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
 
-@import url('#{$nodeModuleRoot}leaflet/dist/leaflet.css');
+@import '../../node_modules/leaflet/dist/leaflet.css';
 
-@import url('#{$nodeModuleRoot}leaflet-draw/dist/leaflet.draw.css');
+@import '../../node_modules/leaflet-draw/dist/leaflet.draw.css';
 
-@import url('#{$nodeModuleRoot}@bevacqua/rome/dist/rome.min.css');
+@import '../../node_modules/@bevacqua/rome/dist/rome.min.css';
 
-@import url('#{$nodeModuleRoot}tippy.js/dist/tippy.css');
+@import '../../node_modules/tippy.js/dist/tippy.css';
 
 // --------------------
 // Responsive design

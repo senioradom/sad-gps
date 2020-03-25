@@ -7,7 +7,6 @@ import TranslationService from '../services/translation-service';
 import WidgetAddress from '../widgets/widget-address';
 
 class AppMap {
-
     constructor(htmlElement, api, contractRef, basicAuth, locale, distributorColor, isFullMode, isDevEnvironment) {
         this._autoSave = false;
 
