@@ -1,19 +1,17 @@
-{
-    "extends": [
-        "airbnb-base",
-        "plugin:prettier/recommended"
-    ],
-    "parser": "babel-eslint",
-    "env": {
-        "browser": true,
-        "node": true
+module.exports = {
+    'extends': ['airbnb-base', 'plugin:prettier/recommended'],
+    'env': {
+        'browser': true,
+        'node': true
     },
-    "overrides": [
+    overrides: [
         {
             "files": [
                 "*.js"
             ],
             "rules": {
+                "import/no-extraneous-dependencies": "off",
+                "import/extensions": "off",
                 "no-underscore-dangle": "off",
                 "no-prototype-builtins": "off",
                 "no-unused-vars": "off",
@@ -21,8 +19,9 @@
                 "no-console": "off",
                 "class-methods-use-this": "off",
                 "no-param-reassign": "off",
+                "no-alert": "off",
                 "new-cap": "off"
             }
         }
     ]
-}
+};

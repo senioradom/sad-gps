@@ -19,13 +19,13 @@ class WidgetDates {
         this._elements = {
             buttons: {
                 toggle: document.getElementById('js-widget-dates__toggle'),
-                submit: document.getElementById('js-widget-dates__submit')
+                submit: document.getElementById('js-widget-dates__submit'),
             },
             form: {
                 form: document.getElementById('js-widget-dates__form'),
                 start: document.getElementById('js-widget-dates__date-start'),
-                end: document.getElementById('js-widget-dates__date-end')
-            }
+                end: document.getElementById('js-widget-dates__date-end'),
+            },
         };
 
         this._initEvents();
@@ -34,28 +34,26 @@ class WidgetDates {
             start: rome(this._elements.form.start, {
                 weekStart: 1,
                 dateValidator: rome.val.beforeEq(this._elements.form.end),
-                initialValue: moment()
-                    .subtract(3, 'days')
-                    .startOf('day'),
+                initialValue: moment().subtract(3, 'days').startOf('day'),
                 min: moment().subtract(6, 'months'),
-                max: moment()
+                max: moment(),
             }),
             end: rome(this._elements.form.end, {
                 weekStart: 1,
                 dateValidator: rome.val.afterEq(this._elements.form.start),
                 initialValue: moment(),
                 min: moment().subtract(6, 'months'),
-                max: moment()
-            })
+                max: moment(),
+            }),
         };
     }
 
     _initEvents() {
-        this._elements.buttons.toggle.addEventListener('click', e => {
+        this._elements.buttons.toggle.addEventListener('click', (e) => {
             this._elements.form.form.classList.toggle('widget-dates__form--visible');
         });
 
-        this._elements.buttons.submit.addEventListener('click', e => {
+        this._elements.buttons.submit.addEventListener('click', (e) => {
             if (this._screenSize === 'SMALL_SCREEN') {
                 this._elements.form.form.classList.remove('widget-dates__form--visible');
             }

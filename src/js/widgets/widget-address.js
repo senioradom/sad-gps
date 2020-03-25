@@ -11,12 +11,12 @@ class WidgetAddress {
         this._elements = {
             root: document.getElementById('js-widget-address'),
             results: {
-                container: document.getElementById('js-widget-address__result')
+                container: document.getElementById('js-widget-address__result'),
             },
             inputs: {
                 search: document.getElementById('js-widget-address__input-search'),
-                submit: document.getElementById('js-widget-address__input-submit')
-            }
+                submit: document.getElementById('js-widget-address__input-submit'),
+            },
         };
 
         this._initSubmitEvent();
@@ -25,13 +25,13 @@ class WidgetAddress {
     }
 
     _initSubmitEvent() {
-        this._elements.inputs.submit.addEventListener('click', e => {
+        this._elements.inputs.submit.addEventListener('click', (e) => {
             this._submit();
         });
     }
 
     _initEnterKeyAsSubmitEvent() {
-        this._elements.inputs.search.addEventListener('keyup', e => {
+        this._elements.inputs.search.addEventListener('keyup', (e) => {
             if (e.keyCode === 13) {
                 e.preventDefault();
                 this._submit();
@@ -40,7 +40,7 @@ class WidgetAddress {
     }
 
     _initClickSelectedAddress() {
-        this._elements.root.addEventListener('click', e => {
+        this._elements.root.addEventListener('click', (e) => {
             if (e.target.dataset.hasOwnProperty('widgetAddress')) {
                 this._mapService.zoomAtCoordinates(
                     e.target.dataset.widgetAddressGpsLat,
@@ -58,9 +58,9 @@ class WidgetAddress {
         const inputValue = this._elements.inputs.search.value;
         if (inputValue && inputValue.length >= 3) {
             const htmlContent = [];
-            this._apiService.getAddress(inputValue).then(response => {
+            this._apiService.getAddress(inputValue).then((response) => {
                 if (response.length) {
-                    response.forEach(address => {
+                    response.forEach((address) => {
                         htmlContent.push(
                             `<div data-widget-address-gps-lat="${address.lat}" data-widget-address-gps-lng="${address.lng}" data-widget-address class="widget-address__result-item">${address.label}</div>`
                         );

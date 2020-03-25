@@ -11,25 +11,25 @@ class ApiService {
     getAlertConfigurations() {
         return fetch(`${this.api}/api/3/contracts/${this.contractRef}/alert-configurations`, {
             headers: {
-                authorization: `Basic ${this.basicAuth}`
+                authorization: `Basic ${this.basicAuth}`,
             },
-            method: 'GET'
+            method: 'GET',
         })
-            .then(response => response.json())
-            .then(responseData => {
+            .then((response) => response.json())
+            .then((responseData) => {
                 return responseData;
             })
-            .catch(error => console.warn(error));
+            .catch((error) => console.warn(error));
     }
 
     saveAlertConfiguration(configuration) {
         return fetch(`${this.api}/api/3/contracts/${this.contractRef}/alert-configurations/${configuration.id}`, {
             headers: {
                 authorization: `Basic ${this.basicAuth}`,
-                'content-type': 'application/json'
+                'content-type': 'application/json',
             },
             body: JSON.stringify(configuration),
-            method: 'PUT'
+            method: 'PUT',
         }).then(this._handleErrors);
     }
 
@@ -39,15 +39,15 @@ class ApiService {
     getLastPosition() {
         return fetch(`${this.api}/api/4/contracts/${this.contractRef}/actimetry/gps-positions/last`, {
             headers: {
-                authorization: `Basic ${this.basicAuth}`
+                authorization: `Basic ${this.basicAuth}`,
             },
-            method: 'GET'
+            method: 'GET',
         })
-            .then(response => response.json())
-            .then(responseData => {
+            .then((response) => response.json())
+            .then((responseData) => {
                 return responseData;
             })
-            .catch(error => console.warn(error));
+            .catch((error) => console.warn(error));
     }
 
     getPositions(start, end) {
@@ -55,16 +55,16 @@ class ApiService {
             `${this.api}/api/4/contracts/${this.contractRef}/actimetry/gps-positions?start=${start}&end=${end}`,
             {
                 headers: {
-                    authorization: `Basic ${this.basicAuth}`
+                    authorization: `Basic ${this.basicAuth}`,
                 },
-                method: 'GET'
+                method: 'GET',
             }
         )
-            .then(response => response.json())
-            .then(responseData => {
+            .then((response) => response.json())
+            .then((responseData) => {
                 return responseData;
             })
-            .catch(error => console.warn(error));
+            .catch((error) => console.warn(error));
     }
 
     // --------------------
@@ -73,15 +73,15 @@ class ApiService {
     getAddress(address) {
         return fetch(`${this.api}/api/3/address?query=${encodeURIComponent(address)}`, {
             headers: {
-                authorization: `Basic ${this.basicAuth}`
+                authorization: `Basic ${this.basicAuth}`,
             },
-            method: 'GET'
+            method: 'GET',
         })
-            .then(response => response.json())
-            .then(responseData => {
+            .then((response) => response.json())
+            .then((responseData) => {
                 return responseData;
             })
-            .catch(error => console.warn(error));
+            .catch((error) => console.warn(error));
     }
 
     // --------------------

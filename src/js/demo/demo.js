@@ -1,4 +1,4 @@
-import AppMap from '../app/app-map';
+import AppMap from '../app/app-map.js';
 
 class Demo {
     constructor() {
@@ -6,7 +6,7 @@ class Demo {
             api: 'https://gateway-pp.senioradom.com',
             htmlElement: '#sad-gps',
             isFullMode: true, // true : GPS/History replay modes, false : Last position tile mode
-            isDevEnvironment: true
+            isDevEnvironment: true,
         };
 
         this._elements = {
@@ -15,7 +15,7 @@ class Demo {
             contractRef: document.getElementById('js-config-contract-ref'),
             language: document.getElementById('js-config-language'),
             color: document.getElementById('js-config-color'),
-            submit: document.getElementById('js-demo__submit')
+            submit: document.getElementById('js-demo__submit'),
         };
 
         this._init();
@@ -40,7 +40,7 @@ class Demo {
     }
 
     _initEvents() {
-        this._elements.submit.addEventListener('click', e => {
+        this._elements.submit.addEventListener('click', (e) => {
             e.preventDefault();
 
             const username = this._elements.username.value;

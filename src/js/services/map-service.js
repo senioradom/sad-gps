@@ -1,7 +1,7 @@
 import tippy from 'tippy.js';
 import L from 'leaflet';
 import 'leaflet-draw';
-import 'leaflet.timeline';
+import 'leaflet.timeline/dist/leaflet.timeline';
 import drawLocales from 'leaflet-draw-locales';
 import moment from 'moment';
 import 'moment-timezone';
@@ -37,14 +37,14 @@ class MapService {
     // --------------------
     generateMap(el, geoJSON) {
         const mapAsImage = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            noWrap: true
+            noWrap: true,
         });
 
         this._map = L.map(el, {
             center: [this._FRANCE_CENTERED.lat, this._FRANCE_CENTERED.lng],
             zoom: this._FRANCE_CENTERED.zoom,
             zoomControl: false,
-            layers: [mapAsImage]
+            layers: [mapAsImage],
         });
 
         this._alertsGPSConfigurationShapesGroup = new L.FeatureGroup();
@@ -66,23 +66,23 @@ class MapService {
             position: 'topright',
             draw: {
                 circle: {
-                    feet: false
+                    feet: false,
                 },
                 marker: false,
                 circlemarker: false,
                 polygon: false,
                 polyline: false,
-                rectangle: false
+                rectangle: false,
             },
             edit: {
                 featureGroup: this._alertsGPSConfigurationShapesGroup,
                 edit: {
                     selectedPathOptions: {
                         color: this._colors.circle.view,
-                        fillColor: this._colors.circle.view
-                    }
-                }
-            }
+                        fillColor: this._colors.circle.view,
+                    },
+                },
+            },
         });
         this._controlDraw.addTo(this._map);
 
@@ -90,7 +90,7 @@ class MapService {
             L.control.zoom({
                 zoomInTitle: this._translationService.translateString('ZOOM_IN'),
                 zoomOutTitle: this._translationService.translateString('ZOOM_OUT'),
-                position: 'bottomleft'
+                position: 'bottomleft',
             })
         );
 
@@ -110,11 +110,11 @@ class MapService {
 
         let matchingLayer = null;
 
-        Object.values(geoJson.features).forEach(feature => {
+        Object.values(geoJson.features).forEach((feature) => {
             const lat = feature.geometry.coordinates[1];
             const lng = feature.geometry.coordinates[0];
 
-            Object.keys(layers).some(key => {
+            Object.keys(layers).some((key) => {
                 if (Object.prototype.hasOwnProperty.call(layers, key)) {
                     const layer = layers[key];
 
@@ -141,7 +141,7 @@ class MapService {
         this._disableEditMode();
         this._deleteAllLayers();
 
-        Array.from(document.querySelectorAll(this._elements.selectors.inputTextLabels)).forEach(element => {
+        Array.from(document.querySelectorAll(this._elements.selectors.inputTextLabels)).forEach((element) => {
             element.remove();
         });
 
@@ -178,7 +178,7 @@ class MapService {
         });
 
         if (!isHistoryPlaybackMode) {
-            Array.from(document.querySelectorAll('.leaflet-timeline-control')).forEach(element => {
+            Array.from(document.querySelectorAll('.leaflet-timeline-control')).forEach((element) => {
                 element.remove();
             });
 
@@ -190,7 +190,7 @@ class MapService {
     playGPSHistory(start, end) {
         const data = {
             type: 'FeatureCollection',
-            features: []
+            features: [],
         };
 
         let lastPositionDateTime;
@@ -198,9 +198,9 @@ class MapService {
         let minimumDate;
         let maximumDate;
 
-        this._apiService.getPositions(start, end).then(result => {
+        this._apiService.getPositions(start, end).then((result) => {
             if (result.length) {
-                const moments = result.map(position => moment(position.createdAt));
+                const moments = result.map((position) => moment(position.createdAt));
 
                 minimumDate = moment.min(moments);
                 maximumDate = moment.max(moments);
@@ -221,20 +221,20 @@ class MapService {
                     data.features.push({
                         type: 'Feature',
                         properties: {
-                            start: position.createdAt
+                            start: position.createdAt,
                             // end: Added programmatically
                         },
                         geometry: {
                             type: 'Point',
-                            coordinates: [position.longitude, position.latitude]
-                        }
+                            coordinates: [position.longitude, position.latitude],
+                        },
                     });
                 });
 
                 data.features[data.features.length - 1].properties.end =
                     data.features[data.features.length - 1].properties.start;
 
-                Array.from(document.querySelectorAll('.leaflet-timeline-control')).forEach(element => {
+                Array.from(document.querySelectorAll('.leaflet-timeline-control')).forEach((element) => {
                     element.remove();
                 });
 
@@ -249,13 +249,13 @@ class MapService {
                     duration: hours * 1000,
                     formatOutput(date) {
                         return moment(date).format('DD/MM/YYYY - HH:mm');
-                    }
+                    },
                 });
                 this._timelineControl.addTo(this._map);
 
                 this._addTimelineElementAndEvents(data);
             } else {
-                Array.from(document.querySelectorAll('.leaflet-timeline-control')).forEach(element => {
+                Array.from(document.querySelectorAll('.leaflet-timeline-control')).forEach((element) => {
                     element.remove();
                 });
 
@@ -275,8 +275,8 @@ class MapService {
             this._controlDraw.setDrawingOptions({
                 circle: true,
                 shapeOptions: {
-                    color: this._colors.circle.view
-                }
+                    color: this._colors.circle.view,
+                },
             });
             this._map.removeControl(this._controlDraw);
             this._map.addControl(this._controlDraw);
@@ -301,8 +301,8 @@ class MapService {
                 className: 'pointer-map-pin',
                 html: `<i class="pointer-map-pin__icon fas fa-map-pin"></i>`,
                 iconSize: [30, 42],
-                iconAnchor: [15, 42]
-            })
+                iconAnchor: [15, 42],
+            }),
         });
 
         pinPositionMarkerIcon.addTo(this._addressSearchGroup);
@@ -314,7 +314,7 @@ class MapService {
     }
 
     addLastKnownUserGPSLocation(callback) {
-        this._apiService.getLastPosition().then(result => {
+        this._apiService.getLastPosition().then((result) => {
             if (!(result.latitude && result.longitude && result.createdAt)) {
                 return;
             }
@@ -337,8 +337,8 @@ class MapService {
                         </div>
                     `,
                     iconSize: [30, 42],
-                    iconAnchor: [15, 42]
-                })
+                    iconAnchor: [15, 42],
+                }),
             });
 
             this._lastUserPositionGroup.clearLayers();
@@ -362,11 +362,11 @@ class MapService {
             app: document.getElementById('js-app-map'),
             map: document.getElementById('js-map'),
             buttons: {
-                container: document.getElementById('js-app-map__buttons-container')
+                container: document.getElementById('js-app-map__buttons-container'),
             },
             selectors: {
-                inputTextLabels: '[id^="js-map__custom-zone-label-"]'
-            }
+                inputTextLabels: '[id^="js-map__custom-zone-label-"]',
+            },
         };
 
         this._isDevEnvironment = isDevEnvironment;
@@ -380,13 +380,13 @@ class MapService {
         this._FRANCE_CENTERED = {
             lat: 46.92,
             lng: 2.68,
-            zoom: 6
+            zoom: 6,
         };
 
         this._colors = {
             circle: {
-                view: distributorColor
-            }
+                view: distributorColor,
+            },
         };
 
         window.sad = window.sad || {};
@@ -405,7 +405,7 @@ class MapService {
 
             this._enableEdit();
 
-            features.forEach(feature => {
+            features.forEach((feature) => {
                 if (feature.type === 'Feature') {
                     if (feature.geometry.type === 'Point') {
                         const latLng = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
@@ -417,7 +417,7 @@ class MapService {
 
                             this.circle = new L.Circle(latLng, feature.properties.radius, {
                                 color: this._colors.circle.view,
-                                weight: 2
+                                weight: 2,
                             });
 
                             this.circle.feature = feature;
@@ -453,7 +453,7 @@ class MapService {
     }
 
     _disableEditMode() {
-        Object.keys(this._controlDraw._toolbars).forEach(key => {
+        Object.keys(this._controlDraw._toolbars).forEach((key) => {
             if (
                 Object.prototype.hasOwnProperty.call(this._controlDraw._toolbars, key) &&
                 this._controlDraw._toolbars[key] instanceof L.EditToolbar
@@ -472,7 +472,7 @@ class MapService {
 
                 tippy(el, {
                     appendTo: this._elements.app,
-                    content: el.title
+                    content: el.title,
                 });
             });
         }
@@ -523,7 +523,7 @@ class MapService {
 
         const circle = new L.Circle(event.latlng, radius, {
             color: this._colors.circle.view,
-            weight: 2
+            weight: 2,
         });
 
         circle.feature = {
@@ -531,14 +531,14 @@ class MapService {
                 radius: 1000,
                 drawtype: 'circle',
                 label: this._translationService.translateString('ZONE', {
-                    index: this._alertsGPSConfigurationShapesGroup.getLayers().length + 1
-                })
+                    index: this._alertsGPSConfigurationShapesGroup.getLayers().length + 1,
+                }),
             },
             type: 'Feature',
             geometry: {
                 type: 'Point',
-                coordinates: event.latlng
-            }
+                coordinates: event.latlng,
+            },
         };
 
         L.Draw.SimpleShape.prototype._fireCreatedEvent.call(handler, circle);
@@ -549,7 +549,7 @@ class MapService {
         let { label } = layer.feature.properties;
         if (!label) {
             label = this._translationService.translateString('ZONE', {
-                index: this._alertsGPSConfigurationShapesGroup.getLayers().length
+                index: this._alertsGPSConfigurationShapesGroup.getLayers().length,
             });
         }
 
@@ -558,7 +558,7 @@ class MapService {
             closeButton: false,
             autoClose: false,
             closeOnClick: false,
-            closeOnEscapeKey: false
+            closeOnEscapeKey: false,
         });
 
         popup.setContent(this._createHTMLInputWithKmRadius(id, label));
@@ -582,8 +582,8 @@ class MapService {
         this._controlDraw.setDrawingOptions({
             circle: bool,
             shapeOptions: {
-                color: this._colors.circle.view
-            }
+                color: this._colors.circle.view,
+            },
         });
 
         this._map.removeControl(this._controlDraw);
@@ -607,7 +607,7 @@ class MapService {
     }
 
     _regenerateZones() {
-        this._map.eachLayer(layer => {
+        this._map.eachLayer((layer) => {
             if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
                 if (layer.feature.properties.drawtype === 'circle') {
                     this._addLabelAndDistanceToCircle(
@@ -621,7 +621,7 @@ class MapService {
     }
 
     _recoverStateBeforeDeletion() {
-        this._map.eachLayer(layer => {
+        this._map.eachLayer((layer) => {
             if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
                 if (layer.feature.properties.drawtype === 'circle') {
                     const id = this._alertsGPSConfigurationShapesGroup.getLayerId(layer);
@@ -629,7 +629,7 @@ class MapService {
                         try {
                             layer.feature.properties.label = layer._popup._content
                                 .split('\n')
-                                .filter(v => v.indexOf('value="') > -1)[0]
+                                .filter((v) => v.indexOf('value="') > -1)[0]
                                 .trim()
                                 .replace('value="', '')
                                 .replace(/"$/, '');
@@ -689,7 +689,7 @@ class MapService {
 
     _getArrayOfDuplicatedLabels() {
         const labelsArray = [];
-        document.querySelectorAll(this._elements.selectors.inputTextLabels).forEach(el => {
+        document.querySelectorAll(this._elements.selectors.inputTextLabels).forEach((el) => {
             labelsArray.push(el.value.toLowerCase());
         });
 
@@ -710,7 +710,7 @@ class MapService {
         let condNotEmpty = true;
         let condMaxLength = true;
 
-        document.querySelectorAll(this._elements.selectors.inputTextLabels).forEach(el => {
+        document.querySelectorAll(this._elements.selectors.inputTextLabels).forEach((el) => {
             if (el.value === '') {
                 condNotEmpty = false;
             }
@@ -726,13 +726,13 @@ class MapService {
         if (isValid) {
             document
                 .querySelectorAll('[id^="js-map__custom-zone-label-"].map__custom-zone-label--not-valid')
-                .forEach(el => {
+                .forEach((el) => {
                     el.classList.remove('map__custom-zone-label--not-valid');
                 });
         } else {
             const duplicatedLabelsArray = this._getArrayOfDuplicatedLabels();
 
-            document.querySelectorAll(this._elements.selectors.inputTextLabels).forEach(el => {
+            document.querySelectorAll(this._elements.selectors.inputTextLabels).forEach((el) => {
                 if (duplicatedLabelsArray.includes(el.value.toLowerCase()) || el.value === '') {
                     el.classList.add('map__custom-zone-label--not-valid');
                 } else {
@@ -745,11 +745,11 @@ class MapService {
     _addRemoveSaveResetButtonsDisabledState(isEnabled) {
         const buttons = document.querySelectorAll('.app-map__button');
         if (isEnabled) {
-            buttons.forEach(button => {
+            buttons.forEach((button) => {
                 button.classList.remove('app-map__button--disabled');
             });
         } else {
-            buttons.forEach(button => {
+            buttons.forEach((button) => {
                 button.classList.add('app-map__button--disabled');
             });
         }
@@ -760,9 +760,9 @@ class MapService {
             options: {
                 shapeOptions: {
                     color: this._colors.circle.view,
-                    weight: 2
-                }
-            }
+                    weight: 2,
+                },
+            },
         });
 
         this._customizeApplicationTextualContent();
@@ -790,13 +790,13 @@ class MapService {
                         )}</div>
                     `,
                     iconSize: [30, 42],
-                    iconAnchor: [15, 42]
+                    iconAnchor: [15, 42],
                 });
 
                 return L.marker(latlng, {
-                    icon: divIcon
+                    icon: divIcon,
                 });
-            }
+            },
         });
 
         this._timelineControl.addTimelines(this._timeline);
@@ -804,9 +804,10 @@ class MapService {
 
         document.querySelector('.leaflet-timeline-control .play').click();
 
-        this._timeline.on('change', e => {
+        this._timeline.on('change', (e) => {
             try {
                 this._centerMapFromProvidedLayer('_userPositionsHistoryGroup');
+                // eslint-disable-next-line no-empty
             } catch (exception) {}
         });
 
@@ -844,7 +845,7 @@ class MapService {
 
     _initEventListeners() {
         // Events listeners
-        this._map.on('click', e => {
+        this._map.on('click', (e) => {
             if (this._DRAWING_MODE) {
                 // This is a request from the marketing to be able to click and create zone rather than the default
                 // behavior (click and drag) that Leaflet.Draw provides
@@ -946,7 +947,7 @@ class MapService {
     }
 
     _drawEditedEvent(e) {
-        e.layers.eachLayer(layer => {
+        e.layers.eachLayer((layer) => {
             this._addLayerPropertiesSuchAsTypeAndRadius.bind(this, layer);
         });
 

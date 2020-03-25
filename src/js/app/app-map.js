@@ -1,15 +1,15 @@
-import MapService from '../services/map-service';
-import NotificationService from '../services/notification-service';
-import ApiService from '../services/api-service';
-import WidgetDates from '../widgets/widget-dates';
-import TemplateService from '../services/template-service';
-import TranslationService from '../services/translation-service';
-import WidgetAddress from '../widgets/widget-address';
+import MapService from '../services/map-service.js';
+import NotificationService from '../services/notification-service.js';
+import ApiService from '../services/api-service.js';
+import WidgetDates from '../widgets/widget-dates.js';
+import TemplateService from '../services/template-service.js';
+import TranslationService from '../services/translation-service.js';
+import WidgetAddress from '../widgets/widget-address.js';
 
 class AppMap {
-    _autoSave = false;
-
     constructor(htmlElement, api, contractRef, basicAuth, locale, distributorColor, isFullMode, isDevEnvironment) {
+        this._autoSave = false;
+
         this._selectedMode = isFullMode ? 'GPS-ALERTS-CONFIGURATION-MODE' : 'LAST-POSITION-MODE';
         this._isDevEnvironment = isDevEnvironment;
         document.documentElement.style.setProperty('--distributor-color', distributorColor);
@@ -52,8 +52,8 @@ class AppMap {
 
         this._showLoadingIndicator(true);
 
-        this._apiService.getAlertConfigurations().then(configurations => {
-            [this.configuration] = [configurations.filter(conf => conf.alertCode === 'out_of_perimeter')[0]];
+        this._apiService.getAlertConfigurations().then((configurations) => {
+            [this.configuration] = [configurations.filter((conf) => conf.alertCode === 'out_of_perimeter')[0]];
 
             if (!this.configuration.preference.geoJson) {
                 this.configuration.preference.geoJson = `{
@@ -129,7 +129,7 @@ class AppMap {
     // --------------------
     _promptUserLeavingThePageWhenUnsavedChanges() {
         if (!this._isDevEnvironment) {
-            window.addEventListener('beforeunload', e => {
+            window.addEventListener('beforeunload', (e) => {
                 if (this._mapService.isMapFormStateDirty()) {
                     e.preventDefault();
                     e.returnValue = ''; // Required by Chrome
@@ -177,13 +177,13 @@ class AppMap {
             app: document.getElementById('js-app-map'),
             map: document.getElementById('js-map'),
             widgets: {
-                dates: document.getElementById('js-widget-dates__form')
+                dates: document.getElementById('js-widget-dates__form'),
             },
             buttons: {
                 closeReplay: document.getElementById('js-close-replay__button'),
                 reset: document.getElementById('js-app-map__button-reset'),
-                save: document.getElementById('js-app-map__button-save')
-            }
+                save: document.getElementById('js-app-map__button-save'),
+            },
         };
     }
 

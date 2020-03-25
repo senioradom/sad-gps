@@ -1,9 +1,52 @@
+## Project
+dist/*
+
+## Node.js
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+pids
+logs
+results
+npm-debug.log
+node_modules
+
+## Sass
+.sass-cache
+
+## OS X
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+## Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+## ParcelJS
 /.cache/
-/.idea/
-/dist/
-yarn.lock
-/node_modules/
-/.dev/
-/images/
-/package-lock.json
+
+## Dev
+.idea
+.dev
+/yarn.lock
 /yarn-error.log
+/package-lock.json
+bower_components/
+.csscomb.json
+*.iml
+/src/assets/
+/src/style.css
+/src/style.css.map
+
