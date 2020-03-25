@@ -7,9 +7,10 @@ import TranslationService from '../services/translation-service';
 import WidgetAddress from '../widgets/widget-address';
 
 class AppMap {
-    _autoSave = false;
 
     constructor(htmlElement, api, contractRef, basicAuth, locale, distributorColor, isFullMode, isDevEnvironment) {
+        this._autoSave = false;
+
         this._selectedMode = isFullMode ? 'GPS-ALERTS-CONFIGURATION-MODE' : 'LAST-POSITION-MODE';
         this._isDevEnvironment = isDevEnvironment;
         document.documentElement.style.setProperty('--distributor-color', distributorColor);
