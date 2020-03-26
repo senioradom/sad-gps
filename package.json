@@ -47,5 +47,6 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/senioradom/sad-gps/issues"
-  }
+  },
+  "main": "src/js/app/app-map.js"
 }
