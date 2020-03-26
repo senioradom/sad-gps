@@ -45,7 +45,7 @@ This updates every 2 minutes.
 
 ```
 <!-- HTML -->
-<div class="sad-gps sad-gps--last-position-mode" id="sad-gps"></div>
+<div class="sad-gps" id="sad-gps"></div>
 ```
 ```
 // JS
