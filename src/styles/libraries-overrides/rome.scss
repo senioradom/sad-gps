@@ -4,3 +4,15 @@
 .rd-container {
   z-index: 401;
 }
+
+.rd-day-disabled {
+  color: #ccc;
+}
+
+.rd-container :hover > td {
+  background-color: transparent;
+}
+
+.rd-container :hover > td.rd-day-selected {
+  background-color: black;
+}

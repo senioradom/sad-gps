@@ -69,11 +69,32 @@
 
     @at-root #{&}--visible {
       display: flex;
+      align-items: center;
 
       @media screen and (max-width: #{$viewport-sm-from}) {
         display: block;
       }
     }
+  }
+
+  @at-root #{&}__icon-map {
+    width: 26px;
+    min-width: 26px;
+    height: 26px;
+    min-height: 26px;
+
+    font-size: 26px;
+    line-height: 26px;
+  }
+
+  @at-root #{&}__icon-play {
+    width: 11px;
+    min-width: 11px;
+    height: 11px;
+    min-height: 11px;
+
+    font-size: 11px;
+    line-height: 11px;
   }
 
   @at-root #{&}__input-container {
@@ -86,7 +107,7 @@
       left: 6px;
 
       width: 1px;
-      height: 30px;
+      height: 21px;
 
       content: '';
 

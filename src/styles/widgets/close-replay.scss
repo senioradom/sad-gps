@@ -24,16 +24,28 @@
   }
 
   @at-root #{&}__button {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+
     cursor: pointer;
     user-select: none;
 
     border: none;
     background-color: transparent;
 
-    font-size: 26px;
-
     @at-root #{&}:focus {
       outline: none;
     }
+  }
+
+  @at-root #{&}__icon-close {
+    width: 24px;
+    min-width: 24px;
+    height: 24px;
+    min-height: 24px;
+
+    font-size: 24px;
+    line-height: 24px;
   }
 }

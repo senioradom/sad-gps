@@ -5,6 +5,20 @@
   width: 100%;
 }
 
+.leaflet-control.leaflet-timeline-control .button-container button {
+  display: inline-block;
+
+  width: 21px!important;
+  height: 21px!important;
+}
+
+.leaflet-control.leaflet-timeline-control .button-container button.pause:before {
+  width: 0!important;
+  padding-left: 4px;
+}
+
+  widget-address
+
 .leaflet-control.leaflet-timeline-control {
   position: absolute!important;
   bottom: 0!important;

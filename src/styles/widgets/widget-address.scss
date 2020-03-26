@@ -47,18 +47,28 @@
 
   @at-root #{&}__input-search {
     width: 233px;
-    height: calc(34px - 8px);
+    //height: calc(34px - 8px);
+    height: 34px !important;
     padding: 8px;
   }
 
   @at-root #{&}__input-submit {
-    padding: 8px;
     padding-right: 13px;
     padding-left: 13px;
 
     cursor: pointer;
 
     border: 1px solid rgba(0,0,0,.2);
+  }
+
+  @at-root #{&}__icon-search {
+    width: 11px;
+    min-width: 11px;
+    height: 11px;
+    min-height: 11px;
+
+    font-size: 11px;
+    line-height: 11px;
   }
 
   @at-root #{&}__result {

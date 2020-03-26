@@ -71,7 +71,7 @@
   content: '';
 
   border-radius: 50%;
-  background-color: var(--distributor-color);
+  background-color: var(--distributor-color) !important;;
 }
 
 .leaflet-popup-tip-container::after {
@@ -102,6 +102,7 @@
 // Tooltip
 // --------------------
 .leaflet-draw-actions a {
+  color: #fff !important;
   background-color: #464646 !important;
 
   @at-root #{&}:hover {
@@ -137,9 +138,9 @@
   width: 30px !important;
   height: 30px !important;
 
-  border: 1px solid var(--distributor-color);
+  border: 1px solid var(--distributor-color) !important;
   border-radius: 50%;
-  background-color: white;
+  background-color: white;;
 }
 
 .leaflet-editing-icon.leaflet-edit-resize {
@@ -152,11 +153,11 @@
 
     content: '\f31e';
 
-    color: var(--distributor-color);
+    color: var(--distributor-color) !important;
 
     font-family: 'Font Awesome 5 Free';
     font-size: 21px;
-    font-weight: 900;
+    font-weight: 900;;
   }
 }
 

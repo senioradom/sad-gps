@@ -15,7 +15,7 @@ class TemplateService {
     ------------------- -->
     <div class="widget-dates">
         <button class="widget-dates__button" id="js-widget-dates__toggle" data-i18n-title="VISUALIZE_THE_CLICK_LOCATION_HOURLY">
-            <i class="fas fa-map-marked-alt"></i>
+            <i class="widget-dates__icon-map fas fa-map-marked-alt"></i>
         </button>
 
         <div class="widget-dates__form" id="js-widget-dates__form"><!-- Toggle class : widget-dates__form--visible -->
@@ -28,14 +28,14 @@ class TemplateService {
             </div>
 
             <button class="widget-dates__button widget-dates__button--play" id="js-widget-dates__submit">
-                <i class="fas fa-play"></i>
+                <i class="widget-dates__icon-play fas fa-play"></i>
             </button>
         </div>
     </div>
 
     <div class="close-replay close-replay--hidden" id="js-close-replay">
         <button class="close-replay__button" id="js-close-replay__button">
-            <i class="fas fa-times"></i>
+            <i class="close-replay__icon-close fas fa-times"></i>
         </button>
     </div>
 
@@ -46,7 +46,7 @@ class TemplateService {
         <div class="widget-address__input-search-container">
             <input class="widget-address__input-search form-element" type="text" data-i18n-placeholder="SEARCH_ADDRESS" id="js-widget-address__input-search" value="" autocomplete="off">
             <button class="widget-address__input-submit" id="js-widget-address__input-submit">
-                <i class="fas fa-search"></i>
+                <i class="widget-address__icon-search fas fa-search"></i>
             </button>
         </div>
         <div class="widget-address__result" id="js-widget-address__result">
