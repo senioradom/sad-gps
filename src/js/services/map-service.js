@@ -1,7 +1,7 @@
 import tippy from 'tippy.js';
 import L from 'leaflet';
 import 'leaflet-draw';
-import 'leaflet.timeline';
+import 'leaflet.timeline/dist/leaflet.timeline';
 import drawLocales from 'leaflet-draw-locales';
 import moment from 'moment';
 import 'moment-timezone';
