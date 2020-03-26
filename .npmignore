@@ -1,0 +1,10 @@
+/.cache/
+/.idea/
+/dist/
+yarn.lock
+/node_modules/
+/.dev/
+/images/
+/package-lock.json
+/yarn-error.log
+/src/build/sad-gps-without-font-awesome.css.map

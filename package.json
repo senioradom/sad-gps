@@ -1,10 +1,16 @@
 {
   "name": "sad-gps",
+  "description": "Map SeniorAdom",
   "version": "1.0.0",
+  "homepage": "http://www.senioradom.com",
   "scripts": {
     "lint": "eslint ."
   },
-  "license": "MIT",
+  "keywords": [
+    "SeniorAdom",
+    "Actimetry"
+  ],
+  "author": "developer@senioradom.com",
   "dependencies": {
     "@bevacqua/rome": "^3.0.3",
     "leaflet": "^1.5.1",
@@ -33,5 +39,13 @@
     "eslint-plugin-prettier": "^3.1.1",
     "prettier": "^1.18.2",
     "sass": "^1.23.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/senioradom/sad-gps.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/senioradom/sad-gps/issues"
   }
 }
