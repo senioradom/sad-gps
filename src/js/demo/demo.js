@@ -27,16 +27,16 @@ class Demo {
 
     _startApp(contractRef, basicAuth, language, color) {
         (() =>
-            new AppMap(
-                this._config.htmlElement,
-                this._config.api,
+            new AppMap({
+                htmlElement: this._config.htmlElement,
+                api: this._config.api,
                 contractRef,
                 basicAuth,
-                language,
-                color,
-                this._config.isFullMode,
-                this._config.isDevEnvironment
-            ))();
+                locale: language,
+                distributorColor: color,
+                isFullMode: this._config.isFullMode,
+                isDevEnvironment: this._config.isDevEnvironment
+            }))();
     }
 
     _initEvents() {

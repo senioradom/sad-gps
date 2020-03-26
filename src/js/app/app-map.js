@@ -6,26 +6,48 @@ import TemplateService from '../services/template-service';
 import TranslationService from '../services/translation-service';
 import WidgetAddress from '../widgets/widget-address';
 
+/**
+ * @param {Object}                       : config
+ * @param {type} config.htmlElement      : HTML node in which to generate the map
+ * @param {type} config.api              : API URL
+ * @param {type} config.contractRef      : Contract reference
+ * @param {type} config.basicAuth        : Basic auth password
+ * @param {type} config.locale           : Value in [fr, en, es, sk, cs, zh]
+ * @param {type} config.distributorColor : Hexadecimal color. eg : #ff0000
+ * @param {type} config.isFullMode       : Boolean : true : Alerts configuration / History replay / false : Dashboard tile with last position
+ * @param {type} config.isDevEnvironment : Boolean : Adds debug features for developers
+ *
+ * new AppMap({
+ *     htmlElement: '#sad-gps',
+ *     api: 'https://url-api.com',
+ *     contractRef: 'A0000XXX',
+ *     basicAuth: $basicAuthPa$$w0rd,
+ *     locale: 'fr',
+ *     distributorColor: '#ff0000',
+ *     isFullMode: true,
+ *     isDevEnvironment: false
+ * });
+ */
 class AppMap {
-    constructor(htmlElement, api, contractRef, basicAuth, locale, distributorColor, isFullMode, isDevEnvironment) {
+    constructor(config) {
         this._autoSave = false;
 
-        this._selectedMode = isFullMode ? 'GPS-ALERTS-CONFIGURATION-MODE' : 'LAST-POSITION-MODE';
-        this._isDevEnvironment = isDevEnvironment;
-        document.documentElement.style.setProperty('--distributor-color', distributorColor);
+        this._selectedMode = config.isFullMode ? 'GPS-ALERTS-CONFIGURATION-MODE' : 'LAST-POSITION-MODE';
+        this._isDevEnvironment = config.isDevEnvironment;
+        document.documentElement.style.setProperty('--distributor-color', config.distributorColor);
 
         this._templateService = new TemplateService(this._selectedMode);
-        document.querySelector(htmlElement).innerHTML = this._templateService.getApplicationTemplate();
+        document.querySelector(config.htmlElement).innerHTML = this._templateService.getApplicationTemplate();
 
-        this._translationService = new TranslationService(locale);
+        this._translationService = new TranslationService(config.locale);
         this._translationService.translateInterface();
 
         this._elements = this._initElements();
         this._screenSize = this._elements.app.offsetWidth < 1081 ? 'SMALL_SCREEN' : 'BIG_SCREEN';
 
-        this._apiService = new ApiService(api, contractRef, basicAuth);
+        this._apiService = new ApiService(config.api, config.contractRef, config.basicAuth);
         this._notificationService = new NotificationService();
-        this._locale = locale;
+        this._locale = config.locale;
 
         this._mapService = new MapService(
             this._apiService,
@@ -33,7 +55,7 @@ class AppMap {
             this._translationService,
             this._locale,
             this._screenSize,
-            distributorColor,
+            config.distributorColor,
             this._isDevEnvironment
         );
 
