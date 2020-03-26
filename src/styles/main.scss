@@ -2,6 +2,12 @@
 // Application
 // --------------------------------------------
 // --------------------
+// Optimisations
+// --------------------
+$isEmbedded: true;
+$includeFontAwesomeLibrary: false;
+
+// --------------------
 // Variables
 // --------------------
 // Defined in AppMap() : document.documentElement.style.setProperty('--distributor-color', distributorColor);
@@ -12,17 +18,18 @@
 // --------------------
 // Libraries
 // --------------------
-@import '../../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
+@import 'libraries/fontawesome-free/all'; // @fortawesome/fontawesome-free/css/all.min.css
+@if $includeFontAwesomeLibrary == true {
+  @include fontAwesomeFreeLibrary;
+}
 
 @import 'libraries/leaflet/leaflet';
-//@import '../../node_modules/leaflet/dist/leaflet';
 
 @import 'libraries/leaflet/leaflet.draw-src';
-//@import '../../node_modules/leaflet-draw/dist/leaflet.draw';
 
-@import '../../node_modules/@bevacqua/rome/dist/rome.min.css';
+@import '../../node_modules/@bevacqua/rome/dist/rome.min';
 
-@import '../../node_modules/tippy.js/dist/tippy.css';
+@import '../../node_modules/tippy.js/dist/tippy';
 
 // --------------------
 // Responsive design
@@ -52,7 +59,10 @@
 // --------------------
 // Common
 // --------------------
-@import 'common/shared';
+@import 'common/global';
+@if $isEmbedded == false {
+  @include global;
+}
 
 @import 'common/forms';
 
@@ -74,6 +84,9 @@
 // Libraries overrides
 // --------------------
 @import 'libraries-overrides/font-awesome-v5';
+@if $includeFontAwesomeLibrary == true {
+  @include fontAwesomeFreeFontsOverride;
+}
 
 @import 'libraries-overrides/rome';
 
