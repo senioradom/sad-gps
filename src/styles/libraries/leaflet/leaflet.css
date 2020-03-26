@@ -71,8 +71,7 @@
 
 .leaflet-container.leaflet-touch-drag {
   -ms-touch-action: pinch-zoom;
-
-/* Fallback for FF which doesn't support pinch-zoom */
+  /* Fallback for FF which doesn't support pinch-zoom */
   touch-action: none;
   touch-action: pinch-zoom;
 }
@@ -493,7 +492,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   border-top: 1px solid #ddd;
 }
 
- /*Default icon URLs */
+/*Default icon URLs */
 .leaflet-default-icon-path {
   /*background-image: url(images/marker-icon.png);*/
 }
