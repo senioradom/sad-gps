@@ -70,7 +70,9 @@
 }
 
 .leaflet-container.leaflet-touch-drag {
-  -ms-touch-action: pinch-zoom;/* Fallback for FF which doesn't support pinch-zoom */
+  -ms-touch-action: pinch-zoom;
+
+/* Fallback for FF which doesn't support pinch-zoom */
   touch-action: none;
   touch-action: pinch-zoom;
 }
@@ -435,11 +437,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
   width: 36px;
   height: 36px;
 
-  background-image: url(images/layers.png);
+  /*background-image: url(images/layers.png);*/
 }
 
 .leaflet-retina .leaflet-control-layers-toggle {
-  background-image: url(images/layers-2x.png);
+  /*background-image: url(images/layers-2x.png);*/
   background-size: 26px 26px;
 }
 
@@ -491,9 +493,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
   border-top: 1px solid #ddd;
 }
 
-/* Default icon URLs */
+ /*Default icon URLs */
 .leaflet-default-icon-path {
-  background-image: url(images/marker-icon.png);
+  /*background-image: url(images/marker-icon.png);*/
 }
 
 /* attribution and scale controls */
