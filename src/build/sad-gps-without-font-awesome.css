@@ -2166,6 +2166,45 @@ html.env-dev:after {
   background-image: linear-gradient(transparent, transparent), url('/assets/images/leaflet/spritesheet.svg');
 }
 
+.leaflet-bar a {
+  width: 30px;
+  height: 30px;
+
+  line-height: 30px;
+}
+
+.leaflet-bar a:first-child {
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+.leaflet-bar a:last-child {
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  font-size: 22px;
+}
+
+.leaflet-control-layers-toggle {
+  width: 44px;
+  height: 44px;
+}
+
+.leaflet-control-attribution,
+.leaflet-control-layers,
+.leaflet-bar {
+  box-shadow: none;
+}
+
+.leaflet-control-layers,
+.leaflet-bar {
+  border: 2px solid rgba(0, 0, 0, .2);
+  background-clip: padding-box;
+}
+
 .leaflet-popup-content-wrapper {
   padding: 0 !important;
 
@@ -2287,17 +2326,17 @@ html.env-dev:after {
   background: none !important;
 }
 
-.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-circle,
-.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-edit-edit,
-.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-edit-remove {
+.leaflet-draw-toolbar .leaflet-draw-draw-circle,
+.leaflet-draw-toolbar .leaflet-draw-edit-edit,
+.leaflet-draw-toolbar .leaflet-draw-edit-remove {
   position: relative;
 
-  background-image: none;
+  background-image: none !important;
 }
 
-.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-circle::after,
-.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-edit-edit::after,
-.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-edit-remove::after {
+.leaflet-draw-toolbar .leaflet-draw-draw-circle::after,
+.leaflet-draw-toolbar .leaflet-draw-edit-edit::after,
+.leaflet-draw-toolbar .leaflet-draw-edit-remove::after {
   position: absolute;
   top: 0;
   left: 9px;
@@ -2309,17 +2348,17 @@ html.env-dev:after {
   font-weight: 900;
 }
 
-.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-circle::after {
+.leaflet-draw-toolbar .leaflet-draw-draw-circle::after {
   content: '';
 
   font-weight: 300;
 }
 
-.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-edit-edit::after {
+.leaflet-draw-toolbar .leaflet-draw-edit-edit::after {
   content: '';
 }
 
-.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-edit-remove::after {
+.leaflet-draw-toolbar .leaflet-draw-edit-remove::after {
   content: '';
 }
 
@@ -2374,7 +2413,7 @@ html.env-dev:after {
   padding-left: 4px;
 }
 
-widget-address .leaflet-control.leaflet-timeline-control {
+.leaflet-control.leaflet-timeline-control {
   position: absolute !important;
   bottom: 0 !important;
 

@@ -29,6 +29,48 @@
 }
 
 // --------------------
+// .leaflet-touch (not present in admin)
+// --------------------
+.leaflet-bar a {
+  width: 30px;
+  height: 30px;
+
+  line-height: 30px;
+}
+
+.leaflet-bar a:first-child {
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+.leaflet-bar a:last-child {
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  font-size: 22px;
+}
+
+.leaflet-control-layers-toggle {
+  width: 44px;
+  height: 44px;
+}
+
+.leaflet-control-attribution,
+.leaflet-control-layers,
+.leaflet-bar {
+  box-shadow: none;
+}
+
+.leaflet-control-layers,
+.leaflet-bar {
+  border: 2px solid rgba(0,0,0,.2);
+  background-clip: padding-box;
+}
+
+// --------------------
 // Popup
 // --------------------
 .leaflet-popup-content-wrapper {
@@ -169,14 +211,14 @@
 // --------------------
 // Leaflet Draw icons (edit bar)
 // --------------------
-.leaflet-touch .leaflet-draw-toolbar {
+.leaflet-draw-toolbar {
   @at-root
   #{&} .leaflet-draw-draw-circle,
   #{&} .leaflet-draw-edit-edit,
   #{&} .leaflet-draw-edit-remove {
     position: relative;
 
-    background-image: none;
+    background-image: none!important;
   }
 
   @at-root
@@ -195,7 +237,7 @@
   }
 }
 
-.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-circle {
+.leaflet-draw-toolbar .leaflet-draw-draw-circle {
   @at-root #{&}::after {
     content: '\f111';
 
@@ -203,13 +245,13 @@
   }
 }
 
-.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-edit-edit {
+.leaflet-draw-toolbar .leaflet-draw-edit-edit {
   @at-root #{&}::after {
     content: '\f304';
   }
 }
 
-.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-edit-remove {
+.leaflet-draw-toolbar .leaflet-draw-edit-remove {
   @at-root #{&}::after {
     content: '\f1f8';
   }
