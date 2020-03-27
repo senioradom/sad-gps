@@ -66,6 +66,10 @@ class AppMap {
         window.clearInterval(this._updateGPSLocationInterval);
     }
 
+    isMapDirty() {
+        return this._mapService.isMapFormStateDirty();
+    }
+
     async _init() {
         if (this._isDevEnvironment) {
             document.documentElement.classList.add('env-dev');
@@ -153,6 +157,8 @@ class AppMap {
     // --
     // Events handler
     // --------------------
+    /*
+    // Moved to public method : AppMap.isMapDirty() in order to handle it from "parent project"
     _promptUserLeavingThePageWhenUnsavedChanges() {
         if (!this._isDevEnvironment) {
             window.addEventListener('beforeunload', e => {
@@ -163,6 +169,7 @@ class AppMap {
             });
         }
     }
+    */
 
     _initWidgets() {
         (() => new WidgetDates(this._mapService, this._locale, this._screenSize))();
@@ -189,7 +196,7 @@ class AppMap {
     _initEvents() {
         this._initClickEvents();
         this._initOrientationAndWindowResizeEvents();
-        this._promptUserLeavingThePageWhenUnsavedChanges();
+        // this._promptUserLeavingThePageWhenUnsavedChanges();
 
         if (this._autoSave) {
             document.addEventListener('mapEdited', () => this._save());
