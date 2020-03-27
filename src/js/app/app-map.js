@@ -69,6 +69,11 @@ class AppMap {
         window.clearInterval(this._updateGPSLocationInterval);
     }
 
+    cleanEventsListeners() {
+        window.removeEventListener('orientationchange', window.sad.appMapInstance._checkScreenResolution, false);
+        window.removeEventListener('resize', window.sad.appMapInstance._checkScreenResolution, false);
+    }
+
     isMapDirty() {
         return this._mapService.isMapFormStateDirty();
     }
@@ -224,21 +229,8 @@ class AppMap {
     }
 
     _initOrientationAndWindowResizeEvents() {
-        window.addEventListener(
-            'orientationchange',
-            () => {
-                this._checkScreenResolution();
-            },
-            false
-        );
-
-        window.addEventListener(
-            'resize',
-            () => {
-                this._checkScreenResolution();
-            },
-            false
-        );
+        window.addEventListener('orientationchange', window.sad.appMapInstance._checkScreenResolution, false);
+        window.addEventListener('resize', window.sad.appMapInstance._checkScreenResolution, false);
     }
 }
 
