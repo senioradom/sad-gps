@@ -30,6 +30,9 @@ import WidgetAddress from '../widgets/widget-address';
  */
 class AppMap {
     constructor(config) {
+        window.sad = window.sad || {};
+        window.sad.appMapInstance = this;
+
         this._autoSave = false;
 
         this._selectedMode = config.isFullMode ? 'GPS-ALERTS-CONFIGURATION-MODE' : 'LAST-POSITION-MODE';
