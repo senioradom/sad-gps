@@ -2167,10 +2167,10 @@ html.env-dev:after {
 }
 
 .leaflet-bar a {
-  width: 30px;
-  height: 30px;
+  width: 30px !important;
+  height: 30px !important;
 
-  line-height: 30px;
+  line-height: 30px !important;
 }
 
 .leaflet-bar a:first-child {
