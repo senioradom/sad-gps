@@ -33,7 +33,7 @@ class AppMap {
         this._autoSave = false;
 
         this._selectedMode = config.isFullMode ? 'GPS-ALERTS-CONFIGURATION-MODE' : 'LAST-POSITION-MODE';
-        this._isDevEnvironment = config.isDevEnvironment;
+        this._isDevEnvironment = config.isDevEnvironment || false;
         document.documentElement.style.setProperty('--distributor-color', config.distributorColor);
 
         this._templateService = new TemplateService(this._selectedMode);
