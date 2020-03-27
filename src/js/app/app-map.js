@@ -62,6 +62,10 @@ class AppMap {
         this._init();
     }
 
+    stopGPSLocationInterval() {
+        window.clearInterval(this._updateGPSLocationInterval);
+    }
+
     async _init() {
         if (this._isDevEnvironment) {
             document.documentElement.classList.add('env-dev');
@@ -90,7 +94,7 @@ class AppMap {
             if (this._selectedMode === 'LAST-POSITION-MODE') {
                 this._mapService.addLastKnownUserGPSLocation();
 
-                setInterval(() => {
+                this._updateGPSLocationInterval = window.setInterval(() => {
                     this._mapService.addLastKnownUserGPSLocation();
                 }, 1000 * 60 * 2);
             }
