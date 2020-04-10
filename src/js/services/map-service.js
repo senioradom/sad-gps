@@ -315,7 +315,14 @@ class MapService {
 
     addLastKnownUserGPSLocation(callback) {
         this._apiService.getLastPosition().then(result => {
-            if (!(result.latitude && result.longitude && result.createdAt)) {
+            if (
+                !result ||
+                !(
+                    result.hasOwnProperty('latitude') &&
+                    result.hasOwnProperty('longitude') &&
+                    result.hasOwnProperty('createdAt')
+                )
+            ) {
                 return;
             }
 
