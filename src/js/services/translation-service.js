@@ -150,7 +150,7 @@ class TranslationService {
             this._language = language;
         }
 
-        moment.locale(this.language);
+        moment.locale(this._language);
     }
 
     translateInterface() {
