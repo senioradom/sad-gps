@@ -51,6 +51,29 @@ class TranslationService {
                 ZOOM_OUT: 'Zoom out'
             },
             // --------------------
+            // Chinese
+            // --------------------
+            zh: {
+                RESET: '取消',
+                SAVE: '保存',
+                ZONE: '区 {{index}}',
+                NO_DATA_FOR_GIVEN_PERIOD: '有选定的周期没有数据',
+                SAVING: '注册',
+                SUCCESS: '成功',
+                FAILURE: '失败',
+                ZONES_VALIDATION_FAILURE: '区验证失败',
+                SEARCH_ADDRESS: '定位搜索',
+                NO_ADDRESS_FOUND: '没有找到地址',
+                LAST_GPS_LOCATION: '最后一个位置',
+                CLICK_ZONE_TO_DELETE: '单击某一区域将其删除。',
+                VISUALIZE_THE_CLICK_LOCATION_HOURLY: '可视化点击的位置每小时。',
+                ADD_ZONE: '添加区域。',
+                UPDATE_ZONES: '编辑区域。',
+                DELETE_ZONES: '删除的区域。',
+                ZOOM_IN: '放大',
+                ZOOM_OUT: '缩小'
+            },
+            // --------------------
             // Spanish
             // --------------------
             es: {
@@ -120,27 +143,50 @@ class TranslationService {
                 ZOOM_OUT: 'Oddálit'
             },
             // --------------------
-            // Chinese
+            // Finnish
             // --------------------
-            zh: {
-                RESET: '取消',
-                SAVE: '保存',
-                ZONE: '区 {{index}}',
-                NO_DATA_FOR_GIVEN_PERIOD: '有选定的周期没有数据',
-                SAVING: '注册',
-                SUCCESS: '成功',
-                FAILURE: '失败',
-                ZONES_VALIDATION_FAILURE: '区验证失败',
-                SEARCH_ADDRESS: '定位搜索',
-                NO_ADDRESS_FOUND: '没有找到地址',
-                LAST_GPS_LOCATION: '最后一个位置',
-                CLICK_ZONE_TO_DELETE: '单击某一区域将其删除。',
-                VISUALIZE_THE_CLICK_LOCATION_HOURLY: '可视化点击的位置每小时。',
-                ADD_ZONE: '添加区域。',
-                UPDATE_ZONES: '编辑区域。',
-                DELETE_ZONES: '删除的区域。',
-                ZOOM_IN: '放大',
-                ZOOM_OUT: '缩小'
+            fi: {
+                RESET: 'Nollaa',
+                SAVE: 'Tallentaa',
+                ZONE: 'vyöhyke {{index}}',
+                NO_DATA_FOR_GIVEN_PERIOD: 'Ei ole tietoa valitsemansa',
+                SAVING: 'Tallentaa',
+                SUCCESS: 'Menestys',
+                FAILURE: 'Vika',
+                ZONES_VALIDATION_FAILURE: 'Zones todennusvirhe',
+                SEARCH_ADDRESS: 'Sijainti haku',
+                NO_ADDRESS_FOUND: 'Ei löytynyt osoitetietoja',
+                LAST_GPS_LOCATION: 'Viimeinen sijaintipaikka',
+                CLICK_ZONE_TO_DELETE: 'Klikkaa vyöhyke poistaa sen.',
+                VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Visualisoi Valitse sijainti tunneittain.',
+                ADD_ZONE: 'Lisää vyöhyke.',
+                UPDATE_ZONES: 'Edit alueilla.',
+                DELETE_ZONES: 'Poista alueilla.',
+                ZOOM_IN: 'Lähennä',
+                ZOOM_OUT: 'Loitontaa'
+            },
+            // --------------------
+            // German
+            // --------------------
+            de: {
+                RESET: 'Reset',
+                SAVE: 'speichern',
+                ZONE: 'zone {{index}}',
+                NO_DATA_FOR_GIVEN_PERIOD: 'Es liegen keine Daten über den gewählten Zeitraum',
+                SAVING: 'Saving',
+                SUCCESS: 'Erfolg',
+                FAILURE: 'Fehler',
+                ZONES_VALIDATION_FAILURE: 'Zones Prüfungsfehler',
+                SEARCH_ADDRESS: 'Standort Suche',
+                NO_ADDRESS_FOUND: 'Keine Adresse',
+                LAST_GPS_LOCATION: 'Letzter Standort',
+                CLICK_ZONE_TO_DELETE: 'Klicken Sie auf eine Zone um es zu löschen.',
+                VISUALIZE_THE_CLICK_LOCATION_HOURLY: 'Klicken Sie auf Standort Visualize stündlich.',
+                ADD_ZONE: 'In Zone.',
+                UPDATE_ZONES: 'Bearbeiten Bereiche.',
+                DELETE_ZONES: 'Entfernen Bereiche.',
+                ZOOM_IN: 'Hineinzoomen',
+                ZOOM_OUT: 'Rauszoomen'
             }
         };
 
@@ -180,7 +226,7 @@ class TranslationService {
     }
 
     _validateLanguage(language) {
-        return ['en', 'fr', 'es', 'sk', 'cs', 'zh'].includes(language);
+        return ['fr', 'en', 'zh', 'es', 'sk', 'cs', 'fi', 'de'].includes(language);
     }
 }
 
