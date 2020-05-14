@@ -1,3 +1,5 @@
+import { version } from '../../../package.json';
+
 import MapService from '../services/map-service';
 import NotificationService from '../services/notification-service';
 import ApiService from '../services/api-service';
@@ -32,6 +34,8 @@ class AppMap {
     constructor(config) {
         window.sad = window.sad || {};
         window.sad.appMapInstance = this;
+
+        this.version = version;
 
         this._autoSave = false;
 
