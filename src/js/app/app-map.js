@@ -99,8 +99,8 @@ class AppMap {
 
             if (!this.configuration.preference.geoJson) {
                 this.configuration.preference.geoJson = `{
-                    'type': 'FeatureCollection',
-                    'features': []
+                    "type": "FeatureCollection",
+                    "features": []
                 }`;
             }
 
