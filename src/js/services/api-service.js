@@ -23,13 +23,19 @@ class ApiService {
     }
 
     saveAlertConfiguration(configuration) {
-        return fetch(`${this.api}/api/3/contracts/${this.contractRef}/alert-configurations/${configuration.id}`, {
+        const hasId = configuration.hasOwnProperty('id');
+        const httpMethod = hasId ? 'PUT' : 'POST';
+        const url = `${this.api}/api/3/contracts/${this.contractRef}/alert-configurations${
+            hasId ? `/${configuration.id}` : ''
+        }`;
+
+        return fetch(url, {
             headers: {
                 authorization: `Basic ${this.basicAuth}`,
                 'content-type': 'application/json'
             },
             body: JSON.stringify(configuration),
-            method: 'PUT'
+            method: httpMethod
         }).then(this._handleErrors);
     }
 
