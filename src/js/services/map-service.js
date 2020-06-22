@@ -314,27 +314,36 @@ class MapService {
     }
 
     addLastKnownUserGPSLocation(callback) {
-        this._apiService.getLastPosition().then(result => {
-            if (
-                !result ||
-                !(
-                    result.hasOwnProperty('latitude') &&
-                    result.hasOwnProperty('longitude') &&
-                    result.hasOwnProperty('createdAt')
-                )
-            ) {
+        this._apiService.getLastPosition().then(lastPosition => {
+            const isLastPositionAnObject = typeof lastPosition === 'object';
+
+            const hasLastPositionRequiredFields =
+                isLastPositionAnObject &&
+                lastPosition.hasOwnProperty('latitude') &&
+                lastPosition.hasOwnProperty('longitude') &&
+                lastPosition.hasOwnProperty('createdAt');
+
+            const isLastPositionValid =
+                isLastPositionAnObject &&
+                hasLastPositionRequiredFields &&
+                lastPosition.latitude > -90 &&
+                lastPosition.latitude < 90 &&
+                lastPosition.longitude > -180 &&
+                lastPosition.longitude < 180;
+
+            if (!isLastPositionAnObject || !hasLastPositionRequiredFields || !isLastPositionValid) {
                 return;
             }
 
-            this._map.panTo(new L.LatLng(result.latitude, result.longitude));
+            this._map.panTo(new L.LatLng(lastPosition.latitude, lastPosition.longitude));
 
-            const lastUserPositionMarker = new L.marker([result.latitude, result.longitude], {
+            const lastUserPositionMarker = new L.marker([lastPosition.latitude, lastPosition.longitude], {
                 icon: L.divIcon({
                     className: 'pointer-user',
                     html: `
                         <i class="pointer-user__icon fas fa-portrait"></i>
                         <div class="pointer-user__label">
-                            <div class="pointer-user__date">${moment(result.createdAt).format(
+                            <div class="pointer-user__date">${moment(lastPosition.createdAt).format(
                                 'DD/MM/YYYY - HH:mm'
                             )}</div>
                             <div class="pointer-user__description">
