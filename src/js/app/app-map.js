@@ -97,6 +97,22 @@ class AppMap {
         this._apiService.getAlertConfigurations().then(configurations => {
             [this.configuration] = [configurations.filter(conf => conf.alertCode === 'out_of_perimeter')[0]];
 
+            if (!this.configuration) {
+                this.configuration = {
+                    alertCode: 'out_of_perimeter',
+                    contract: this._apiService.contractRef,
+                    preference: {
+                        type: 'distance',
+                        visible: true,
+                        active: true,
+                        geoJson: {
+                            type: 'FeatureCollection',
+                            features: []
+                        }
+                    }
+                };
+            }
+
             if (!this.configuration.preference.geoJson) {
                 this.configuration.preference.geoJson = `{
                     "type": "FeatureCollection",
