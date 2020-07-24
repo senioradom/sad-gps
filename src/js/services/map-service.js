@@ -387,6 +387,7 @@ class MapService {
 
         this._isDevEnvironment = isDevEnvironment;
 
+        this._MININUM_CIRCLE_RADIUS = 100;
         this._DRAWING_MODE = false;
         this._mode = this._elements.app.dataset.mapMode;
 
@@ -626,6 +627,10 @@ class MapService {
         this._map.eachLayer(layer => {
             if (layer.feature && layer.feature.properties && layer.feature.properties.drawtype) {
                 if (layer.feature.properties.drawtype === 'circle') {
+                    if (layer.getRadius() < this._MININUM_CIRCLE_RADIUS) {
+                        layer.setRadius(this._MININUM_CIRCLE_RADIUS);
+                    }
+
                     this._addLabelAndDistanceToCircle(
                         this._alertsGPSConfigurationShapesGroup.getLayerId(layer),
                         false,
@@ -934,8 +939,8 @@ class MapService {
         e.layer.feature.properties = e.layer.feature.properties || {};
         e.layer.feature.type = 'Feature';
 
-        if (e.layer.getRadius() < 10) {
-            e.layer.setRadius(10);
+        if (e.layer.getRadius() < this._MININUM_CIRCLE_RADIUS) {
+            e.layer.setRadius(this._MININUM_CIRCLE_RADIUS);
         }
 
         this._addLayerPropertiesSuchAsTypeAndRadius(e.layer);
@@ -958,6 +963,13 @@ class MapService {
     }
 
     _drawEditedResizeEvent(e) {
+        if (e.layer.getRadius() < this._MININUM_CIRCLE_RADIUS) {
+            this._notificationService.notify(
+                this._translationService.translateString('ZONE_MINIMUM_PERIMETER'),
+                'warning'
+            );
+        }
+
         this._addLabelAndDistanceToCircle(e.layer._leaflet_id, e.layer.getRadius(), false);
     }
 
