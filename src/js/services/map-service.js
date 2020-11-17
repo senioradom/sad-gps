@@ -790,6 +790,10 @@ class MapService {
     }
 
     _customizeApplicationTextualContent() {
+        L.drawLocal.draw.handlers.circle.tooltip.start = this._translationService.translateString(
+            'ADD_ZONE_DESCRIPTION'
+        );
+
         L.drawLocal.edit.handlers.remove.tooltip.text = this._translationService.translateString(
             'CLICK_ZONE_TO_DELETE'
         );
